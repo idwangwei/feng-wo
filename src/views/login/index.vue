@@ -2,7 +2,7 @@
   <div class="login-container">
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
       <div class="title-container">
-        <el-image style="width: 100%; height: 100px" :src="imgUrl" fit="cover">
+        <el-image style="width: 100%; height: 100px; background: none" :src="imgUrl" fit="scale-down">
           <div slot="error" class="image-slot">
             <i class="el-icon-picture-outline"></i>
           </div>
@@ -49,6 +49,8 @@ export default {
       },
       loading: false,
       passwordType: "password",
+      imgUrl: require('@/assets/logo@2x.png'),
+      // imgUrl: '',
       redirect: undefined
     };
   },
@@ -91,9 +93,6 @@ export default {
           return false;
         }
       });
-    },
-    goRegister() {
-      this.$router.push({ path: "/register" });
     }
   }
 };
@@ -197,7 +196,9 @@ $light_gray: #eee;
 
   .title-container {
     position: relative;
-
+    /deep/ .el-image__placeholder,.el-image__error{
+      background-color: $bg;
+    }
     .title {
       font-size: 26px;
       color: $light_gray;
