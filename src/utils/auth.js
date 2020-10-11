@@ -27,17 +27,9 @@ export function removeToken() {
     Cookies.remove(RefreshTokenKey);
 }
 
-export function setRole(role) {
-    return Cookies.set('role', role);
-}
-
-export function getRole() {
-    return Cookies.get('role');
-}
 export function checkPermission(value) {
     const { user } = store.state;
-    const hasPermission = user.role === 'MERCHANT' && user.info.status === 'AUDIT_PASS';
-    return !hasPermission;
+    return !!user;
 }
 export function showPermissionMessage(value) {
     const { info } = store.state.user;

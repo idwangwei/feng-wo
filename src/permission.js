@@ -1,6 +1,6 @@
 import router from './router';
-import store from './store';
-import { Message } from 'element-ui';
+// import store from './store';
+// import { Message } from 'element-ui';
 import NProgress from 'nprogress'; // progress bar
 import 'nprogress/nprogress.css'; // progress bar style
 import { getToken } from '@/utils/auth'; // get token from cookie
@@ -18,32 +18,32 @@ router.beforeEach((to, from, next) => {
 
     // determine whether the user has logged in
     const hasToken = getToken();
-
     if (hasToken) {
         if (to.path === '/login') {
             // if is logged in, redirect to the home page
             NProgress.done();
             next({ path: '/' });
         } else {
-            const hasGetUserInfo = store.getters.name;
-            if (store.getters.isOperator || hasGetUserInfo) {
-                next();
-            } else {
-                try {
-                    // get user info
-                    store.dispatch('user/getInfo').then(() => {
-                        next();
-                    });
-                } catch (error) {
-                    // remove token and go to login page to re-login
-                    debugger;
-                    store.dispatch('user/resetToken').then(() => {
-                        Message.error(error || 'Has Error');
-                        next(`/login?redirect=${to.path}`);
-                        NProgress.done();
-                    });
-                }
-            }
+            next();
+            // const hasGetUserInfo = store.getters.name;
+            // if (store.getters.isOperator || hasGetUserInfo) {
+            //     next();
+            // } else {
+            //     try {
+            //         // get user info
+            //         store.dispatch('user/getInfo').then(() => {
+            //             next();
+            //         });
+            //     } catch (error) {
+            //         // remove token and go to login page to re-login
+            //         debugger;
+            //         store.dispatch('user/resetToken').then(() => {
+            //             Message.error(error || 'Has Error');
+            //             next(`/login?redirect=${to.path}`);
+            //             NProgress.done();
+            //         });
+            //     }
+            // }
         }
     } else {
         /* has no token*/

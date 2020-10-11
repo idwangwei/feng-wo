@@ -48,7 +48,7 @@ service.interceptors.response.use(
   response => {
     const res = response.data;
     // if the custom code is not 20000, it is judged as an error.
-    if (res.code !== '10000') {
+    if (res.code !== 20000) {
       Message({
         message: `code:${res.code} message:${res.message || 'Error'}`,
         type: 'error',
@@ -56,7 +56,7 @@ service.interceptors.response.use(
       });
 
       // 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired;
-      if (res.code === '21013') {
+      if (res.code === 21013) {
         // to re-login
         MessageBox.alert(
           '登录过期, 重新登录',
@@ -79,7 +79,7 @@ service.interceptors.response.use(
   error => {
     const { response = {}} = error;
     const { data = {}} = response;
-    if (data.code === '21011' || data.code === '21012') {
+    if (data.code === 21011 || data.code === 21012) {
       store.dispatch('user/refreshToken').then(() => {
         // requestQueue.forEach(item => {});
       });

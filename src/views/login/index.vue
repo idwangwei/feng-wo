@@ -196,6 +196,7 @@ $light_gray: #eee;
 
   .title-container {
     position: relative;
+    margin-bottom: 2rem;
     /deep/ .el-image__placeholder,.el-image__error{
       background-color: $bg;
     }

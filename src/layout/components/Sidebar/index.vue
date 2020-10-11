@@ -23,13 +23,8 @@ export default {
       'role'
     ]),
     routes() {
-      let routes = this.$router.options.routes;
-      if (this.role === 'MERCHANT') {
-        routes = routes.filter(v => v.path !== '/merchant' && v.path !== '/operatorCommodity');
-      } else if (this.role === 'OPERATOR') {
-        routes = routes.filter(v => v.path !== '/merchantCommodity');
-      }
-      return routes;
+      const routes = this.$router.options.routes;
+      return routes.filter(v => v.sidebarShow);
     },
     activeMenu() {
       const route = this.$route;

@@ -47,90 +47,99 @@ export const constantRoutes = [
         path: '/',
         component: Layout,
         redirect: '/dashboard',
+        sidebarShow: true,
         children: [{
             path: 'dashboard',
-            name: '蜂窝后台管理系统',
+            name: '数据概览',
             component: () => import('@/views/dashboard/index'),
-            meta: { title: '蜂窝后台管理系统', icon: 'dashboard' }
+            meta: { title: '数据概览', icon: 'dashboard' }
+        }]
+    },
+    {
+        path: '/user',
+        component: Layout,
+        redirect: '/user/management',
+        sidebarShow: true,
+        children: [{
+            path: 'management',
+            name: '用户管理',
+            component: () => import('@/views/user/management/index'),
+            meta: { title: '用户管理', icon: 'example' }
+        }]
+    },
+    {
+        path: '/pool',
+        component: Layout,
+        redirect: '/pool/management',
+        sidebarShow: true,
+        children: [{
+            path: 'management',
+            name: '矿池管理',
+            component: () => import('@/views/pool/management/index'),
+            meta: { title: '矿池管理', icon: 'example' }
+        }]
+    },
+    {
+        path: '/wwt',
+        component: Layout,
+        redirect: '/wwt/management',
+        sidebarShow: true,
+        children: [{
+            path: 'management',
+            name: 'WWT价格管理',
+            component: () => import('@/views/wwt/management/index'),
+            meta: { title: 'WWT价格管理', icon: 'example' }
+        }]
+    },
+    {
+        path: '/order',
+        component: Layout,
+        redirect: '/order/management',
+        sidebarShow: true,
+        children: [{
+            path: 'management',
+            name: '订单管理',
+            component: () => import('@/views/order/management/index'),
+            meta: { title: '订单管理', icon: 'example' }
+        }]
+    },
+    {
+        path: '/notify',
+        component: Layout,
+        redirect: '/notify/management',
+        sidebarShow: true,
+        children: [{
+            path: 'management',
+            name: '公告管理',
+            component: () => import('@/views/notify/management/index'),
+            meta: { title: '公告管理', icon: 'example' }
+        }]
+    },
+    {
+        path: '/feedback',
+        component: Layout,
+        redirect: '/feedback/management',
+        sidebarShow: true,
+        children: [{
+            path: 'management',
+            name: '用户反馈管理',
+            component: () => import('@/views/feedback/management/index'),
+            meta: { title: '用户反馈管理', icon: 'example' }
+        }]
+    },
+    {
+        path: '/role',
+        component: Layout,
+        redirect: '/role/management',
+        sidebarShow: true,
+        children: [{
+            path: 'management',
+            name: '角色管理',
+            component: () => import('@/views/role/management/index'),
+            meta: { title: '角色管理', icon: 'example' }
         }]
     },
 
-    {
-        path: '/merchant',
-        component: Layout,
-        redirect: '/merchant/table',
-        name: '商家管理',
-        alwaysShow: true,
-        meta: { title: '商家管理', icon: 'example' },
-        children: [
-            {
-                path: 'table',
-                name: '商家列表',
-                component: () => import('@/views/merchant/table/index'),
-                meta: { title: '商家列表', icon: 'table' }
-            }
-            // ,{
-            //     path: 'other',
-            //     name: '商家其他',
-            //     component: () => import('@/views/merchant/other/index'),
-            //     meta: { title: '商家其他', icon: 'nested' }
-            // }
-        ]
-    },
-    {
-        path: '/operatorCommodity',
-        component: Layout,
-        redirect: '/operatorCommodity/table',
-        name: '商品管理',
-        meta: { title: '商品管理', icon: 'example' },
-        children: [
-            {
-                path: 'table',
-                name: '商品列表',
-                component: () => import('@/views/operatorCommodity/table/index'),
-                meta: { title: '商品列表', icon: 'table' }
-            },
-            {
-                path: 'demand',
-                name: '商品需求',
-                component: () => import('@/views/operatorCommodity/userDemand/index'),
-                meta: { title: '商品需求', icon: 'table' }
-            }
-            // ,{
-            //     path: 'other',
-            //     name: '商品其他',
-            //     component: () => import('@/views/operatorCommodity/other/index'),
-            //     meta: { title: '商品其他', icon: 'nested' }
-            // }
-        ]
-    },
-    {
-        path: '/merchantCommodity',
-        component: Layout,
-        redirect: '/merchantCommodity/table',
-        name: '商品管理',
-        meta: { title: '商品管理', icon: 'example' },
-        children: [
-            {
-                path: 'table',
-                name: '商品列表',
-                component: () => import('@/views/merchantCommodity/table/index'),
-                meta: { title: '商品列表', icon: 'table' }
-            },
-            {
-                path: 'new',
-                name: '商品创建',
-                component: () => import('@/views/merchantCommodity/new/CommodityNew'),
-                meta: { title: '商品创建', icon: 'table' }
-            }
-            // ,{
-            //     path: 'other',
-            //     name: '其他',
-            //     component: () => import('@/views/merchantCommodity/other/index'),
-            //     meta: { title: '其他', icon: 'nested' }
-            // }
-        ]
-    },
     // 404 page must be placed at the end !!!
     { path: '*', redirect: '/404', hidden: true }
 ];

@@ -1,16 +1,10 @@
 import Cookies from 'js-cookie';
-import { getStatusList } from '@/api/dashboard';
 const state = {
   sidebar: {
     opened: Cookies.get('sidebarStatus') ? !!+Cookies.get('sidebarStatus') : true,
     withoutAnimation: false
   },
-  device: 'desktop',
-  // "BANNED": "运营端封禁",
-  // "AUDIT_PASS": "正常营业中",
-  // "AUDIT_REFUSED": "审核拒绝",
-  // "WAIT_AUDIT": "等待审核"
-  merchantStatusList: []
+  device: 'desktop'
 };
 
 const mutations = {
@@ -30,9 +24,6 @@ const mutations = {
   },
   TOGGLE_DEVICE: (state, device) => {
     state.device = device;
-  },
-  SET_STATUS_LIST: (state, list) => {
-    state.merchantStatusList = list;
   }
 };
 
@@ -45,24 +36,6 @@ const actions = {
   },
   toggleDevice({ commit }, device) {
     commit('TOGGLE_DEVICE', device);
-  },
-  setStatusList({ commit }, param) {
-    const statusTypeMap = {
-      AUDIT_PASS: 'primary', // "正常营业中"
-      AUDIT_REFUSED: 'success', // "审核拒绝"
-      BANNED: 'info', // "运营端封禁"
-      WAIT_AUDIT: 'warning' // "等待审核"
-    };
-    getStatusList().then(resp => {
-      const { data } = resp;
-      const list = [];
-      for (const key in data) {
-        if (data.hasOwnProperty(key)) {
-          list.push({ key, label: data[key], type: statusTypeMap[key] || "" });
-        }
-      }
-      commit('SET_STATUS_LIST', list);
-    });
   }
 };
 
