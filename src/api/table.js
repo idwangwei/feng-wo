@@ -14,3 +14,15 @@ export function getPoolList(params) {
     params
   });
 }
+export function getRoles() {
+  return request({
+    url: '/role/list',
+    method: 'get'
+  });
+}
+export function getManegements() {
+  return request({
+    url: '/manegement/list',
+    method: 'get'
+  });
+}

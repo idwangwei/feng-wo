@@ -64,7 +64,7 @@ export const constantRoutes = [
             path: 'management',
             name: '用户管理',
             component: () => import('@/views/user/management/index'),
-            meta: { title: '用户管理', icon: 'example' }
+            meta: { title: '用户管理', icon: 'peoples' }
         }]
     },
     {
@@ -76,7 +76,7 @@ export const constantRoutes = [
             path: 'management',
             name: '矿池管理',
             component: () => import('@/views/pool/management/index'),
-            meta: { title: '矿池管理', icon: 'example' }
+            meta: { title: '矿池管理', icon: 'shopping' }
         }]
     },
     {
@@ -88,7 +88,7 @@ export const constantRoutes = [
             path: 'management',
             name: 'WWT价格管理',
             component: () => import('@/views/wwt/management/index'),
-            meta: { title: 'WWT价格管理', icon: 'example' }
+            meta: { title: 'WWT价格管理', icon: 'money' }
         }]
     },
     {
@@ -100,7 +100,7 @@ export const constantRoutes = [
             path: 'management',
             name: '订单管理',
             component: () => import('@/views/order/management/index'),
-            meta: { title: '订单管理', icon: 'example' }
+            meta: { title: '订单管理', icon: 'clipboard' }
         }]
     },
     {
@@ -112,7 +112,7 @@ export const constantRoutes = [
             path: 'management',
             name: '公告管理',
             component: () => import('@/views/notify/management/index'),
-            meta: { title: '公告管理', icon: 'example' }
+            meta: { title: '公告管理', icon: 'message' }
         }]
     },
     {
@@ -124,7 +124,7 @@ export const constantRoutes = [
             path: 'management',
             name: '用户反馈管理',
             component: () => import('@/views/feedback/management/index'),
-            meta: { title: '用户反馈管理', icon: 'example' }
+            meta: { title: '用户反馈管理', icon: 'form' }
         }]
     },
     {
@@ -136,7 +136,7 @@ export const constantRoutes = [
             path: 'management',
             name: '角色管理',
             component: () => import('@/views/role/management/index'),
-            meta: { title: '角色管理', icon: 'example' }
+            meta: { title: '角色管理', icon: 'user' }
         }]
     },
 
