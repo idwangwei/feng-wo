@@ -144,5 +144,67 @@ export default [
         data: list
       };
     }
+  },
+  {
+    url: "/bms/market/list",
+    type: "post",
+    response: config => {
+      const list = [
+        {
+          orderId: "1",
+          buyPhone: "13232323232",
+          sellerPhone: "15345678967",
+          number: "10",
+          cny: "45",
+          price: "23",
+          type: "普通",
+          time: "2019/2/1",
+          serviceCharge: "45",
+          status: "MATCHING"
+        },
+        {
+          orderId: "1",
+          buyPhone: "13232323232",
+          sellerPhone: "15345678967",
+          number: "10",
+          cny: "45",
+          price: "23",
+          type: "普通",
+          time: "2019/2/1",
+          serviceCharge: "45",
+          status: "MATCHING"
+        }
+      ];
+
+      return {
+        code: 20000,
+        data: list
+      };
+    }
+  },
+  {
+    url: "/bms/ann/list",
+    type: "post",
+    response: config => {
+      const list = [
+        {
+          commitTime: '2019/2/2',
+          content: "是的冯绍峰",
+          id: 1,
+          title: "标题 1"
+        },
+        {
+          commitTime: 0,
+          content: "sdl是的冯绍峰水电费是的冯绍峰是的冯绍峰水电费",
+          id: 2,
+          title: "标体2"
+        }
+      ];
+
+      return {
+        code: 20000,
+        data: list
+      };
+    }
   }
 ];

@@ -26,3 +26,15 @@ export function getManegements() {
     method: 'get'
   });
 }
+export function getOrderList() {
+  return request({
+    url: '/bms/market/list',
+    method: 'post'
+  });
+}
+export function getNotifyList() {
+  return request({
+    url: '/bms/ann/list',
+    method: 'post'
+  });
+}
