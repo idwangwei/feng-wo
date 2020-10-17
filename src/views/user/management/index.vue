@@ -62,7 +62,7 @@
             <el-button v-if="row.edit" v-loading="showBindLoading(row)" type="success" size="mini" @click="bindSuperior(row)">
               确认
             </el-button>
-            <el-button v-else type="primary" size="small" icon="el-icon-edit" @click="row.edit=!row.edit">
+            <el-button v-else type="primary" size="mini" @click="row.edit=!row.edit">
               分配上级
             </el-button>
           </template>
@@ -74,7 +74,7 @@
       </el-table-column>
     </el-table>
 
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
+    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.pageSize" @pagination="getList" />
 
   </div>
 </template>
@@ -107,7 +107,7 @@ export default {
       activeExchangeList: [],
       listQuery: {
         page: 1,
-        limit: 20,
+        pageSize: 10,
         language: "",
         asc: false,
         orderValue: "",
@@ -126,7 +126,8 @@ export default {
   methods: {
     getList() {
       this.listLoading = true;
-      getUserList(this.listQuery)
+      const params = { ...this.listQuery };
+      getUserList(params)
         .then((response) => {
           this.list = response.data.contents.map(v => ({ ...v, edit: false, editParentPhone: null }));
           this.total = response.data.total;
