@@ -206,5 +206,55 @@ export default [
         data: list
       };
     }
+  },
+  {
+    url: "/bms/feedback/list",
+    type: "post",
+    response: config => {
+      const list = [
+        {
+          commitTime: '2019/2/2',
+          content: "是的冯绍峰",
+          phoneNumber:'XXXXXXXXXXXXXX',
+          id: 1,
+        },
+        {
+          commitTime: '2019/2/2',
+          content: "sdl是的冯绍峰水电费是的冯绍峰是的冯绍峰水电费",
+          phoneNumber:'XXXXXXXXXXXXXX',
+          id: 2,
+        }
+      ];
+
+      return {
+        code: 20000,
+        data: list
+      };
+    }
+  },
+  {
+    url: "/bms/feedback/replyfeedbacks",
+    type: "post",
+    response: config => {
+      const list = [
+        {
+          commitTime: '2019/2/2',
+          content: "是的冯绍峰",
+          phoneNumber:'XXXXXXXXXXXXXX',
+          id: 1,
+        },
+        {
+          commitTime: '2019/10/22',
+          content: "sdl是的冯绍峰水电费是的冯绍峰是的冯绍峰水电费",
+          phoneNumber:'XXXXXXXXXXXXXX',
+          id: 2,
+        }
+      ];
+
+      return {
+        code: 20000,
+        data: list
+      };
+    }
   }
 ];

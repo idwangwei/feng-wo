@@ -1,12 +1,21 @@
 import request from '@/utils/request';
 
-export function getUserList(params) {
+export function getUserList(data) {
   return request({
-    url: '/user/list',
+    url: '/bms/user/list',
     method: 'post',
-    params
+    data
   });
 }
+
+export function modifyUserInfo(data) {
+  return request({
+    url: '/bms/user',
+    method: 'put',
+    data
+  });
+}
+
 export function getPoolList(params) {
   return request({
     url: '/pool/list',
@@ -35,6 +44,24 @@ export function getOrderList() {
 export function getNotifyList() {
   return request({
     url: '/bms/ann/list',
+    method: 'post'
+  });
+}
+export function getFeedbackList() {
+  return request({
+    url: '/bms/feedback/list',
+    method: 'post'
+  });
+}
+export function getFeedbackReplyList() {
+  return request({
+    url: '/bms/feedback/replyfeedbacks',
+    method: 'post'
+  });
+}
+export function getHomeData() {
+  return request({
+    url: '/bms/common/home',
     method: 'post'
   });
 }

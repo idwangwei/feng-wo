@@ -8,11 +8,11 @@
           </div>
         </el-image>
       </div>
-      <el-form-item prop="username">
+      <el-form-item prop="phone">
         <span class="svg-container">
           <svg-icon icon-class="user" />
         </span>
-        <el-input ref="username" v-model="loginForm.username" placeholder="输入账号" name="username" type="text" tabindex="1" auto-complete="on" />
+        <el-input ref="phone" v-model="loginForm.phone" placeholder="输入账号" name="phone" type="text" tabindex="1" auto-complete="on" />
       </el-form-item>
 
       <el-form-item prop="password">
@@ -25,7 +25,7 @@
           <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
         </span>
       </el-form-item>
-      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;margin-top:80px" @click.native.prevent="handleLogin">登录</el-button>
+      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;margin-top:80px" @click.native.prevent="handleLogin">登 录</el-button>
 
     </el-form>
   </div>
@@ -38,11 +38,11 @@ export default {
   data() {
     return {
       loginForm: {
-        username: "",
+        phone: "",
         password: ""
       },
       loginRules: {
-        username: [{ required: true, trigger: "blur", validator: validName }],
+        phone: [{ required: true, trigger: "blur", validator: validName }],
         password: [
           { required: true, trigger: "blur", validator: validatePassword }
         ]
@@ -53,6 +53,9 @@ export default {
       // imgUrl: '',
       redirect: undefined
     };
+  },
+  computed: {
+
   },
   watch: {
     $route: {

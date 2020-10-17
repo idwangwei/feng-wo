@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { MessageBox, Message } from 'element-ui';
 import store from '@/store';
-import { getToken } from '@/utils/auth';
 // create an axios instance
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
@@ -21,7 +20,7 @@ service.interceptors.request.use(
       // let each request carry token
       // ['X-Token'] is a custom headers key
       // please modify it according to the actual situation
-      config.headers['access-token'] = getToken();
+      config.headers['Authorization'] = store.getters.token;
     }
     // requestQueue.push({ url: config });
     return config;
@@ -47,16 +46,16 @@ service.interceptors.response.use(
    */
   response => {
     const res = response.data;
-    // if the custom code is not 20000, it is judged as an error.
-    if (res.code !== 20000) {
+    // if the custom code is not 10000, it is judged as an error.
+    if (res.errorCode !== 10000) {
       Message({
-        message: `code:${res.code} message:${res.message || 'Error'}`,
+        message: `${res.errorMsg || 'Error'}`,
         type: 'error',
         duration: 5 * 1000
       });
 
       // 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired;
-      if (res.code === 21013) {
+      if (res.errorCode === 21013) {
         // to re-login
         MessageBox.alert(
           '登录过期, 重新登录',
@@ -79,7 +78,7 @@ service.interceptors.response.use(
   error => {
     const { response = {}} = error;
     const { data = {}} = response;
-    if (data.code === 21011 || data.code === 21012) {
+    if (data.errorCode === 21011 || data.errorCode === 21012) {
       store.dispatch('user/refreshToken').then(() => {
         // requestQueue.forEach(item => {});
       });
@@ -87,7 +86,7 @@ service.interceptors.response.use(
     } else {
       Message({
         dangerouslyUseHTMLString: true,
-        message: `<p>CODE：${data.code}</p><p>MESSAGE：${data.message}</p>`,
+        message: `<p>CODE：${data.errorCode}</p><p>MESSAGE：${data.message}</p>`,
         type: 'error',
         duration: 5 * 1000
       });

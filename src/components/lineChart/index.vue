@@ -61,14 +61,18 @@ export default {
       this.chart = echarts.init(this.$el, 'macarons');
       this.setOptions(this.chartData);
     },
-    setOptions({ dateArr, valueArr, legend, edgeColor } = {}) {
-      this.chart.setOption({
-        xAxis: {
-          data: dateArr,
-          boundaryGap: false,
-          axisTick: {
-            show: false
-          }
+    setOptions({ title, edgeColor, data } = {}) {
+      let dateArr, valueArr;
+      const options = {
+        title: {
+          text: title,
+          left: '-5px',
+          top: '-5px'
+        },
+        legend: {
+          type: "scroll",
+          left: "100px",
+          right: "100px"
         },
         grid: {
           left: 10,
@@ -89,11 +93,19 @@ export default {
             show: false
           }
         },
-        legend: {
-          data: [legend]
-        },
-        series: [{
-          name: legend,
+        xAxis: {
+          boundaryGap: false,
+          axisTick: {
+            show: false
+          }
+        }
+      };
+
+      if (Array.isArray(data)) {
+        dateArr = data.map(v => v.time);
+        valueArr = data.map(v => v.count);
+        options.xAxis.data = dateArr;
+        options.series = [{
           smooth: true,
           type: 'line',
           itemStyle: {
@@ -111,8 +123,32 @@ export default {
           data: valueArr,
           animationDuration: 2800,
           animationEasing: 'quadraticOut'
-        }]
-      });
+        }];
+      } else {
+        const legend = Object.keys(data);
+        if (legend.length > 0) {
+          options.legend.data = legend;
+          options.xAxis.data = data[legend[0]].map(v => v.time);
+          options.series = legend.map(item => {
+          return {
+            smooth: true,
+            type: 'line',
+            itemStyle: {
+              normal: {
+                lineStyle: {
+                  width: 2
+                }
+              }
+            },
+            data: data[item].map(v => v.time),
+            animationDuration: 2800,
+            animationEasing: 'quadraticOut'
+          };
+        });
+        }
+      }
+
+      this.chart.setOption(options);
     }
   }
 };
