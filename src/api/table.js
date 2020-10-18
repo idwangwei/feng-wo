@@ -16,11 +16,45 @@ export function modifyUserInfo(data) {
   });
 }
 
-export function getPoolList(params) {
+export function getPoolList(data) {
   return request({
-    url: '/pool/list',
+    url: '/bms/mining/list',
     method: 'post',
-    params
+    data
+  });
+}
+export function switchPoolEnableStatus(data) {
+  return request({
+    url: '/bms/mining/enable',
+    method: 'post',
+    data
+  });
+}
+export function updatePoolInfo(data) {
+  return request({
+    url: '/bms/mining/update',
+    method: 'post',
+    data
+  });
+}
+export function getWWTPrice(data) {
+  return request({
+    url: '/bms/price',
+    method: 'post',
+    data
+  });
+}
+export function getPriceList() {
+  return request({
+    url: '/bms/price/list',
+    method: 'get'
+  });
+}
+export function updateWWTPrice(data) {
+  return request({
+    url: '/bms/price',
+    method: 'put',
+    data
   });
 }
 export function getRoles() {

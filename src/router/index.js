@@ -91,9 +91,9 @@ export const constantRoutes = [
         sidebarShow: true,
         children: [{
             path: 'management',
-            name: 'WWT价格管理',
+            name: 'FMC价格管理',
             component: () => import('@/views/wwt/management/index'),
-            meta: { title: 'WWT价格管理', icon: 'money' }
+            meta: { title: 'FMC价格管理', icon: 'money' }
         }]
     },
     {

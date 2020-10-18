@@ -1,36 +1,36 @@
 <template>
   <div class="app-container">
-    <el-form ref="addNotifyForm" :model="ruleForm" :rules="rules" label-width="100px" inline label-position="top">
-      <el-form-item :label="dateArr[0]" prop="day1">
-        <el-input v-model="ruleForm.day1" style="width:100px"></el-input>
+    <el-form ref="wwtPriceForm" :model="ruleForm" :rules="rules" label-width="100px" inline label-position="top">
+      <el-form-item :label="label.price1" prop="price1">
+        <el-input v-model="ruleForm.price1" style="width:100px"></el-input>
       </el-form-item>
-      <el-form-item :label="dateArr[1]" prop="day2">
-        <el-input v-model="ruleForm.day2" style="width:100px"></el-input>
+      <el-form-item :label="label.price2" prop="price2">
+        <el-input v-model="ruleForm.price2" style="width:100px"></el-input>
       </el-form-item>
-      <el-form-item :label="dateArr[2]" prop="day3">
-        <el-input v-model="ruleForm.day3" style="width:100px"></el-input>
+      <el-form-item :label="label.price3" prop="price3">
+        <el-input v-model="ruleForm.price3" style="width:100px"></el-input>
       </el-form-item>
-      <el-form-item :label="dateArr[3]" prop="day4">
-        <el-input v-model="ruleForm.day4" style="width:100px"></el-input>
+      <el-form-item :label="label.price4" prop="price4">
+        <el-input v-model="ruleForm.price4" style="width:100px"></el-input>
       </el-form-item>
-      <el-form-item :label="dateArr[4]" prop="day5">
-        <el-input v-model="ruleForm.day5" style="width:100px"></el-input>
+      <el-form-item :label="label.price5" prop="price5">
+        <el-input v-model="ruleForm.price5" style="width:100px"></el-input>
       </el-form-item>
-      <el-form-item :label="dateArr[5]" prop="day6">
-        <el-input v-model="ruleForm.day6" style="width:100px"></el-input>
+      <el-form-item :label="label.price6" prop="price6">
+        <el-input v-model="ruleForm.price6" style="width:100px"></el-input>
       </el-form-item>
-      <el-form-item :label="dateArr[6]" prop="day7">
-        <el-input v-model="ruleForm.day7" style="width:100px"></el-input>
+      <el-form-item :label="label.price7" prop="price7">
+        <el-input v-model="ruleForm.price7" style="width:100px"></el-input>
       </el-form-item>
       <el-form-item :label="btnLabel">
-        <el-button class="filter-item" size="small" type="primary" icon="el-icon-search" @click="addNotify()">
-          添加
+        <el-button v-loading="updateLoading" class="filter-item" size="small" type="primary" icon="el-icon-search" :disabled="updateLoading" @click="submitForm('wwtPriceForm')">
+          修改
         </el-button>
 
       </el-form-item>
     </el-form>
 
-    <el-row :gutter="32">
+    <el-row :gutter="32" style="margin-top:1rem;">
       <el-col :xs="24" :sm="24" :lg="24">
         <div class="chart-wrapper">
           <line-chart :chart-data="lineChartData" />
@@ -41,60 +41,70 @@
 </template>
 
 <script>
-import { getNotifyList } from "@/api/table";
-import { parseTime } from "@/utils/index";
+import { getWWTPrice, getPriceList, updateWWTPrice } from "@/api/table";
 import LineChart from "@/components/lineChart";
-
+import { validateFloatNum } from "@/utils/validate";
 export default {
-  name: "ComplexTable",
+  name: "WwtPrice",
   components: { LineChart },
   filters: {},
   data() {
     return {
       btnLabel: "--",
+      listQuery: {},
       ruleForm: {
-        day1: "",
-        day2: "",
-        day3: "",
-        day4: "",
-        day5: "",
-        day6: "",
-        day7: ""
+        price1: "",
+        price2: "",
+        price3: "",
+        price4: "",
+        price5: "",
+        price6: "",
+        price7: ""
       },
-      dateArr: [],
+      label: {
+        price1: "",
+        price2: "",
+        price3: "",
+        price4: "",
+        price5: "",
+        price6: "",
+        price7: ""
+      },
       rules: {
-        day1: [{ required: true, message: "请输入价格", trigger: "blur" }],
-        day2: [{ required: true, message: "请输入价格", trigger: "blur" }],
-        day3: [{ required: true, message: "请输入价格", trigger: "blur" }],
-        day4: [{ required: true, message: "请输入价格", trigger: "blur" }],
-        day5: [{ required: true, message: "请输入价格", trigger: "blur" }],
-        day6: [{ required: true, message: "请输入价格", trigger: "blur" }],
-        day7: [{ required: true, message: "请输入价格", trigger: "blur" }]
+        price1: [{ required: true, validator: validateFloatNum }],
+        price2: [{ required: true, validator: validateFloatNum }],
+        price3: [{ required: true, validator: validateFloatNum }],
+        price4: [{ required: true, validator: validateFloatNum }],
+        price5: [{ required: true, validator: validateFloatNum }],
+        price6: [{ required: true, validator: validateFloatNum }],
+        price7: [{ required: true, validator: validateFloatNum }]
       },
+      priceData: {},
       lineChartData: {
-        legend: '价格趋势',
+        title: '价格趋势',
         edgeColor: '#40c9c6',
-        dateArr: ['2020/10/01', '2020/10/02', '2020/10/03', '2020/10/04', '2020/10/05', '2020/10/06', '2020/10/07'],
-        valueArr: [120, 82, 91, 154, 162, 140, 145]
-      }
+        data: []
+      },
+      updateLoading: false
     };
   },
   created() {
-    for (let i = 0; i < 7; i++) {
-      this.dateArr.push(
-        parseTime(new Date().getTime() + i * 24 * 3600 * 1000, "{y}-{m}-{d}")
-      );
-    }
-
     this.getList();
+    this.getPriceChartData();
   },
   methods: {
     getList() {
       this.listLoading = true;
-      getNotifyList(this.listQuery)
+      getWWTPrice(this.listQuery)
         .then((response) => {
-          this.list = response.data;
-          this.total = response.data.length;
+          this.priceData = response.data;
+          [this.label.price1, this.ruleForm.price1] = response.data.price1.split(':');
+          [this.label.price2, this.ruleForm.price2] = response.data.price2.split(':');
+          [this.label.price3, this.ruleForm.price3] = response.data.price3.split(':');
+          [this.label.price4, this.ruleForm.price4] = response.data.price4.split(':');
+          [this.label.price5, this.ruleForm.price5] = response.data.price5.split(':');
+          [this.label.price6, this.ruleForm.price6] = response.data.price6.split(':');
+          [this.label.price7, this.ruleForm.price7] = response.data.price7.split(':');
         })
         .catch((error) => {
           console.log(error);
@@ -104,26 +114,58 @@ export default {
         });
     },
 
-    addNotify() {
-      this.dialogVisible = true;
-      this.$refs.addNotifyForm && this.$refs.addNotifyForm.resetFields();
+    getPriceChartData() {
+      getPriceList()
+        .then(res => {
+          try {
+            const prices = res.data.prices;
+            this.lineChartData.data = Object.keys(prices).sort((v1, v2) => new Date(v1).getTime() - new Date(v2).getTime()).map(v => {
+              return {
+                time: v,
+                count: prices[v]
+              };
+            });
+          } catch (error) {
+            this.lineChartData.data = [];
+          }
+        })
+        .catch(() => {})
+        .finally(() => {});
     },
 
-    deleteItem(row) {
-      this.$message({
-        message: "操作Success",
-        type: "success"
-      });
-      row.status = "disable";
-    },
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.dialogVisible = false;
-          alert("submit!");
-        } else {
-          console.log("error submit!!");
-          return false;
+          const param = {
+            price1: `${this.label.price1}:${this.ruleForm.price1}`,
+            price2: `${this.label.price2}:${this.ruleForm.price2}`,
+            price3: `${this.label.price3}:${this.ruleForm.price3}`,
+            price4: `${this.label.price4}:${this.ruleForm.price4}`,
+            price5: `${this.label.price5}:${this.ruleForm.price5}`,
+            price6: `${this.label.price6}:${this.ruleForm.price6}`,
+            price7: `${this.label.price7}:${this.ruleForm.price7}`
+          };
+          for (const key in this.priceData) {
+            if (this.priceData[key] === param[key]) {
+              delete param[key];
+            }
+          }
+          if (!Object.keys(param).length) {
+            return;
+          }
+          this.updateLoading = true;
+          updateWWTPrice(param)
+            .then(res => {
+              this.getPriceChartData();
+              this.$message({
+                message: `价格设置修改成功`,
+                type: 'success'
+              });
+            })
+            .catch(() => {})
+            .finally(() => {
+              this.updateLoading = false;
+            });
         }
       });
     }
@@ -134,6 +176,11 @@ export default {
 .filter-container {
   .filter-item {
     margin-right: 1rem;
+  }
+}
+/deep/ .el-loading-spinner{
+  svg{
+    width: 1rem;
   }
 }
 </style>

@@ -90,6 +90,16 @@ const validateAddress = (rule, value, callback) => {
     callback();
   }
 };
+const validateFloatNum = (rule, value, callback) => {
+  const reg = /^\d+(\.\d+)?$/;
+  if (!value) {
+    callback(new Error("不能为空"));
+  } else if (!reg.test(value)) {
+    callback(new Error("只能为数字"));
+  } else {
+      callback();
+  }
+};
 export {
   isExternal,
   validateName,
@@ -102,5 +112,6 @@ export {
   validateCorporate,
   validateCorporateIdCard,
   validateAddress,
-  validatePassword
+  validatePassword,
+  validateFloatNum
 };

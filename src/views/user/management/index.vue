@@ -35,8 +35,22 @@
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="unusedWwt" label="FMC数量" align="center" width="180" sortable></el-table-column>
-      <el-table-column prop="usedWwt" label="矿池投入数量" align="center" width="180" sortable></el-table-column>
+      <el-table-column label="账户状态" align="center" width="100">
+        <template slot-scope="{row}">
+          <el-tag :type="row.enable | statusFilter">
+            {{ row.enable ? '正常':'已冻结' }}
+          </el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column label="交易权限" align="center" width="100">
+        <template slot-scope="{row}">
+          <el-tag :type="row.alipayEnable | statusFilter">
+            {{ row.alipayEnable ? '正常':'已冻结' }}
+          </el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column prop="unusedWwt" label="FMC数量" align="center" width="120" sortable></el-table-column>
+      <el-table-column prop="usedWwt" label="矿池投入数量" align="center" width="150" sortable></el-table-column>
       <el-table-column label="上级" align="center" width="220">
         <template slot-scope="{row}">
           <template v-if="row.edit">
@@ -52,14 +66,20 @@
       <el-table-column label="操作" width="auto" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
 
-          <el-button v-if="row.enable" v-loading="showFreezeLoading(row)" type="primary" size="mini" @click="freezeAccount(row)">
-            冻结
+          <el-button v-if="row.enable" v-loading="showFreezeLoading(row)" type="primary" size="mini" :disabled="showFreezeLoading(row)" @click="freezeAccount(row)">
+            冻结账户
           </el-button>
-          <el-button v-else v-loading="showUnFreezeLoading(row)" size="mini" type="success" @click="unfreezeAccount(row)">
-            解冻
+          <el-button v-else v-loading="showUnFreezeLoading(row)" size="mini" type="success" :disabled="showUnFreezeLoading(row)" @click="unfreezeAccount(row)">
+            解冻账户
+          </el-button>
+          <el-button v-if="row.alipayEnable" v-loading="showFreezeTradLoading(row)" type="primary" size="mini" :disabled="showFreezeTradLoading(row)" @click="freezeAccountTrad(row)">
+            冻结交易权限
+          </el-button>
+          <el-button v-else v-loading="showUnFreezeTradLoading(row)" size="mini" type="success" :disabled="showUnFreezeTradLoading(row)" @click="unfreezeAccountTrad(row)">
+            解冻交易权限
           </el-button>
           <template v-if="!row.parentPhone">
-            <el-button v-if="row.edit" v-loading="showBindLoading(row)" type="success" size="mini" @click="bindSuperior(row)">
+            <el-button v-if="row.edit" v-loading="showBindLoading(row)" type="success" size="mini" :disabled="showBindLoading(row)" @click="bindSuperior(row)">
               确认
             </el-button>
             <el-button v-else type="primary" size="mini" @click="row.edit=!row.edit">
@@ -67,7 +87,7 @@
             </el-button>
           </template>
 
-          <el-button v-if="!row.active" v-loading="showActiveLoading(row)" size="mini" type="danger" @click="activeUser(row)">
+          <el-button v-if="!row.active" v-loading="showActiveLoading(row)" size="mini" type="danger" :disabled="showActiveLoading(row)" @click="activeUser(row)">
             激活
           </el-button>
         </template>
@@ -84,7 +104,7 @@ import { getUserList, modifyUserInfo } from "@/api/table";
 import Pagination from "@/components/Pagination"; // secondary package based on el-pagination
 
 export default {
-  name: "ComplexTable",
+  name: "UserManagement",
   components: { Pagination },
   filters: {
     statusFilter(status) {
@@ -103,6 +123,8 @@ export default {
       listLoading: true,
       freezeExchangeList: [],
       unfreezeExchangeList: [],
+      freezeTradExchangeList: [],
+      unfreezeTradExchangeList: [],
       bindExchangeList: [],
       activeExchangeList: [],
       listQuery: {
@@ -167,6 +189,12 @@ export default {
     showUnFreezeLoading(row) {
       return this.unfreezeExchangeList.includes(row.phone);
     },
+    showFreezeTradLoading(row) {
+      return this.freezeTradExchangeList.includes(row.phone);
+    },
+    showUnFreezeTradLoading(row) {
+      return this.unfreezeTradExchangeList.includes(row.phone);
+    },
     showBindLoading(row) {
       return this.bindExchangeList.includes(row.phone);
     },
@@ -175,8 +203,10 @@ export default {
     },
     unfreezeAccount(row) {
       this.unfreezeExchangeList.push(row.phone);
-      modifyUserInfo({ phone: row.phone, enable: true })
+      modifyUserInfo({ userPhone: row.phone, enable: true })
       .then(res => {
+        row.enable = true;
+
         this.$message({
           message: `用户【${row.name}】解冻成功`,
           type: 'success'
@@ -189,8 +219,10 @@ export default {
     freezeAccount(row) {
       debugger;
       this.freezeExchangeList.push(row.phone);
-      modifyUserInfo({ phone: row.phone, enable: false })
+      modifyUserInfo({ userPhone: row.phone, enable: false })
       .then(res => {
+        row.enable = false;
+
         this.$message({
           message: `用户【${row.name}】冻结成功`,
           type: 'success'
@@ -200,9 +232,38 @@ export default {
         this.freezeExchangeList.splice(this.freezeExchangeList.indexOf(row.phone), 1);
       });
     },
+    unfreezeAccountTrad(row) {
+      this.unfreezeTradExchangeList.push(row.phone);
+      modifyUserInfo({ userPhone: row.phone, alipayEnable: true })
+      .then(res => {
+        row.alipayEnable = true;
+        this.$message({
+          message: `用户【${row.name}】交易权限解冻成功`,
+          type: 'success'
+        });
+      }).catch(() => {
+      }).finally(() => {
+        this.unfreezeTradExchangeList.splice(this.unfreezeTradExchangeList.indexOf(row.phone), 1);
+      });
+    },
+    freezeAccountTrad(row) {
+      debugger;
+      this.freezeTradExchangeList.push(row.phone);
+      modifyUserInfo({ userPhone: row.phone, alipayEnable: false })
+      .then(res => {
+        row.alipayEnable = false;
+        this.$message({
+          message: `用户【${row.name}】交易权限冻结成功`,
+          type: 'success'
+        });
+      }).catch(() => {
+      }).finally(() => {
+        this.freezeTradExchangeList.splice(this.freezeTradExchangeList.indexOf(row.phone), 1);
+      });
+    },
     bindSuperior(row) {
       this.bindExchangeList.push(row.phone);
-      modifyUserInfo({ phone: row.phone, parentPhone: row.editParentPhone })
+      modifyUserInfo({ userPhone: row.phone, parentPhone: row.editParentPhone })
       .then(res => {
         row.edit = false;
         this.$message({
@@ -219,8 +280,9 @@ export default {
     },
     activeUser(row) {
       this.activeExchangeList.push(row.phone);
-      modifyUserInfo({ phone: row.phone, active: true })
+      modifyUserInfo({ userPhone: row.phone, active: true })
       .then(res => {
+        row.active = true;
         this.$message({
           message: `用户【${row.name}】激活成功`,
           type: 'success'

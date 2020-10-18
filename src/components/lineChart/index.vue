@@ -75,8 +75,8 @@ export default {
           right: "100px"
         },
         grid: {
-          left: 10,
-          right: 10,
+          left: 40,
+          right: 20,
           bottom: 20,
           top: 30,
           containLabel: true
@@ -97,6 +97,10 @@ export default {
           boundaryGap: false,
           axisTick: {
             show: false
+          },
+          axisLabel: {
+            showMaxLabel: true,
+             rotate: 45
           }
         }
       };

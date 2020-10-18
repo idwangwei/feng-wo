@@ -110,7 +110,7 @@ import { getRoles, getManegements } from "@/api/table";
 const roleAuthLabelValue = [
   { value: 'all', label: '所有权限' },
   { value: 'pool', label: '矿池管理' },
-  { value: 'wwt', label: 'WWT价格管理' },
+  { value: 'wwt', label: 'FMC价格管理' },
   { value: 'order', label: '订单管理' },
   { value: 'notity', label: '公告管理' },
   { value: 'feedback', label: '用户反馈管理' },
