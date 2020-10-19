@@ -69,10 +69,25 @@ export function getManegements() {
     method: 'get'
   });
 }
-export function getOrderList() {
+export function getOrderList(data) {
   return request({
     url: '/bms/market/list',
-    method: 'post'
+    method: 'post',
+    data
+  });
+}
+export function cancelOrder(data) {
+  return request({
+    url: '/bms/market/canceled',
+    method: 'post',
+    data
+  });
+}
+export function permitOrder(data) {
+  return request({
+    url: '/bms/market/permit',
+    method: 'post',
+    data: { language: "", ...data }
   });
 }
 export function getNotifyList() {
