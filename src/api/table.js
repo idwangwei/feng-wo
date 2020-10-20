@@ -90,27 +90,57 @@ export function permitOrder(data) {
     data: { language: "", ...data }
   });
 }
-export function getNotifyList() {
+export function getNotifyList(data) {
   return request({
     url: '/bms/ann/list',
-    method: 'post'
+    method: 'post',
+    data
   });
 }
-export function getFeedbackList() {
+export function deleteNotify(params) {
+  return request({
+    url: '/bms/ann',
+    method: 'delete',
+    params
+  });
+}
+export function addNotify(data) {
+  return request({
+    url: '/bms/ann',
+    method: 'post',
+    data: { language: '', ...data }
+  });
+}
+export function getFeedbackList(data) {
   return request({
     url: '/bms/feedback/list',
-    method: 'post'
+    method: 'post',
+    data
   });
 }
-export function getFeedbackReplyList() {
+export function getFeedbackReplyList(data) {
   return request({
     url: '/bms/feedback/replyfeedbacks',
-    method: 'post'
+    method: 'post',
+    data
+  });
+}
+export function replyFeedback(data) {
+  return request({
+    url: '/bms/feedback/reply',
+    method: 'post',
+    data
   });
 }
 export function getHomeData() {
   return request({
     url: '/bms/common/home',
     method: 'post'
+  });
+}
+export function getImg({ imageType, filename }) {
+  return request({
+    url: `/bms/common/images/${imageType}/${filename}`,
+    method: 'get'
   });
 }
