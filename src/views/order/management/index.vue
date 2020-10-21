@@ -2,29 +2,29 @@
   <div class="app-container">
     <div class="filter-container">
       订单号：
-      <el-input v-model="listQuery.orderId" placeholder="" size="small" style="width: 150px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input v-model="listQuery.orderId" placeholder="" size="small" style="width: 150px;margin-top: 0.5rem;" class="filter-item" @keyup.enter.native="handleFilter" />
       买家手机号：
-      <el-input v-model="listQuery.buyPhone" placeholder="" size="small" style="width: 150px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input v-model="listQuery.buyPhone" placeholder="" size="small" style="width: 150px;margin-top: 0.5rem;" class="filter-item" @keyup.enter.native="handleFilter" />
       卖家手机号：
-      <el-input v-model="listQuery.sellerPhone" placeholder="" size="small" style="width: 150px;" class="filter-item" @keyup.enter.native="handleFilter" />
-      订单状态：<el-select v-model="listQuery.status" placeholder="" size="small" clearable class="filter-item" style="width: 100px">
+      <el-input v-model="listQuery.sellerPhone" placeholder="" size="small" style="width: 150px;margin-top: 0.5rem;" class="filter-item" @keyup.enter.native="handleFilter" />
+      订单状态：<el-select v-model="listQuery.status" placeholder="" size="small" clearable class="filter-item" style="width: 100px;margin-top: 0.5rem;">
         <el-option label="已取消" value="CANCELED" />
         <el-option label="已完成" value="COMPLETED" />
         <el-option label="待付款" value="OBLIGATION" />
         <el-option label="待确认" value="UNCONFIRMED" />
       </el-select>
-      订单类型：<el-select v-model="listQuery.type" placeholder="" size="small" clearable class="filter-item" style="width: 100px">
+      订单类型：<el-select v-model="listQuery.type" placeholder="" size="small" clearable class="filter-item" style="width: 100px;margin-top: 0.5rem;">
         <el-option label="普通" :value="false" />
         <el-option label="大宗" :value="true" />
       </el-select>
 
-      <el-button class="filter-item" size="small" type="primary" icon="el-icon-search" @click="handleFilter">
+      <el-button class="filter-item" size="small" type="primary" icon="el-icon-search" style="margin-top: 0.5rem;" @click="handleFilter">
         查询
       </el-button>
 
     </div>
 
-    <el-table :key="tableKey" v-loading="listLoading" :data="list" border fit highlight-current-row style="width: 100%; margin-top:1rem;" @sort-change="sortChange">
+    <el-table :key="tableKey" v-loading="listLoading" :data="list" border fit highlight-current-row style="width: 100%; margin-top:1rem;">
       <el-table-column prop="orderId" label="订单号" min-width="7%"></el-table-column>
       <el-table-column prop="buyPhone" label="买家手机号" align="center" min-width="7%"></el-table-column>
       <el-table-column prop="sellerPhone" label="卖家手机号" align="center" min-width="7%"></el-table-column>
@@ -97,13 +97,13 @@ export default {
     },
     colorFilter(status) {
       const statusMap = {
-        MATCHING: "#73C6B6",
-        TRANSACTION: "#85C1E9",
-        CANCELED: "#C0C4CC",
-        COMPLETED: "#67C23A",
-        OBLIGATION: "#82E0AA",
-        UNCONFIRMED: "#67C23A",
-        COMPLAINT: "#E6A23C"
+        MATCHING: "#73C6B647",
+        TRANSACTION: "#85C1E947",
+        CANCELED: "#C0C4CC47",
+        COMPLETED: "#67C23A47",
+        OBLIGATION: "#82E0AA47",
+        UNCONFIRMED: "#67C23A47",
+        COMPLAINT: "#e2aa5647"
       };
       return statusMap[status];
     },

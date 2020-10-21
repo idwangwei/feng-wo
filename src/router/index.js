@@ -101,12 +101,27 @@ export const constantRoutes = [
         component: Layout,
         redirect: '/order/management',
         sidebarShow: true,
-        children: [{
-            path: 'management',
-            name: '订单管理',
-            component: () => import('@/views/order/management/index'),
-            meta: { title: '订单管理', icon: 'clipboard' }
-        }]
+        meta: { title: '订单', icon: 'clipboard' },
+        children: [
+            {
+                path: 'management',
+                name: '订单管理',
+                component: () => import('@/views/order/management/index'),
+                meta: { title: '订单管理', icon: 'form' }
+            },
+            {
+                path: 'buy',
+                name: '买单管理',
+                component: () => import('@/views/order/management/buyOrder'),
+                meta: { title: '买单管理', icon: 'form' }
+            },
+            {
+                path: 'complaint',
+                name: '申诉管理',
+                component: () => import('@/views/order/management/complaintOrder'),
+                meta: { title: '申诉管理', icon: 'form' }
+            }
+        ]
     },
     {
         path: '/notify',

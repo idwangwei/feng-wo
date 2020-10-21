@@ -4,12 +4,14 @@
       <el-table-column prop="id" label="用户ID" min-width="10%"></el-table-column>
       <el-table-column prop="phoneNumber" label="电话号码" align="center" min-width="10%"></el-table-column>
       <el-table-column prop="content" label="反馈内容" align="left" min-width="40%"></el-table-column>
-      <el-table-column label="图片" align="left" min-width="30%">
+      <el-table-column label="图片" align="center" width="120px">
         <template slot-scope="{row}">
-          <el-image style="width: 100px; height: 100px" :src="row.url" :preview-src-list="row.imageList"></el-image>
+          <div @click.stop>
+            <el-image v-if="row.url" style="width: 100px; height: 100px" :src="row.url" :preview-src-list="row.imageList"></el-image>
+          </div>
         </template>
       </el-table-column>
-      <el-table-column label="时间" align="center" min-width="10%" class-name="badge-overflow-display">
+      <el-table-column label="时间" align="center" min-width="15%" class-name="badge-overflow-display">
         <template slot-scope="{row}">
           <el-badge is-dot class="item" :hidden="row.haveRead">{{ row.commitTime | DateFilter }}</el-badge>
         </template>
@@ -109,8 +111,10 @@ export default {
           this.list = response.data.contents.map(v => {
             let imageList = [];
             try {
-              imageList = JSON.parse(v.images).map(img => `${process.env.VUE_APP_BASE_API}/bms/common/images/FEEDBACK/${img}`);
-            } catch (err) { console.log(err); }
+							imageList = v.images.replace(/\[|\]/g, '').split(',').map(img => `${process.env.VUE_APP_BASE_API}/bms/common/images/FEEDBACK/${img.trim()}`);
+            } catch (err) {
+							return { ...v, url: null, imageList: null };
+						}
             return { ...v, url: imageList[0], imageList: imageList };
           });
           this.total = response.data.total;
@@ -123,7 +127,7 @@ export default {
         });
     },
 
-    clickRow(row, column, cell, event) {
+    clickRow(row, column, event) {
       this.replyListLoading = true;
       this.dialogVisible = true;
       this.replyRow = row;
@@ -139,7 +143,7 @@ export default {
       .finally(() => {
         this.replyListLoading = false;
       });
-    },
+		},
 
     replyBtnCommit() {
       this.replyLoading = true;

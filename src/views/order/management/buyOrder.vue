@@ -16,7 +16,7 @@
 
     </div>
 
-    <el-table :key="tableKey" v-loading="listLoading" :data="list" border fit highlight-current-row style="width: 100%; margin-top:1rem;" @sort-change="sortChange">
+    <el-table :key="tableKey" v-loading="listLoading" :data="list" border fit highlight-current-row style="width: 100%; margin-top:1rem;">
       <el-table-column prop="orderId" label="订单号" min-width="7%"></el-table-column>
       <el-table-column prop="buyPhone" label="买家手机号" align="center" min-width="7%"></el-table-column>
       <el-table-column prop="sellerPhone" label="卖家手机号" align="center" min-width="7%"></el-table-column>
@@ -89,13 +89,13 @@ export default {
     },
     colorFilter(status) {
       const statusMap = {
-        MATCHING: "#73C6B6",
-        TRANSACTION: "#85C1E9",
-        CANCELED: "#C0C4CC",
-        COMPLETED: "#67C23A",
-        OBLIGATION: "#82E0AA",
-        UNCONFIRMED: "#67C23A",
-        COMPLAINT: "#E6A23C"
+        MATCHING: "#73C6B647",
+        TRANSACTION: "#85C1E947",
+        CANCELED: "#C0C4CC47",
+        COMPLETED: "#67C23A47",
+        OBLIGATION: "#82E0AA47",
+        UNCONFIRMED: "#67C23A47",
+        COMPLAINT: "#e2aa5647"
       };
       return statusMap[status];
     },

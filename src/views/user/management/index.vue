@@ -1,25 +1,25 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      昵称：<el-input v-model="listQuery.name" placeholder="" size="small" clearable style="width: 150px;margin-right:1rem" class="filter-item" @keyup.enter.native="handleFilter" />
-      手机号：<el-input v-model="listQuery.phone" placeholder="" size="small" clearable style="width: 150px;;margin-right:1rem" class="filter-item" @keyup.enter.native="handleFilter" />
-      实名：<el-select v-model="listQuery.active" placeholder="" size="small" clearable class="filter-item" style="width: 100px;margin-right:1rem">
+      昵称：<el-input v-model="listQuery.name" placeholder="" size="small" clearable style="width: 150px;margin-right:1rem;margin-top: 0.5rem;" class="filter-item" @keyup.enter.native="handleFilter" />
+      手机号：<el-input v-model="listQuery.phone" placeholder="" size="small" clearable style="width: 150px;;margin-right:1rem;margin-top: 0.5rem;" class="filter-item" @keyup.enter.native="handleFilter" />
+      实名：<el-select v-model="listQuery.active" placeholder="" size="small" clearable class="filter-item" style="width: 100px;margin-right:1rem;margin-top: 0.5rem;">
         <el-option label="全部" :value="null" />
         <el-option label="是" :value="true" />
         <el-option label="否" :value="false" />
       </el-select>
-      账号状态：<el-select v-model="listQuery.enable" placeholder="" size="small" clearable class="filter-item" style="width: 100px;margin-right:1rem">
+      账号状态：<el-select v-model="listQuery.enable" placeholder="" size="small" clearable class="filter-item" style="width: 100px;margin-right:1rem;margin-top: 0.5rem;">
         <el-option label="全部" :value="null" />
         <el-option label="正常" :value="true" />
         <el-option label="冻结" :value="false" />
       </el-select>
-      交易权限：<el-select v-model="listQuery.alipayEnable" placeholder="" size="small" clearable class="filter-item" style="width: 100px;margin-right:1rem">
+      交易权限：<el-select v-model="listQuery.alipayEnable" placeholder="" size="small" clearable class="filter-item" style="width: 100px;margin-right:1rem;margin-top: 0.5rem;">
         <el-option label="全部" :value="null" />
         <el-option label="正常" :value="true" />
         <el-option label="冻结" :value="false" />
       </el-select>
 
-      <el-button class="filter-item" size="small" type="primary" icon="el-icon-search" :disabled="listLoading" @click="handleFilter">
+      <el-button class="filter-item" size="small" type="primary" icon="el-icon-search" style="margin-top: 0.5rem;" :disabled="listLoading" @click="handleFilter">
         查询
       </el-button>
 
