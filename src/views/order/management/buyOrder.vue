@@ -2,18 +2,10 @@
   <div class="app-container">
     <div class="filter-container">
       订单号：
-      <el-input v-model="listQuery.orderId" placeholder="" size="small" style="width: 150px;" class="filter-item" @keyup.enter.native="handleFilter" />
-      买家手机号：
-      <el-input v-model="listQuery.buyPhone" placeholder="" size="small" style="width: 150px;" class="filter-item" @keyup.enter.native="handleFilter" />
-      卖家手机号：
-      <el-input v-model="listQuery.sellerPhone" placeholder="" size="small" style="width: 150px;" class="filter-item" @keyup.enter.native="handleFilter" />
-      订单状态：<el-select v-model="listQuery.status" placeholder="" size="small" clearable class="filter-item" style="width: 100px">
-        <el-option label="已取消" value="CANCELED" />
-        <el-option label="已完成" value="COMPLETED" />
-        <el-option label="待付款" value="OBLIGATION" />
-        <el-option label="待确认" value="UNCONFIRMED" />
-      </el-select>
-      订单类型：<el-select v-model="listQuery.type" placeholder="" size="small" clearable class="filter-item" style="width: 100px">
+      <el-input v-model="listQuery.name" placeholder="" size="small" style="width: 150px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      手机号：
+      <el-input v-model="listQuery.phone" placeholder="" size="small" style="width: 150px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      订单类型：<el-select v-model="listQuery.realName" placeholder="" size="small" clearable class="filter-item" style="width: 100px">
         <el-option label="普通" :value="false" />
         <el-option label="大宗" :value="true" />
       </el-select>
@@ -30,8 +22,8 @@
       <el-table-column prop="sellerPhone" label="卖家手机号" align="center" min-width="7%"></el-table-column>
       <el-table-column prop="number" label="数量" align="center" min-width="4%"></el-table-column>
       <el-table-column prop="cny" label="CNY" align="center" min-width="4%"></el-table-column>
-      <el-table-column prop="price" label="价格" align="center" min-width="4%"></el-table-column>
       <el-table-column prop="serviceCharge" label="手续费" align="center" min-width="4%"></el-table-column>
+      <el-table-column prop="price" label="价格" align="center" min-width="4%"></el-table-column>
       <el-table-column prop="type" label="订单类型" align="center" min-width="4%"></el-table-column>
       <el-table-column label="时间" align="center" min-width="8%">
         <template slot-scope="{row}">
@@ -43,7 +35,7 @@
           <template v-if="row.edit">
             <el-select v-model="row.editStatus" placeholder="" size="small" clearable class="filter-item" style="width: 4rem">
               <el-option label="取消" value="cancel" />
-              <el-option label="放行" value="permit" />
+              <el-option v-if="v.status === 'MATCHING'" label="匹配中" value="matching" />
             </el-select>
             <el-button class="cancel-btn" size="mini" type="warning" @click="cancelEdit(row)">
               取消
@@ -58,7 +50,7 @@
 
       <el-table-column label="操作" min-width="8%" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
-          <template v-if="row.status === 'OBLIGATION' || row.status === 'UNCONFIRMED'">
+          <template>
             <el-button v-if="row.edit" v-loading="updateLoading(row)" type="success" size="mini" :disabled="updateLoading(row)" @click="updateStatus(row)">
               确认
             </el-button>
@@ -76,11 +68,11 @@
 </template>
 
 <script>
-import { getOrderList, cancelOrder, permitOrder } from "@/api/table";
+import { getBuyOrderList, cancelBuyOrder, matchBuyOrder } from "@/api/table";
 import Pagination from "@/components/Pagination"; // secondary package based on el-pagination
 import { parseTime } from "@/utils/index";
 export default {
-  name: "OrderList",
+  name: "BuyOrderList",
   components: { Pagination },
   filters: {
     statusFilter(status) {
@@ -122,12 +114,8 @@ export default {
         page: 1,
         pageSize: 10,
         orderId: null,
-        buyPhone: null,
-        sellerPhone: null,
-        orderType: null,
-        status: null,
-        startTime: null,
-        endTime: null
+        phone: null,
+        orderType: null
       },
       updateLoadingList: []
     };
@@ -140,9 +128,9 @@ export default {
       this.getList();
     },
 
-    getList() {
-      this.listLoading = true;
-      getOrderList(this.listQuery)
+    getList(hideLoading = true) {
+      this.listLoading = hideLoading;
+      getBuyOrderList(this.listQuery)
         .then((response) => {
           this.list = response.data.contents.map((v) => ({
             ...v,
@@ -167,9 +155,9 @@ export default {
       this.updateLoadingList.push(row.phone);
       let updateFn = null;
       if (row.editStatus === "cancel") {
-        updateFn = cancelOrder;
-      } else if (row.editStatus === "permit") {
-        updateFn = permitOrder;
+        updateFn = cancelBuyOrder;
+      } else if (row.editStatus === "matching") {
+        updateFn = matchBuyOrder;
       } else {
         return;
       }
@@ -181,19 +169,7 @@ export default {
             type: "success"
           });
           row.editStatus = null;
-          getOrderList({ orderId: row.orderId })
-            .then((res) => {
-              res.data.contents.forEach((v) => {
-                const idx = this.list.findIndex((o) => o.orderId === v.orderId);
-                this.list.splice(idx, 1, {
-                  ...v,
-                  edit: false,
-                  editStatus: null
-                });
-              });
-            })
-            .catch(() => {})
-            .finally(() => {});
+          this.getList(false);
         })
         .catch(() => {
           row.editStatus = null;

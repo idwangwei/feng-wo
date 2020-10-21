@@ -76,11 +76,32 @@ export function getOrderList(data) {
     data
   });
 }
+export function getBuyOrderList(data) {
+  return request({
+    url: '/bms/market/buyorder',
+    method: 'post',
+    data
+  });
+}
 export function cancelOrder(data) {
   return request({
     url: '/bms/market/canceled',
     method: 'post',
     data
+  });
+}
+export function cancelBuyOrder(data) {
+  return request({
+    url: '/bms/market/canceled',
+    method: 'post',
+    data: { language: "", ...data }
+  });
+}
+export function matchBuyOrder() {
+  return request({
+    url: '/bms/market/match',
+    method: 'post',
+    data: { language: "" }
   });
 }
 export function permitOrder(data) {

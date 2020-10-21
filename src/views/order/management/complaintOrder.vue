@@ -7,21 +7,9 @@
       <el-input v-model="listQuery.buyPhone" placeholder="" size="small" style="width: 150px;" class="filter-item" @keyup.enter.native="handleFilter" />
       卖家手机号：
       <el-input v-model="listQuery.sellerPhone" placeholder="" size="small" style="width: 150px;" class="filter-item" @keyup.enter.native="handleFilter" />
-      订单状态：<el-select v-model="listQuery.status" placeholder="" size="small" clearable class="filter-item" style="width: 100px">
-        <el-option label="已取消" value="CANCELED" />
-        <el-option label="已完成" value="COMPLETED" />
-        <el-option label="待付款" value="OBLIGATION" />
-        <el-option label="待确认" value="UNCONFIRMED" />
-      </el-select>
-      订单类型：<el-select v-model="listQuery.type" placeholder="" size="small" clearable class="filter-item" style="width: 100px">
-        <el-option label="普通" :value="false" />
-        <el-option label="大宗" :value="true" />
-      </el-select>
-
       <el-button class="filter-item" size="small" type="primary" icon="el-icon-search" @click="handleFilter">
         查询
       </el-button>
-
     </div>
 
     <el-table :key="tableKey" v-loading="listLoading" :data="list" border fit highlight-current-row style="width: 100%; margin-top:1rem;" @sort-change="sortChange">
@@ -38,6 +26,7 @@
           {{ row.time | DateFilter }}
         </template>
       </el-table-column>
+
       <el-table-column label="订单状态" align="center" min-width="6%">
         <template slot-scope="{row}">
           <template v-if="row.edit">
@@ -55,10 +44,9 @@
         </template>
 
       </el-table-column>
-
       <el-table-column label="操作" min-width="8%" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
-          <template v-if="row.status === 'OBLIGATION' || row.status === 'UNCONFIRMED'">
+          <template>
             <el-button v-if="row.edit" v-loading="updateLoading(row)" type="success" size="mini" :disabled="updateLoading(row)" @click="updateStatus(row)">
               确认
             </el-button>
@@ -80,7 +68,7 @@ import { getOrderList, cancelOrder, permitOrder } from "@/api/table";
 import Pagination from "@/components/Pagination"; // secondary package based on el-pagination
 import { parseTime } from "@/utils/index";
 export default {
-  name: "OrderList",
+  name: "ComplaintOrderList",
   components: { Pagination },
   filters: {
     statusFilter(status) {
@@ -122,12 +110,10 @@ export default {
         page: 1,
         pageSize: 10,
         orderId: null,
+        status: "COMPLAINT",
         buyPhone: null,
-        sellerPhone: null,
-        orderType: null,
-        status: null,
-        startTime: null,
-        endTime: null
+
+        sellerPhone: null
       },
       updateLoadingList: []
     };
