@@ -5,11 +5,12 @@
       <el-button type="primary" size="mini" style="margin-bottom:1rem" @click="showRoleDialog()">
         添加角色
       </el-button>
+
       <el-table v-loading="roleListLoading" :data="roleList" border fit highlight-current-row style="width: 100%;" height="calc(100% - 4rem)">
         <el-table-column prop="name" label="角色名称" width="150"></el-table-column>
         <el-table-column label="权限" align="center" width="auto">
           <template slot-scope="{row}">
-            <el-tag v-for="(item, index) in row.auth" :key="index" type="success">
+            <el-tag v-for="(item, index) in row.auth" :key="index" type="success" size="mini">
               {{ item | authMap }}
             </el-tag>
           </template>
@@ -26,6 +27,7 @@
         </el-table-column>
       </el-table>
     </div>
+
     <div class="mangement-container">
       <el-button type="primary" size="mini" style="margin-bottom:1rem" @click="showManegementDialog()">
         添加管理员
@@ -34,14 +36,14 @@
         <el-table-column prop="phone" label="手机号" width="150"></el-table-column>
         <el-table-column label="角色" align="center" width="auto">
           <template slot-scope="{row}">
-            <el-tag v-for="(item, index) in row.roles" :key="index" type="success">
-              {{ item.name }}
+            <el-tag v-for="(item, index) in row.roles" :key="index" type="success" size="mini">
+              {{ item }}
             </el-tag>
           </template>
         </el-table-column>
         <el-table-column label="状态" align="center" width="100">
           <template slot-scope="{row}">
-            <el-tag :type="row.status | statusFilter">
+            <el-tag :type="row.status | statusFilter" size="mini">
               {{ row.status == 'enable' ? '正常':'禁用' }}
             </el-tag>
           </template>
@@ -53,7 +55,7 @@
                 禁用
               </el-button>
               <el-button v-else size="mini" type="success" @click="enableAccount(row)">
-                恢复
+                激活
               </el-button>
             </transition>
             <el-button size="mini" type="success" @click="showManegementDialog(row)">
@@ -106,7 +108,7 @@
 </template>
 
 <script>
-import { getRoles, getManegements } from "@/api/table";
+import { getRoles, getAdminuser } from "@/api/table";
 const roleAuthLabelValue = [
   { value: 'all', label: '所有权限' },
   { value: 'pool', label: '矿池管理' },
@@ -127,7 +129,7 @@ export default {
       return statusMap[status];
     },
     authMap(auth) {
-      return roleAuthLabelValue.find(v => v.value === auth).label;
+      return roleAuthLabelValue.find(v => v.value === auth.toLowerCase()).label;
     }
   },
   data() {
@@ -168,9 +170,9 @@ export default {
   methods: {
     getManegementList() {
       this.manegementListLoading = true;
-      getManegements()
+      getAdminuser()
         .then((response) => {
-          this.manegementList = response.data;
+          this.manegementList = response.data.map(v => ({ ...v, roles: v.roleName.split(',') }));
         })
         .catch((error) => {
           console.log(error);
@@ -183,7 +185,7 @@ export default {
       this.roleListLoading = true;
       getRoles()
         .then((response) => {
-          this.roleList = response.data;
+          this.roleList = response.data.map(v => ({ ...v, auth: v.role.split(',') }));
         })
         .catch((error) => {
           console.log(error);

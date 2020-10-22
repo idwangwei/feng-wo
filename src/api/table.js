@@ -57,18 +57,7 @@ export function updateWWTPrice(data) {
     data
   });
 }
-export function getRoles() {
-  return request({
-    url: '/role/list',
-    method: 'get'
-  });
-}
-export function getManegements() {
-  return request({
-    url: '/manegement/list',
-    method: 'get'
-  });
-}
+
 export function getOrderList(data) {
   return request({
     url: '/bms/market/list',
@@ -165,3 +154,90 @@ export function getImg({ imageType, filename }) {
     method: 'get'
   });
 }
+
+// 角色操作
+export function getRoles() {
+  return request({
+    url: '/bms/adminuser/role/list',
+    method: 'get'
+  });
+}
+export function addRole(data) {
+  return request({
+    url: '/bms/adminuser/role',
+    method: 'post',
+    data
+  });
+}
+export function updateRole(data) {
+  return request({
+    url: '/bms/adminuser/role',
+    method: 'put',
+    data
+  });
+}
+export function deleteRole(data) {
+  return request({
+    url: '/bms/adminuser/role',
+    method: 'delete',
+    data
+  });
+}
+export function getRoleById(data) {
+  return request({
+    url: '/bms/adminuser/role',
+    method: 'get',
+    data
+  });
+}
+
+// 管理员操作
+export function getAdminuser() {
+  return request({
+    url: `/bms/adminuser/list`,
+    method: 'get'
+  });
+}
+export function addAdminuser(data) {
+  return request({
+    url: `/bms/adminuser`,
+    method: 'post',
+    data
+  });
+}
+export function updateAdminuserEnable(data) {
+  return request({
+    url: `/bms/adminuser`,
+    method: 'put',
+    data
+  });
+}
+export function updateAdminuserRole(data) {
+  return request({
+    url: `/bms/adminuser/update`,
+    method: 'put',
+    data
+  });
+}
+export function getAdminuserByName(data) {
+  return request({
+    url: `/bms/adminuser/username`,
+    method: 'get',
+    data
+  });
+}
+export function getAdminuserByPhone(data) {
+  return request({
+    url: `/bms/adminuser/phone`,
+    method: 'get',
+    data
+  });
+}
+export function getAdminuserByRoleId(data) {
+  return request({
+    url: `/bms/adminuser/roleId`,
+    method: 'get',
+    data
+  });
+}
+

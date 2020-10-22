@@ -50,7 +50,7 @@
             </el-button>
           </template>
           <template v-else>
-            <el-tag :color="row.status | colorFilter">{{ row.status | statusFilter }}</el-tag>
+            <el-tag :color="row.status | colorFilter" size="mini">{{ row.status | statusFilter }}</el-tag>
           </template>
         </template>
 

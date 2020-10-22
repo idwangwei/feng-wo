@@ -14,7 +14,8 @@ const state = {
   initLogin: getInitLogin(),
   expireTime: 3600,
   refreshToken: getRefreshToken(),
-  name: ''
+  name: '',
+  authArr: []
 };
 
 const mutations = {

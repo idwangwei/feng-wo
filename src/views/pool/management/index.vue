@@ -16,7 +16,7 @@
       <el-table-column prop="buyMax" label="最大购买数量" align="center" width="120"></el-table-column>
       <el-table-column label="上架状态" align="center" width="100">
         <template slot-scope="{row}">
-          <el-tag :type="row.enable | statusFilter">
+          <el-tag :type="row.enable | statusFilter" size="mini">
             {{ row.enable ? '是':'否' }}
           </el-tag>
         </template>

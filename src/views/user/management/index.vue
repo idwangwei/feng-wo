@@ -30,21 +30,21 @@
       <el-table-column prop="phone" label="电话号码" align="center" width="120"></el-table-column>
       <el-table-column label="是否实名" align="center" width="100">
         <template slot-scope="{row}">
-          <el-tag :type="row.active | statusFilter">
+          <el-tag :type="row.active | statusFilter" size="mini">
             {{ row.active ? '是':'否' }}
           </el-tag>
         </template>
       </el-table-column>
       <el-table-column label="账户状态" align="center" width="100">
         <template slot-scope="{row}">
-          <el-tag :type="row.enable | statusFilter">
+          <el-tag :type="row.enable | statusFilter" size="mini">
             {{ row.enable ? '正常':'已冻结' }}
           </el-tag>
         </template>
       </el-table-column>
       <el-table-column label="交易权限" align="center" width="100">
         <template slot-scope="{row}">
-          <el-tag :type="row.alipayEnable | statusFilter">
+          <el-tag :type="row.alipayEnable | statusFilter" size="mini">
             {{ row.alipayEnable ? '正常':'已冻结' }}
           </el-tag>
         </template>
