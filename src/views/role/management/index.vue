@@ -20,7 +20,7 @@
             <el-button type="primary" size="mini" @click="showRoleDialog(row)">
               编辑
             </el-button>
-            <el-button size="mini" type="warning" @click="deleteRole(row)">
+            <el-button v-if="row.role !== 'ALL'" v-loading="showDeleteRoleLoading(row)" :disabled="showDeleteRoleLoading(row)" size="mini" type="warning" @click="deleteRoleHandle(row)">
               删除
             </el-button>
           </template>
@@ -43,25 +43,25 @@
         </el-table-column>
         <el-table-column label="状态" align="center" width="100">
           <template slot-scope="{row}">
-            <el-tag :type="row.status | statusFilter" size="mini">
-              {{ row.status == 'enable' ? '正常':'禁用' }}
+            <el-tag :type="row.enable | statusFilter" size="mini">
+              {{ row.enable ? '正常':'禁用' }}
             </el-tag>
           </template>
         </el-table-column>
         <el-table-column label="操作" width="240" class-name="small-padding fixed-width">
           <template slot-scope="{row}">
             <transition name="el-fade-in">
-              <el-button v-if="row.status == 'enable'" type="primary" size="mini" @click="disableAccount(row)">
+              <el-button v-if="row.enable" v-loading="showDisableManegementLoading(row)" :disabled="showDisableManegementLoading(row)" type="primary" size="mini" @click="disableAccount(row)">
                 禁用
               </el-button>
-              <el-button v-else size="mini" type="success" @click="enableAccount(row)">
+              <el-button v-else v-loading="showEnableManegementLoading(row)" :disabled="showEnableManegementLoading(row)" size="mini" type="success" @click="enableAccount(row)">
                 激活
               </el-button>
             </transition>
-            <el-button size="mini" type="success" @click="showManegementDialog(row)">
+            <el-button size="mini" type="primary" @click="showManegementDialog(row)">
               编辑
             </el-button>
-            <el-button size="mini" type="warning" @click="deleteAccount(row)">
+            <el-button v-if="row.username !== 'admin'" v-loading="showDeleteManegementLoading(row)" size="mini" type="warning" :disabled="showDeleteManegementLoading(row)" @click="deleteAccountHandle(row)">
               删除
             </el-button>
           </template>
@@ -74,8 +74,8 @@
         <el-form-item label="角色名称" prop="name">
           <el-input v-model="roleTemp.name" style="width:300px" />
         </el-form-item>
-        <el-form-item label="Type" prop="auth">
-          <el-select v-model="roleTemp.auth" multiple class="filter-item" placeholder="Please select" style="width:300px" @change="roleRuleChange($event)">
+        <el-form-item label="权限" prop="auth">
+          <el-select v-model="roleTemp.auth" multiple class="filter-item" placeholder="请选择角色权限" style="width:300px" @change="roleRuleChange($event)">
             <el-option v-for="item in authOptions" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
@@ -83,17 +83,23 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button size="mini" @click="roleDialogVisible = false">取 消</el-button>
-        <el-button size="mini" type="primary" @click="confirmRole">确 定</el-button>
+        <el-button v-loading="addRoleLoading" :disabled="addRoleLoading" size="mini" type="primary" @click="confirmRole">确 定</el-button>
       </span>
     </el-dialog>
 
     <el-dialog :title="manegementDialogTitle" :visible.sync="manegementDialogVisible" width="50%">
       <el-form ref="manegementForm" :rules="manegementRules" :model="manegementTemp" label-position="left" label-width="100px" style="width: 400px; margin-left:50px;">
-        <el-form-item label="手机号" prop="phone">
+        <el-form-item label="手机号" prop="phone" :disabled="!!manegementDialog">
           <el-input v-model="manegementTemp.phone" style="width:300px" />
         </el-form-item>
-        <el-form-item label="角色" prop="roles">
-          <el-select v-model="manegementTemp.roles" multiple class="filter-item" placeholder="Please select" style="width:300px">
+        <el-form-item label="名称" prop="username">
+          <el-input v-model="manegementTemp.username" :disabled="!!manegementDialog" style="width:300px" />
+        </el-form-item>
+        <el-form-item v-if="!manegementDialog" label="密码" prop="password">
+          <el-input v-model="manegementTemp.password" style="width:300px" />
+        </el-form-item>
+        <el-form-item label="角色" prop="roleId">
+          <el-select v-model="manegementTemp.roleId" class="filter-item" placeholder="请选择" style="width:300px">
             <el-option v-for="item in roleList" :key="item.id" :label="item.name" :value="item.id" />
           </el-select>
         </el-form-item>
@@ -101,65 +107,86 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button size="mini" @click="manegementDialogVisible = false">取 消</el-button>
-        <el-button size="mini" type="primary" @click="confirmMangement">确 定</el-button>
+        <el-button v-loading="addManegementLoading" :disabled="addManegementLoading" size="mini" type="primary" @click="confirmMangement">确 定</el-button>
       </span>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { getRoles, getAdminuser } from "@/api/table";
+import { getRoles, getAdminuser, deleteAdminuserRole, deleteAdminuser, addRole, addAdminuser, updateRole, updateAdminuserRole, updateAdminuserEnable } from "@/api/table";
+import { validateTelephone } from "@/utils/validate";
+
 const roleAuthLabelValue = [
-  { value: 'all', label: '所有权限' },
-  { value: 'pool', label: '矿池管理' },
-  { value: 'wwt', label: 'FMC价格管理' },
-  { value: 'order', label: '订单管理' },
-  { value: 'notity', label: '公告管理' },
-  { value: 'feedback', label: '用户反馈管理' },
-  { value: 'user', label: '用户管理' },
-  { value: 'role', label: '角色管理' }
+  { value: 'ALL', label: '所有权限' },
+  { value: 'MINING_MANAGER', label: '矿池管理' },
+  { value: 'MARKET_MANAGER', label: '市场管理' },
+  { value: 'ORDER_MANAGER', label: '订单管理' },
+  { value: 'ANN_MANAGER', label: '公告管理' },
+  { value: 'FEEDBACK_MANAGER', label: '用户反馈管理' },
+  { value: 'USER_MANAGER', label: '用户管理' },
+  { value: 'ROLE_MANAGER', label: '角色管理' }
 ];
 export default {
   filters: {
     statusFilter(status) {
       const statusMap = {
-        enable: "success",
-        disable: "info"
+        'true': "success",
+        'false': "info"
       };
       return statusMap[status];
     },
     authMap(auth) {
-      return roleAuthLabelValue.find(v => v.value === auth.toLowerCase()).label;
+      return roleAuthLabelValue.find(v => v.value === auth).label;
     }
   },
   data() {
+    const validatePass = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入密码'));
+      } else if (!(/^.{8,18}$/.test(value))) {
+        callback(new Error('密码为8-18位有效字符'));
+      } else {
+        callback();
+      }
+    };
     return {
       roleList: [],
       manegementList: [],
       roleListLoading: true,
       manegementListLoading: true,
-      roleDialogType: 'add',
+      roleDialog: null,
       roleDialogTitle: '',
       roleDialogVisible: false,
-      manegementDialogType: 'add',
+      addRoleLoading: false,
+      deleteRoleLoadingList: [],
+      manegementDialog: null,
       manegementDialogTitle: '',
       manegementDialogVisible: false,
+      addManegementLoading: false,
+      deleteManegementLoadingList: [],
       authOptions: roleAuthLabelValue,
+      enableManegementLoadingList: [],
+      disableManegementLoadingList: [],
       roleTemp: {
         name: null,
         auth: null
       },
       roleRules: {
-        name: [{ required: true, message: 'name is required', trigger: 'change' }],
-        auth: [{ required: true, message: 'rule is required', trigger: 'change' }]
+        name: [{ required: true, message: 'name is required', trigger: 'blur' }],
+        auth: [{ required: true, message: 'rule is required', trigger: 'blur' }]
       },
       manegementTemp: {
-        phone: null,
-        roles: null
+        password: "",
+        phone: "",
+        roleId: "",
+        username: ""
       },
       manegementRules: {
-        phone: [{ required: true, message: 'phone is required', trigger: 'change' }],
-        roles: [{ required: true, message: 'roles is required', trigger: 'change' }]
+        phone: [{ required: true, message: '请输入管理员手机号', trigger: 'blur', validator: validateTelephone }],
+        password: [{ required: true, message: '请输入管理员密码', trigger: 'blur', validator: validatePass }],
+        roleId: [{ required: true, message: '请选择管理员角色', trigger: 'blur' }],
+        username: [{ required: true, message: '请输入管理员名称', trigger: 'blur' }]
       }
     };
   },
@@ -181,8 +208,8 @@ export default {
           this.manegementListLoading = false;
         });
     },
-    getRoleList() {
-      this.roleListLoading = true;
+    getRoleList(hideLoading = false) {
+      this.roleListLoading = !hideLoading;
       getRoles()
         .then((response) => {
           this.roleList = response.data.map(v => ({ ...v, auth: v.role.split(',') }));
@@ -201,37 +228,63 @@ export default {
         type: "success"
       });
     },
-    deleteRole(row) {
-      this.$notify({
-        title: "INFO",
-        message: "稍后删除",
-        type: "info",
-        duration: 2000
+    showDeleteRoleLoading(row) {
+      return this.deleteRoleLoadingList.includes(row.id);
+    },
+    showDeleteManegementLoading(row) {
+      return this.deleteManegementLoadingList.includes(row.id);
+    },
+    deleteRoleHandle(row) {
+      this.deleteRoleLoadingList.push(row.id);
+      deleteAdminuserRole(row.id)
+      .then(res => {
+        this.roleList.splice(this.roleList.findIndex(v => v.id === row.id), 1);
+      })
+      .catch(() => {})
+      .finally(() => {
+        this.deleteRoleLoadingList.splice(this.deleteRoleLoadingList.indexOf(row.id), 1);
+      });
+    },
+    deleteAccountHandle(row) {
+      this.deleteManegementLoadingList.push(row.id);
+      deleteAdminuser(row.id)
+      .then(res => {
+        this.manegementList.splice(this.manegementList.findIndex(v => v.id === row.id), 1);
+      })
+      .catch(() => {})
+      .finally(() => {
+        this.deleteManegementLoadingList.splice(this.deleteManegementLoadingList.indexOf(row.id), 1);
+      });
+    },
+    showEnableManegementLoading(row) {
+      return this.enableManegementLoadingList.includes(row.id);
+    },
+    showDisableManegementLoading(row) {
+      return this.disableManegementLoadingList.includes(row.id);
+    },
+    enableAccount(row) {
+      this.enableManegementLoadingList.push(row.id);
+      updateAdminuserEnable({ id: row.id, enable: true })
+      .then(res => {
+        row.enable = true;
+      })
+      .catch(() => {})
+      .finally(() => {
+        this.enableManegementLoadingList.splice(this.enableManegementLoadingList.indexOf(row.id), 1);
       });
     },
     disableAccount(row) {
-      this.$message({
-        message: "操作Success",
-        type: "success"
+      this.disableManegementLoadingList.push(row.id);
+      updateAdminuserEnable({ id: row.id, enable: false })
+      .then(res => {
+        row.enable = false;
+      })
+      .catch(() => {})
+      .finally(() => {
+        this.disableManegementLoadingList.splice(this.disableManegementLoadingList.indexOf(row.id), 1);
       });
-      row.status = 'disable';
     },
-    enableAccount(row) {
-      this.$message({
-        message: "操作Success",
-        type: "success"
-      });
-      row.status = 'enable';
-    },
-    deleteAccount(row) {
-      this.$notify({
-        title: "INFO",
-        message: "稍后删除",
-        type: "info",
-        duration: 2000
-      });
-      // this.list.splice(index, 1);
-    },
+
     showRoleDialog(role) {
       this.roleDialogVisible = true;
       this.roleTemp.name = null;
@@ -239,7 +292,7 @@ export default {
       this.$nextTick(() => {
         this.$refs['roleForm'].clearValidate();
       });
-      this.roleDialogType = role ? 'edit' : 'add';
+      this.roleDialog = role;
       if (role) {
         this.roleTemp.name = role.name;
         this.roleTemp.auth = role.auth;
@@ -250,10 +303,10 @@ export default {
     },
     roleRuleChange(arr) {
       const lastVal = arr[arr.length - 1];
-      if (lastVal === 'all') {
-        this.roleTemp.auth = ['all'];
+      if (lastVal === 'ALL') {
+        this.roleTemp.auth = ['ALL'];
       } else {
-        const idx = this.roleTemp.auth.findIndex(v => v === 'all');
+        const idx = this.roleTemp.auth.findIndex(v => v === 'ALL');
         if (idx !== -1) {
           this.roleTemp.auth.splice(idx, 1);
         }
@@ -261,28 +314,46 @@ export default {
     },
     confirmRole() {
       this.$refs['roleForm'].validate((valid) => {
-        if (valid) {
-          this.roleDialogVisible = false;
-          this.$notify({
-            title: 'Success',
-            message: 'Successfully',
-            type: 'success',
-            duration: 2000
+        if (!valid) { return; }
+        if (!this.roleDialog) {
+          this.addRoleLoading = true;
+          addRole({ name: this.roleTemp.name, role: this.roleTemp.auth.join(',') })
+          .then(res => {
+            this.roleDialogVisible = false;
+            this.getRoleList(true);
+          })
+          .catch(() => {})
+          .finally(() => {
+            this.addRoleLoading = false;
+          });
+        } else {
+          this.addRoleLoading = true;
+          updateRole({ id: this.roleDialog.id, name: this.roleTemp, role: this.roleTemp.auth.join(',') })
+          .then(res => {
+            this.roleDialogVisible = false;
+            this.getRoleList(true);
+          })
+          .catch(() => {})
+          .finally(() => {
+            this.addRoleLoading = false;
           });
         }
       });
     },
     showManegementDialog(mangement) {
       this.manegementDialogVisible = true;
-      this.manegementDialogType = mangement ? 'edit' : 'add';
+      this.manegementDialog = mangement;
       this.manegementTemp.phone = null;
-      this.manegementTemp.roles = null;
+      this.manegementTemp.password = null;
+      this.manegementTemp.roleId = null;
+      this.manegementTemp.username = null;
       this.$nextTick(() => {
         this.$refs['manegementForm'].clearValidate();
       });
       if (mangement) {
         this.manegementTemp.phone = mangement.phone;
-        this.manegementTemp.roles = mangement.roles;
+        this.manegementTemp.username = mangement.username;
+        this.manegementTemp.roleId = this.roleList.find(v => v.name === mangement.roleName).id;
         this.manegementDialogTitle = '修改管理员';
       } else {
         this.manegementDialogTitle = '创建管理员';
@@ -290,13 +361,30 @@ export default {
     },
     confirmMangement() {
       this.$refs['manegementForm'].validate((valid) => {
-        if (valid) {
-          this.manegementDialogVisible = false;
-          this.$notify({
-            title: 'Success',
-            message: 'Successfully',
-            type: 'success',
-            duration: 2000
+        if (!valid) { return; }
+
+        if (this.manegementDialog) {
+          const roleName = this.roleList.find(v => v.id === this.manegementTemp.roleId).name;
+          this.addManegementLoading = true;
+          updateAdminuserRole({ id: this.manegementDialog.id, roleName })
+          .then(res => {
+            this.manegementDialogVisible = false;
+            this.getManegementList(true);
+          })
+          .catch(() => {})
+          .finally(() => {
+            this.addManegementLoading = false;
+          });
+        } else {
+          this.addManegementLoading = true;
+           addAdminuser(this.manegementTemp)
+          .then(res => {
+            this.manegementDialogVisible = false;
+            this.getManegementList(true);
+          })
+          .catch(() => {})
+          .finally(() => {
+            this.addManegementLoading = false;
           });
         }
       });
@@ -308,5 +396,10 @@ export default {
 .role-container, .mangement-container{
   height: 50%;
 
+}
+/deep/ .el-loading-spinner{
+  svg{
+    width: 1rem;
+  }
 }
 </style>

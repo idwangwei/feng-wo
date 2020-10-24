@@ -32,7 +32,7 @@ import { getSmsCode } from "@/api/user";
 export default {
   name: "UpdatePass",
   data() {
-     var validatePass = (rule, value, callback) => {
+     const validatePass = (rule, value, callback) => {
         if (value === '') {
           callback(new Error('请输入密码'));
         } else if (!(/^.{8,18}$/.test(value))) {
@@ -44,7 +44,7 @@ export default {
           callback();
         }
       };
-      var validateCheckPass = (rule, value, callback) => {
+      const validateCheckPass = (rule, value, callback) => {
         if (value === '') {
           callback(new Error('请再次输入密码'));
         } else if (value !== this.formData.pass) {

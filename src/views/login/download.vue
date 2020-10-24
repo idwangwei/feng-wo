@@ -9,22 +9,29 @@
       </el-image>
     </el-row>
     <el-row>
-      <el-button round @click="donwLoadAndroid()">ANDROID 下载</el-button>
+      <el-button round>
+        <el-link :href="androidURL" target="_self" :underline="false" download="">ANDROID 下载</el-link>
+      </el-button>
 
     </el-row>
     <el-row>
-      <el-button round @click="donwLoadIOS()">IOS 下载</el-button>
+      <el-button round @click="donwLoadIOS()">
+        <el-link :href="iosURL" target="_self" :underline="false" download="">IOS 下载</el-link>
+      </el-button>
     </el-row>
   </div>
 </template>
 
 <script>
+import { getApkUrl } from "@/api/user";
 export default {
   name: "Download",
   data() {
     return {
       loading: false,
-      imgUrl: require('@/assets/logo@2x.png')
+      imgUrl: require('@/assets/logo@2x.png'),
+      androidURL: "",
+      iosURL: ""
     };
   },
   computed: {
@@ -33,9 +40,14 @@ export default {
   watch: {
 
   },
+  created() {
+    getApkUrl().then(res => {
+      this.androidURL = res.data.androidUrl;
+      this.iosURL = res.data.iosUrl;
+    });
+  },
   methods: {
-    donwLoadAndroid() {},
-    donwLoadIOS() {}
+
   }
 };
 </script>

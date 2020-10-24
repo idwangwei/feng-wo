@@ -50,3 +50,10 @@ export function registerAccount(data) {
       data
     });
   }
+export function getApkUrl(data) {
+    return request({
+      url: `/bms/common/apkurl`,
+      method: 'post',
+      data
+    });
+  }

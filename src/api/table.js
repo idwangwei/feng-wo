@@ -205,6 +205,13 @@ export function addAdminuser(data) {
     data
   });
 }
+export function deleteAdminuser(data) {
+  return request({
+    url: `/bms/adminuser`,
+    method: 'delete',
+    data
+  });
+}
 export function updateAdminuserEnable(data) {
   return request({
     url: `/bms/adminuser`,

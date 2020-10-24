@@ -24,7 +24,7 @@ const validateLinkName = (rule, value, callback) => {
   }
 };
 const validateTelephone = (rule, value, callback) => {
-  const phoneRe = new RegExp(/^1\d{10}$/);
+  const phoneRe = new RegExp(/^1[3456789]\d{9}$/);
   if (!phoneRe.test(value)) {
     callback(new Error("请正确输入11位手机号码"));
   } else {

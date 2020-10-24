@@ -1,4 +1,4 @@
-import { login, logout, adminBind, refreshToken } from '@/api/user';
+import { login, adminBind, refreshToken } from '@/api/user';
 import {
   getToken,
   setToken,
@@ -37,6 +37,8 @@ const mutations = {
   CLEAR: state => {
     state.token = '';
     state.name = '';
+    state.initLogin = false;
+    state.refreshToken = '';
   }
 };
 
@@ -65,14 +67,10 @@ const actions = {
   // user logout
   logout({ commit, state }) {
     return new Promise((resolve, reject) => {
-      logout().then(response => {
         commit('CLEAR');
+        removeToken();
         resetRouter();
         resolve();
-      })
-      .catch(error => {
-        reject(error);
-      });
     });
   },
 
