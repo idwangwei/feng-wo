@@ -43,3 +43,10 @@ export function refreshToken(data) {
     data
   });
 }
+export function registerAccount(data) {
+    return request({
+      url: `/auth/register`,
+      method: 'post',
+      data
+    });
+  }

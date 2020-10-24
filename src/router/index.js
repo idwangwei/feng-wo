@@ -38,6 +38,30 @@ export const constantRoutes = [
     },
     {
         path: '/register',
+        component: () => import('@/views/login/register'),
+        meta: { title: '新用户注册' },
+        hidden: true
+    },
+    {
+        path: '/introduce',
+        component: () => import('@/views/login/introduce'),
+        meta: { title: '蜂窝简介' },
+        hidden: true
+    },
+    {
+        path: '/download',
+        component: () => import('@/views/login/download'),
+        meta: { title: '蜂窝下载' },
+        hidden: true
+    },
+    {
+        path: '/userAgre',
+        component: () => import('@/views/login/userAgre'),
+        meta: { title: '用户协议' },
+        hidden: true
+    },
+    {
+        path: '/updatePass',
         component: () => import('@/views/login/updatePass'),
         hidden: true
     },

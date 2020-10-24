@@ -111,10 +111,10 @@ export default {
           this.list = response.data.contents.map(v => {
             let imageList = [];
             try {
-							imageList = v.images.replace(/\[|\]/g, '').split(',').map(img => `${process.env.VUE_APP_BASE_API}/bms/common/images/FEEDBACK/${img.trim()}`);
+                imageList = v.images.replace(/\[|\]/g, '').split(',').map(img => `${process.env.VUE_APP_BASE_API}/bms/common/images/FEEDBACK/${img.trim()}`);
             } catch (err) {
-							return { ...v, url: null, imageList: null };
-						}
+                return { ...v, url: null, imageList: null };
+            }
             return { ...v, url: imageList[0], imageList: imageList };
           });
           this.total = response.data.total;

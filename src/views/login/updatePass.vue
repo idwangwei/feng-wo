@@ -1,6 +1,6 @@
 <template>
-  <div class="register-container">
-    <el-form ref="formData" :model="formData" :rules="formRules" class="register-form" auto-complete="on" label-position="left">
+  <div class="update-pass-container">
+    <el-form ref="formData" :model="formData" :rules="formRules" class="update-pass-form" auto-complete="on" label-position="left">
       <div class="title-container">
         <h1 class="display-4">手机号绑定</h1>
       </div>
@@ -161,13 +161,13 @@ $light_gray: #eee;
 .title-container{
   color: $light_gray;
 }
-.register-container {
+.update-pass-container {
   min-height: 100%;
   width: 100%;
   background-color: $bg;
   overflow: hidden;
 
-  .register-form {
+  .update-pass-form {
     position: relative;
     width: 520px;
     max-width: 100%;

@@ -1,6 +1,6 @@
 module.exports = {
 
-  title: '蜂窝后台管理系统',
+  title: '蜂窝管理系统',
 
   /**
    * @type {boolean} true | false

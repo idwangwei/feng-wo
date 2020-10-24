@@ -9,19 +9,25 @@ import store from '@/store';
 
 NProgress.configure({ showSpinner: false }); // NProgress Configuration
 
-const whiteList = ['/login', '/register']; // no redirect whitelist
-
+const whiteList = ['/login', '/updatePass']; // no redirect whitelist
+const SinglePage = ['/introduce', '/register', '/userAgre', '/download'];
 router.beforeEach((to, from, next) => {
     // start progress bar
     NProgress.start();
     // set page title
+    debugger;
+    if (SinglePage.includes(to.path)) {
+        document.title = getPageTitle(to.meta.title, true);
+        next();
+        return;
+    }
     document.title = getPageTitle(to.meta.title);
     // determine whether the user has logged in
     const hasToken = getToken();
     if (hasToken) {
         if (store.state.user.initLogin === 'true') {
             NProgress.done();
-            to.path === '/register' ? next() : next({ path: '/register' });
+            to.path === '/updatePass' ? next() : next({ path: '/updatePass' });
         } else if (whiteList.includes(to.path)) {
             NProgress.done();
             next({ path: '/' });

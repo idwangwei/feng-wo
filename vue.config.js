@@ -6,7 +6,7 @@ function resolve(dir) {
     return path.join(__dirname, dir);
 }
 
-const name = defaultSettings.title || '轮胎匠'; // page title
+const name = defaultSettings.title || '管理系统'; // page title
 
 // If your port is set to 80,
 // use administrator privileges to execute the command line.
@@ -38,7 +38,7 @@ module.exports = {
         },
         proxy: {
             [process.env.VUE_APP_BASE_API]: {
-                target: `http://34d3583a22.zicp.vip:50378`,
+                target: `http://www.honeycomb-fmc.com`,
                 secure: true,
                 changeOrigin: true,
                 pathRewrite: {
