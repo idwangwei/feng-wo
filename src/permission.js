@@ -15,7 +15,6 @@ router.beforeEach((to, from, next) => {
     // start progress bar
     NProgress.start();
     // set page title
-    debugger;
     if (SinglePage.includes(to.path)) {
         document.title = getPageTitle(to.meta.title, true);
         next();

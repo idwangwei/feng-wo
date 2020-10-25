@@ -38,7 +38,7 @@ module.exports = {
         },
         proxy: {
             [process.env.VUE_APP_BASE_API]: {
-                target: `http://www.honeycomb-fmc.com`,
+                target: `http://www.honeycomb-fmc.com:8080`,
                 secure: true,
                 changeOrigin: true,
                 pathRewrite: {

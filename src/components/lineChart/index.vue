@@ -70,6 +70,7 @@ export default {
           top: '-5px'
         },
         legend: {
+          show: true,
           type: "scroll",
           left: "100px",
           right: "100px"
@@ -94,6 +95,7 @@ export default {
           }
         },
         xAxis: {
+          data: [],
           boundaryGap: false,
           axisTick: {
             show: false
@@ -110,8 +112,6 @@ export default {
         valueArr = data.map(v => v.count);
         options.xAxis.data = dateArr;
         options.series = [{
-          smooth: true,
-          type: 'line',
           itemStyle: {
             normal: {
               color: edgeColor || '#3888fa',
@@ -124,6 +124,8 @@ export default {
               }
             }
           },
+          smooth: true,
+          type: 'line',
           data: valueArr,
           animationDuration: 2800,
           animationEasing: 'quadraticOut'
@@ -132,23 +134,36 @@ export default {
         const legend = Object.keys(data);
         if (legend.length > 0) {
           options.legend.data = legend;
-          options.xAxis.data = data[legend[0]].map(v => v.time);
-          options.series = legend.map(item => {
-          return {
-            smooth: true,
-            type: 'line',
-            itemStyle: {
-              normal: {
-                lineStyle: {
-                  width: 2
+
+          let xaxis = [];
+          legend.forEach(key => {
+              xaxis.push(...data[key].map(v => v.time));
+          });
+          xaxis = Array.from(new Set(xaxis)).sort((v1, v2) => Date.parse(v1) - Date.parse(v2));
+          options.xAxis.data = xaxis;
+          options.series = legend.map(key => {
+            return {
+              name: key,
+              itemStyle: {
+                normal: {
+                    lineStyle: {
+                    width: 2
+                    }
                 }
-              }
-            },
-            data: data[item].map(v => v.time),
-            animationDuration: 2800,
-            animationEasing: 'quadraticOut'
-          };
-        });
+              },
+              data: xaxis.map(d => {
+                const point = data[key].find(item => item.time === d);
+                return point ? point.count : 0;
+              }),
+              smooth: true,
+              type: 'line',
+              animationDuration: 2800,
+              animationEasing: 'quadraticOut'
+            };
+          });
+
+          console.log(xaxis);
+          console.log(options.series);
         }
       }
 

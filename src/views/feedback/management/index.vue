@@ -136,6 +136,7 @@ export default {
       getFeedbackReplyList({ feedbackId: row.id, language: '', replyObj: 'ADMIN' })
       .then(response => {
         this.replyList = response.data;
+        this.replyRow.haveRead = true;
       })
       .catch((error) => {
         console.log(error);
@@ -143,13 +144,17 @@ export default {
       .finally(() => {
         this.replyListLoading = false;
       });
-		},
+    },
 
     replyBtnCommit() {
       this.replyLoading = true;
       replyFeedback({ content: this.replyContent, language: '', feedbackId: this.replyRow.id, replyObj: 'ADMIN' })
       .then(res => {
-        this.dialogVisible = false;
+        this.replyContent = null;
+        getFeedbackReplyList({ feedbackId: this.replyRow.id, language: '', replyObj: 'ADMIN' })
+          .then(response => {
+              this.replyList = response.data;
+          });
       })
       .finally(() => {
         this.replyLoading = false;

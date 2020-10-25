@@ -13,24 +13,37 @@
     </div>
 
     <el-table :key="tableKey" v-loading="listLoading" :data="list" border fit highlight-current-row style="width: 100%; margin-top:1rem;">
-      <el-table-column prop="orderId" label="订单号" min-width="7%"></el-table-column>
-      <el-table-column prop="buyPhone" label="买家手机号" align="center" min-width="7%"></el-table-column>
-      <el-table-column prop="sellerPhone" label="卖家手机号" align="center" min-width="7%"></el-table-column>
-      <el-table-column prop="number" label="数量" align="center" min-width="4%"></el-table-column>
-      <el-table-column prop="cny" label="CNY" align="center" min-width="4%"></el-table-column>
-      <el-table-column prop="price" label="价格" align="center" min-width="4%"></el-table-column>
-      <el-table-column prop="serviceCharge" label="手续费" align="center" min-width="4%"></el-table-column>
-      <el-table-column prop="type" label="订单类型" align="center" min-width="4%"></el-table-column>
-      <el-table-column label="时间" align="center" min-width="8%">
+      <el-table-column prop="orderId" label="订单号" min-width="150px"></el-table-column>
+      <el-table-column prop="buyPhone" label="买家手机号" align="center" min-width="120px"></el-table-column>
+      <el-table-column prop="sellerPhone" label="卖家手机号" align="center" min-width="120px"></el-table-column>
+      <el-table-column prop="number" label="数量" align="center" min-width="100px"></el-table-column>
+      <el-table-column prop="cny" label="CNY" align="center" min-width="100px"></el-table-column>
+      <el-table-column prop="price" label="价格" align="center" min-width="100px"></el-table-column>
+      <el-table-column prop="serviceCharge" label="手续费" align="center" min-width="100px"></el-table-column>
+      <el-table-column prop="appealContent" label="申诉内容" align="center" min-width="160px"></el-table-column>
+      <el-table-column label="申诉凭证" align="center" width="120px">
+        <template slot-scope="{row}">
+          <div @click.stop>
+            <el-image v-if="row.url" style="width: 100px; height: 100px" :src="row.url" :preview-src-list="row.imageList"></el-image>
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column label="订单类型" align="center" min-width="100px">
+        <template slot-scope="{row}">
+          {{ row.type | typeFilter }}
+        </template>
+      </el-table-column>
+
+      <el-table-column label="时间" align="center" min-width="160px">
         <template slot-scope="{row}">
           {{ row.time | DateFilter }}
         </template>
       </el-table-column>
 
-      <el-table-column label="订单状态" align="center" min-width="6%">
+      <el-table-column label="订单状态" align="center" width="150px">
         <template slot-scope="{row}">
           <template v-if="row.edit">
-            <el-select v-model="row.editStatus" placeholder="" size="small" clearable class="filter-item" style="width: 4rem">
+            <el-select v-model="row.editStatus" placeholder="" size="mini" clearable class="filter-item" style="width: 4rem">
               <el-option label="取消" value="cancel" />
               <el-option label="放行" value="permit" />
             </el-select>
@@ -44,7 +57,7 @@
         </template>
 
       </el-table-column>
-      <el-table-column label="操作" min-width="8%" class-name="small-padding fixed-width">
+      <el-table-column label="操作" min-width="120px" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
           <template>
             <el-button v-if="row.edit" v-loading="updateLoading(row)" type="success" size="mini" :disabled="updateLoading(row)" @click="updateStatus(row)">
@@ -71,6 +84,9 @@ export default {
   name: "ComplaintOrderList",
   components: { Pagination },
   filters: {
+    typeFilter(data) {
+      return data ? '大宗' : '普通';
+    },
     statusFilter(status) {
       const statusMap = {
         MATCHING: "匹配中",
@@ -130,11 +146,16 @@ export default {
       this.listLoading = true;
       getOrderList(this.listQuery)
         .then((response) => {
-          this.list = response.data.contents.map((v) => ({
-            ...v,
-            edit: false,
-            editStatus: null
-          }));
+          this.list = response.data.contents.map(v => {
+            let imageList = [];
+            try {
+              imageList = v.appealImages.replace(/\[|\]/g, '').split(',').map(img => `${process.env.VUE_APP_BASE_API}/bms/common/images/APPEAL/${img.trim()}`);
+            } catch (err) {
+              return { ...v, url: null, imageList: null };
+            }
+            return { ...v, url: imageList[0], imageList: imageList, edit: false, editStatus: null };
+          });
+
           this.total = response.data.total;
         })
         .catch((error) => {

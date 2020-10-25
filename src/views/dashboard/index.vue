@@ -74,17 +74,17 @@ export default {
         registerToday: res.data.registerToday,
         countDataStartTime: res.data.countDataStartTime,
         userData: {
-          title: '总用户数量',
+          title: '用户',
           edgeColor: '#40c9c6',
           data: res.data.userData
         },
         orderData: {
-          title: '总交易数量',
+          title: '交易',
           edgeColor: '#f4516c',
           data: res.data.orderData
         },
         miningData: {
-          title: '矿池转入量',
+          title: '矿池',
           edgeColor: '#34bfa3',
           data: res.data.miningData
         }

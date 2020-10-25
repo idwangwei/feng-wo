@@ -226,25 +226,25 @@ export function updateAdminuserRole(data) {
     data
   });
 }
-export function getAdminuserByName(data) {
+export function getAdminuserByName(params) {
   return request({
     url: `/bms/adminuser/username`,
     method: 'get',
-    data
+    params
   });
 }
-export function getAdminuserByPhone(data) {
+export function getAdminuserByPhone(params) {
   return request({
     url: `/bms/adminuser/phone`,
     method: 'get',
-    data
+    params
   });
 }
-export function getAdminuserByRoleId(data) {
+export function getAdminuserByRoleId(params) {
   return request({
     url: `/bms/adminuser/roleId`,
     method: 'get',
-    data
+    params
   });
 }
 

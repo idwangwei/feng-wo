@@ -8,7 +8,7 @@
 
       <el-table v-loading="roleListLoading" :data="roleList" border fit highlight-current-row style="width: 100%;" height="calc(100% - 4rem)">
         <el-table-column prop="name" label="角色名称" width="150"></el-table-column>
-        <el-table-column prop="id" label="角色ID" width="100"></el-table-column>
+        <!-- <el-table-column prop="id" label="角色ID" width="100"></el-table-column> -->
         <el-table-column label="权限" align="center" width="auto">
           <template slot-scope="{row}">
             <el-tag v-for="(item, index) in row.auth" :key="index" type="success" size="mini">
@@ -18,7 +18,7 @@
         </el-table-column>
         <el-table-column label="操作" width="200" class-name="small-padding fixed-width">
           <template slot-scope="{row}">
-            <el-button type="primary" size="mini" @click="showRoleDialog(row)">
+            <el-button v-if="row.role !== 'ALL'" type="primary" size="mini" @click="showRoleDialog(row)">
               编辑
             </el-button>
             <el-button v-if="row.role !== 'ALL'" v-loading="showDeleteRoleLoading(row)" :disabled="showDeleteRoleLoading(row)" size="mini" type="warning" @click="deleteRoleHandle(row)">
@@ -43,9 +43,12 @@
               <el-option label="角色ID" value="roleId" />
               <el-option label="昵称" value="username" />
             </el-select>
-            <el-input v-model="query.input" size="mini" style="width:8rem;margin-right:1rem"></el-input>
+            <el-input v-model="query.input" size="mini" style="width:8rem;margin-right:1rem" @keyup.enter.native="queryManegementByParam"></el-input>
             <el-button v-loading="queryLoading" :disabled="queryLoading" type="primary" size="mini" @click="queryManegementByParam()">
               查询
+            </el-button>
+            <el-button v-loading="manegementListLoading" :disabled="manegementListLoading" type="primary" size="mini" @click="getManegementList()">
+              查询全部
             </el-button>
           </el-row>
         </el-col>
@@ -53,6 +56,7 @@
 
       <el-table v-loading="manegementListLoading" :data="manegementList" border fit highlight-current-row style="width: 100%;" height="calc(100% - 4rem)">
         <el-table-column prop="phone" label="手机号" width="150"></el-table-column>
+        <el-table-column prop="username" label="昵称" width="150"></el-table-column>
         <el-table-column label="角色" align="center" width="auto">
           <template slot-scope="{row}">
             <el-tag v-for="(item, index) in row.roles" :key="index" type="success" size="mini">
@@ -69,7 +73,7 @@
         </el-table-column>
         <el-table-column label="操作" width="240" class-name="small-padding fixed-width">
           <template slot-scope="{row}">
-            <transition name="el-fade-in">
+            <transition v-if="row.username !== 'admin'" name="el-fade-in">
               <el-button v-if="row.enable" v-loading="showDisableManegementLoading(row)" :disabled="showDisableManegementLoading(row)" type="primary" size="mini" @click="disableAccount(row)">
                 禁用
               </el-button>
@@ -77,7 +81,7 @@
                 激活
               </el-button>
             </transition>
-            <el-button size="mini" type="primary" @click="showManegementDialog(row)">
+            <el-button v-if="row.username !== 'admin'" size="mini" type="primary" @click="showManegementDialog(row)">
               编辑
             </el-button>
             <el-button v-if="row.username !== 'admin'" v-loading="showDeleteManegementLoading(row)" size="mini" type="warning" :disabled="showDeleteManegementLoading(row)" @click="deleteAccountHandle(row)">
@@ -435,18 +439,22 @@ export default {
       let queryPromise = null;
       switch (this.query.type) {
         case 'phone':
-          queryPromise = getAdminuserByPhone(this.query.input);
+          queryPromise = getAdminuserByPhone({ phone: this.query.input });
           break;
         case 'roleId':
-          queryPromise = getAdminuserByRoleId(this.query.input);
+          queryPromise = getAdminuserByRoleId({ roleId: this.query.input });
           break;
         case 'username':
         default:
-          queryPromise = getAdminuserByName(this.query.input);
+          queryPromise = getAdminuserByName({ username: this.query.input });
           break;
       }
       queryPromise.then(res => {
-        this.manegementList = res.data.map(v => ({ ...v, roles: v.roleName.split(',') }));
+        let data = res.data;
+        if (!Array.isArray(data)) {
+          data = [data];
+        }
+        this.manegementList = data.map(v => ({ ...v, roles: v.roleName.split(',') }));
       })
       .finally(() => {
         this.queryLoading = false;

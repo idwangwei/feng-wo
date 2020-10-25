@@ -16,7 +16,7 @@
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
       <div class="card-panel">
         <div class="card-panel-icon-wrapper icon-money">
-          <svg-icon icon-class="money" class-name="card-panel-icon" />
+          <svg-icon icon-class="fmc" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
@@ -106,25 +106,25 @@ export default {
     border-color: rgba(0, 0, 0, .05);
 
     &:hover {
-      .card-panel-icon-wrapper {
-        color: #fff;
-      }
+    //   .card-panel-icon-wrapper {
+    //     color: #fff;
+    //   }
 
-      .icon-people {
-        background: #40c9c6;
-      }
+    //   .icon-people {
+    //     background: #40c9c6;
+    //   }
 
-      .icon-message {
-        background: #36a3f7;
-      }
+    //   .icon-message {
+    //     background: #36a3f7;
+    //   }
 
-      .icon-money {
-        background: #f4516c;
-      }
+    //   .icon-money {
+    //     background: #40c9c6;
+    //   }
 
-      .icon-shopping {
-        background: #34bfa3
-      }
+    //   .icon-shopping {
+    //     background: #34bfa3
+    //   }
     }
 
     .icon-people {
@@ -161,6 +161,7 @@ export default {
       font-weight: bold;
       margin: 26px;
       margin-left: 0px;
+    text-align: end;
 
       .card-panel-text {
         line-height: 18px;

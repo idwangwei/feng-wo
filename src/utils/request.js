@@ -23,6 +23,7 @@ service.interceptors.request.use(
       config.headers['Authorization'] = store.getters.token;
     }
     // requestQueue.push({ url: config });
+    console.log(config);
     return config;
   },
   error => {

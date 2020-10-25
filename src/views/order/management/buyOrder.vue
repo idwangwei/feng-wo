@@ -17,20 +17,22 @@
     </div>
 
     <el-table :key="tableKey" v-loading="listLoading" :data="list" border fit highlight-current-row style="width: 100%; margin-top:1rem;">
-      <el-table-column prop="orderId" label="订单号" min-width="7%"></el-table-column>
-      <el-table-column prop="buyPhone" label="买家手机号" align="center" min-width="7%"></el-table-column>
-      <el-table-column prop="sellerPhone" label="卖家手机号" align="center" min-width="7%"></el-table-column>
-      <el-table-column prop="number" label="数量" align="center" min-width="4%"></el-table-column>
-      <el-table-column prop="cny" label="CNY" align="center" min-width="4%"></el-table-column>
-      <el-table-column prop="serviceCharge" label="手续费" align="center" min-width="4%"></el-table-column>
-      <el-table-column prop="price" label="价格" align="center" min-width="4%"></el-table-column>
-      <el-table-column prop="type" label="订单类型" align="center" min-width="4%"></el-table-column>
-      <el-table-column label="时间" align="center" min-width="8%">
+      <el-table-column prop="orderId" label="订单号" min-width="150px"></el-table-column>
+      <el-table-column prop="userPhone" label="买家手机号" align="center" min-width="120px"></el-table-column>
+      <el-table-column prop="number" label="数量" align="center" min-width="100px"></el-table-column>
+      <el-table-column prop="price" label="价格" align="center" min-width="100px"></el-table-column>
+      <el-table-column label="订单类型" align="center" min-width="100px">
+        <template slot-scope="{row}">
+          {{ row.type | typeFilter }}
+        </template>
+      </el-table-column>
+
+      <!-- <el-table-column label="时间" align="center" min-width="8%">
         <template slot-scope="{row}">
           {{ row.time | DateFilter }}
         </template>
-      </el-table-column>
-      <el-table-column label="订单状态" align="center" min-width="6%">
+      </el-table-column> -->
+      <el-table-column label="订单状态" align="center" min-width="100px">
         <template slot-scope="{row}">
           <template v-if="row.edit">
             <el-select v-model="row.editStatus" placeholder="" size="small" clearable class="filter-item" style="width: 4rem">
@@ -48,7 +50,7 @@
 
       </el-table-column>
 
-      <el-table-column label="操作" min-width="8%" class-name="small-padding fixed-width">
+      <el-table-column label="操作" min-width="150px" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
           <template>
             <el-button v-if="row.edit" v-loading="updateLoading(row)" type="success" size="mini" :disabled="updateLoading(row)" @click="updateStatus(row)">
@@ -75,6 +77,9 @@ export default {
   name: "BuyOrderList",
   components: { Pagination },
   filters: {
+    typeFilter(data) {
+      return data ? '大宗' : '普通';
+    },
     statusFilter(status) {
       const statusMap = {
         MATCHING: "匹配中",
