@@ -247,4 +247,18 @@ export function getAdminuserByRoleId(params) {
     params
   });
 }
+export function getPriceStatus() {
+  return request({
+    url: `/bms/price/status`,
+    method: 'get'
+  });
+}
+
+export function setPriceStatus(data) {
+  return request({
+    url: `/bms/price/status`,
+    method: 'put',
+    data
+  });
+}
 

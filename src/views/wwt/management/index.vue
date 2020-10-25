@@ -23,14 +23,22 @@
         <el-input v-model="ruleForm.price7" style="width:100px"></el-input>
       </el-form-item>
       <el-form-item :label="btnLabel">
-        <el-button v-loading="updateLoading" class="filter-item" size="small" type="primary" icon="el-icon-search" :disabled="updateLoading" @click="submitForm('wwtPriceForm')">
+        <el-button v-loading="updateLoading" class="filter-item" size="mini" type="primary" icon="el-icon-search" :disabled="updateLoading" @click="submitForm('wwtPriceForm')">
           修改
         </el-button>
 
       </el-form-item>
     </el-form>
 
-    <el-row :gutter="32" style="margin-top:1rem;">
+    <el-row type="flex" align="middle">
+
+      <span>全部市场：</span><el-switch v-model="priceStatus.allMarket" :active-value="true" :inactive-value="false" style="margin-right:2rem"></el-switch>
+      <span>大宗市场：</span><el-switch v-model="priceStatus.bigMarket" :active-value="true" :inactive-value="false" style="margin-right:2rem"></el-switch>
+      <span>普通市场：</span><el-switch v-model="priceStatus.commonMarket" :active-value="true" :inactive-value="false" style="margin-right:2rem"></el-switch>
+      <el-button v-loading="setStatusLoading" type="primary" size="mini" :disabled="setStatusLoading" @click="updateStatus">更新</el-button>
+    </el-row>
+
+    <el-row :gutter="32" style="margin-top:2rem;">
       <el-col :xs="24" :sm="24" :lg="24">
         <div class="chart-wrapper">
           <line-chart :chart-data="lineChartData" />
@@ -41,7 +49,7 @@
 </template>
 
 <script>
-import { getWWTPrice, getPriceList, updateWWTPrice } from "@/api/table";
+import { getWWTPrice, getPriceList, updateWWTPrice, getPriceStatus, setPriceStatus } from "@/api/table";
 import LineChart from "@/components/lineChart";
 import { validateFloatNum } from "@/utils/validate";
 export default {
@@ -85,12 +93,19 @@ export default {
         edgeColor: '#40c9c6',
         data: []
       },
-      updateLoading: false
+      priceStatus: {
+        allMarket: true,
+        bigMarket: false,
+        commonMarket: false
+      },
+      updateLoading: false,
+      setStatusLoading: false
     };
   },
   created() {
     this.getList();
     this.getPriceChartData();
+    this.getStatus();
   },
   methods: {
     getList() {
@@ -167,6 +182,28 @@ export default {
               this.updateLoading = false;
             });
         }
+      });
+    },
+
+    getStatus() {
+      getPriceStatus()
+      .then(res => {
+        this.priceStatus = res.data;
+      });
+    },
+    updateStatus() {
+      this.$confirm('此操作将修改市场状态, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.setStatusLoading = true;
+        setPriceStatus(this.priceStatus).then(res => {
+        }).finally(() => {
+          this.setStatusLoading = false;
+        });
+      }).catch(() => {
+
       });
     }
   }
