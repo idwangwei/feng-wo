@@ -288,7 +288,7 @@ export default {
     },
     deleteAccountHandle(row) {
       this.deleteManegementLoadingList.push(row.id);
-      deleteAdminuser(row.id)
+      deleteAdminuser({ id: row.id })
       .then(res => {
         this.manegementList.splice(this.manegementList.findIndex(v => v.id === row.id), 1);
       })
