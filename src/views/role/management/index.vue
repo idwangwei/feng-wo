@@ -8,6 +8,7 @@
 
       <el-table v-loading="roleListLoading" :data="roleList" border fit highlight-current-row style="width: 100%;" height="calc(100% - 4rem)">
         <el-table-column prop="name" label="角色名称" width="150"></el-table-column>
+        <el-table-column prop="id" label="角色ID" width="100"></el-table-column>
         <el-table-column label="权限" align="center" width="auto">
           <template slot-scope="{row}">
             <el-tag v-for="(item, index) in row.auth" :key="index" type="success" size="mini">
@@ -29,9 +30,27 @@
     </div>
 
     <div class="mangement-container">
-      <el-button type="primary" size="mini" style="margin-bottom:1rem" @click="showManegementDialog()">
-        添加管理员
-      </el-button>
+      <el-row type="flex" justify="space-between" style="margin-bottom:1rem">
+        <el-col>
+          <el-button type="primary" size="mini" @click="showManegementDialog()">
+            添加管理员
+          </el-button>
+        </el-col>
+        <el-col>
+          <el-row type="flex" justify="end">
+            <el-select v-model="query.type" style="width:5.5rem" size="mini">
+              <el-option label="电话" value="phone" />
+              <el-option label="角色ID" value="roleId" />
+              <el-option label="昵称" value="username" />
+            </el-select>
+            <el-input v-model="query.input" size="mini" style="width:8rem;margin-right:1rem"></el-input>
+            <el-button v-loading="queryLoading" :disabled="queryLoading" type="primary" size="mini" @click="queryManegementByParam()">
+              查询
+            </el-button>
+          </el-row>
+        </el-col>
+      </el-row>
+
       <el-table v-loading="manegementListLoading" :data="manegementList" border fit highlight-current-row style="width: 100%;" height="calc(100% - 4rem)">
         <el-table-column prop="phone" label="手机号" width="150"></el-table-column>
         <el-table-column label="角色" align="center" width="auto">
@@ -89,8 +108,8 @@
 
     <el-dialog :title="manegementDialogTitle" :visible.sync="manegementDialogVisible" width="50%">
       <el-form ref="manegementForm" :rules="manegementRules" :model="manegementTemp" label-position="left" label-width="100px" style="width: 400px; margin-left:50px;">
-        <el-form-item label="手机号" prop="phone" :disabled="!!manegementDialog">
-          <el-input v-model="manegementTemp.phone" style="width:300px" />
+        <el-form-item label="手机号" prop="phone">
+          <el-input v-model="manegementTemp.phone" style="width:300px" :disabled="!!manegementDialog" />
         </el-form-item>
         <el-form-item label="名称" prop="username">
           <el-input v-model="manegementTemp.username" :disabled="!!manegementDialog" style="width:300px" />
@@ -114,7 +133,20 @@
 </template>
 
 <script>
-import { getRoles, getAdminuser, deleteAdminuserRole, deleteAdminuser, addRole, addAdminuser, updateRole, updateAdminuserRole, updateAdminuserEnable } from "@/api/table";
+import {
+  getRoles,
+  getAdminuser,
+  deleteAdminuserRole,
+  deleteAdminuser,
+  addRole,
+  addAdminuser,
+  updateRole,
+  updateAdminuserRole,
+  updateAdminuserEnable,
+  getAdminuserByName,
+  getAdminuserByPhone,
+  getAdminuserByRoleId
+} from "@/api/table";
 import { validateTelephone } from "@/utils/validate";
 
 const roleAuthLabelValue = [
@@ -187,7 +219,12 @@ export default {
         password: [{ required: true, message: '请输入管理员密码', trigger: 'blur', validator: validatePass }],
         roleId: [{ required: true, message: '请选择管理员角色', trigger: 'blur' }],
         username: [{ required: true, message: '请输入管理员名称', trigger: 'blur' }]
-      }
+      },
+      query: {
+        type: 'phone',
+        input: ''
+      },
+      queryLoading: false
     };
   },
   created() {
@@ -387,6 +424,32 @@ export default {
             this.addManegementLoading = false;
           });
         }
+      });
+    },
+    queryManegementByParam() {
+      if (!this.query.input) {
+        return;
+      }
+
+      this.queryLoading = true;
+      let queryPromise = null;
+      switch (this.query.type) {
+        case 'phone':
+          queryPromise = getAdminuserByPhone(this.query.input);
+          break;
+        case 'roleId':
+          queryPromise = getAdminuserByRoleId(this.query.input);
+          break;
+        case 'username':
+        default:
+          queryPromise = getAdminuserByName(this.query.input);
+          break;
+      }
+      queryPromise.then(res => {
+        this.manegementList = res.data.map(v => ({ ...v, roles: v.roleName.split(',') }));
+      })
+      .finally(() => {
+        this.queryLoading = false;
       });
     }
   }

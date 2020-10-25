@@ -6,6 +6,7 @@ import {
 const TokenKey = 'access-token';
 const RefreshTokenKey = 'refresh-token';
 const InitLogin = 'init-login';
+const authRoles = 'auth-roles';
 
 export function getToken() {
     return Cookies.get(TokenKey);
@@ -19,6 +20,9 @@ export function setToken(token) {
     return Cookies.set(TokenKey, token);
 }
 
+export function removeToken() {
+    Cookies.remove(TokenKey);
+}
 export function setRefreshToken(token) {
     return Cookies.set(RefreshTokenKey, token);
 }
@@ -28,8 +32,16 @@ export function setInitLogin(status) {
 export function getInitLogin() {
     return Cookies.get(InitLogin);
 }
+export function setAuth(data) {
+    return Cookies.set(authRoles, data);
+}
+export function getAuth() {
+    const str = Cookies.get(authRoles);
+    return str ? str.split(',') : [];
+}
 
-export function removeToken() {
+export function removeInfo() {
+    Cookies.remove(authRoles);
     Cookies.remove(TokenKey);
     Cookies.remove(RefreshTokenKey);
     Cookies.remove(InitLogin);

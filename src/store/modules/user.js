@@ -3,9 +3,12 @@ import {
   getToken,
   setToken,
   removeToken,
+  removeInfo,
   getRefreshToken,
   setInitLogin,
-  getInitLogin
+  getInitLogin,
+  setAuth,
+  getAuth
 } from '@/utils/auth';
 import { resetRouter } from '@/router';
 
@@ -15,7 +18,7 @@ const state = {
   expireTime: 3600,
   refreshToken: getRefreshToken(),
   name: '',
-  authArr: []
+  authArr: getAuth()
 };
 
 const mutations = {
@@ -34,11 +37,15 @@ const mutations = {
   SET_EXPIRE_TIME: (state, expireTime) => {
     state.expireTime = expireTime;
   },
+  SET_AUTH: (state, data) => {
+    state.authArr = data.split(',');
+  },
   CLEAR: state => {
     state.token = '';
     state.name = '';
     state.initLogin = false;
     state.refreshToken = '';
+    state.authArr = [];
   }
 };
 
@@ -50,11 +57,13 @@ const actions = {
       login({ phone: phone.trim(), password: password })
         .then(response => {
           const { data = {}} = response;
-          const { token, initLogin, expireTime } = data;
+          const { token, initLogin, expireTime, roles } = data;
           commit('SET_TOKEN', { token });
           commit('SET_INIT_LOGIN', initLogin);
           commit('SET_EXPIRE_TIME', expireTime);
+          commit('SET_AUTH', roles);
           setToken(token);
+          setAuth(roles);
           setInitLogin(initLogin);
           resolve();
         })
@@ -68,7 +77,7 @@ const actions = {
   logout({ commit, state }) {
     return new Promise((resolve, reject) => {
         commit('CLEAR');
-        removeToken();
+        removeInfo();
         resetRouter();
         resolve();
     });

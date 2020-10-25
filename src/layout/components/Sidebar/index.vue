@@ -20,11 +20,27 @@ export default {
   computed: {
     ...mapGetters([
       'sidebar',
-      'role'
+      'auth'
     ]),
     routes() {
+      const authMap = {
+        ALL: '',
+        MINING_MANAGER: '/pool',
+        MARKET_MANAGER: '/wwt',
+        ORDER_MANAGER: '/order',
+        ANN_MANAGER: '/notify',
+        FEEDBACK_MANAGER: '/feedback',
+        USER_MANAGER: '/user',
+        ROLE_MANAGER: '/role'
+      };
       const routes = this.$router.options.routes;
-      return routes.filter(v => v.sidebarShow);
+      if (this.auth.includes('ALL')) {
+        return routes.filter(v => v.sidebarShow);
+      } else {
+        return routes.filter(v => {
+          return v.sidebarShow && (v.path === '/' || this.auth.find(au => authMap[au] === v.path));
+        });
+      }
     },
     activeMenu() {
       const route = this.$route;
