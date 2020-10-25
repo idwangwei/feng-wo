@@ -23,7 +23,15 @@ service.interceptors.request.use(
       config.headers['Authorization'] = store.getters.token;
     }
     // requestQueue.push({ url: config });
-    console.log(config);
+
+    // 注册接口在8001端口，其他接口在8080
+    const url = config.url.replace(config.baseURL, '');
+    if (url === '/auth/register') {
+      config.baseURL = process.env.VUE_APP_BASE_API.replace('8080', '8001');
+    } else {
+      config.baseURL = process.env.VUE_APP_BASE_API;
+    }
+
     return config;
   },
   error => {
