@@ -2,15 +2,15 @@
   <div class="app-container">
     <div class="filter-container">
       订单号：
-      <el-input v-model="listQuery.name" placeholder="" size="small" style="width: 150px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input v-model="listQuery.name" placeholder="" size="mini" style="width: 150px;" class="filter-item" @keyup.enter.native="handleFilter" />
       手机号：
-      <el-input v-model="listQuery.phone" placeholder="" size="small" style="width: 150px;" class="filter-item" @keyup.enter.native="handleFilter" />
-      订单类型：<el-select v-model="listQuery.realName" placeholder="" size="small" clearable class="filter-item" style="width: 100px">
+      <el-input v-model="listQuery.phone" placeholder="" size="mini" style="width: 150px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      订单类型：<el-select v-model="listQuery.realName" placeholder="" size="mini" clearable class="filter-item" style="width: 100px">
         <el-option label="普通" :value="false" />
         <el-option label="大宗" :value="true" />
       </el-select>
 
-      <el-button class="filter-item" size="small" type="primary" icon="el-icon-search" @click="handleFilter">
+      <el-button class="filter-item" size="mini" type="primary" icon="el-icon-search" @click="handleFilter">
         查询
       </el-button>
 
@@ -35,7 +35,7 @@
       <el-table-column label="订单状态" align="center" min-width="100px">
         <template slot-scope="{row}">
           <template v-if="row.edit">
-            <el-select v-model="row.editStatus" placeholder="" size="small" clearable class="filter-item" style="width: 4rem">
+            <el-select v-model="row.editStatus" placeholder="" size="mini" clearable class="filter-item" style="width: 4rem">
               <el-option label="取消" value="cancel" />
               <el-option v-if="v.status === 'MATCHING'" label="匹配中" value="matching" />
             </el-select>

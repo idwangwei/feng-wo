@@ -2,7 +2,7 @@
   <div class="app-container">
     <div class="filter-container">
 
-      <el-button class="filter-item" size="small" type="primary" icon="el-icon-plus" @click="showDialog()">
+      <el-button class="filter-item" size="mini" type="primary" icon="el-icon-plus" @click="showDialog()">
         添加
       </el-button>
 

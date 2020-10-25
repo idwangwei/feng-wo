@@ -2,23 +2,23 @@
   <div class="app-container">
     <div class="filter-container">
       订单号：
-      <el-input v-model="listQuery.orderId" placeholder="" size="small" style="width: 150px;margin-top: 0.5rem;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input v-model="listQuery.orderId" placeholder="" size="mini" style="width: 150px;margin-top: 0.5rem;" class="filter-item" @keyup.enter.native="handleFilter" />
       买家手机号：
-      <el-input v-model="listQuery.buyPhone" placeholder="" size="small" style="width: 150px;margin-top: 0.5rem;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input v-model="listQuery.buyPhone" placeholder="" size="mini" style="width: 150px;margin-top: 0.5rem;" class="filter-item" @keyup.enter.native="handleFilter" />
       卖家手机号：
-      <el-input v-model="listQuery.sellerPhone" placeholder="" size="small" style="width: 150px;margin-top: 0.5rem;" class="filter-item" @keyup.enter.native="handleFilter" />
-      订单状态：<el-select v-model="listQuery.status" placeholder="" size="small" clearable class="filter-item" style="width: 100px;margin-top: 0.5rem;">
+      <el-input v-model="listQuery.sellerPhone" placeholder="" size="mini" style="width: 150px;margin-top: 0.5rem;" class="filter-item" @keyup.enter.native="handleFilter" />
+      订单状态：<el-select v-model="listQuery.status" placeholder="" size="mini" clearable class="filter-item" style="width: 100px;margin-top: 0.5rem;">
         <el-option label="已取消" value="CANCELED" />
         <el-option label="已完成" value="COMPLETED" />
         <el-option label="待付款" value="OBLIGATION" />
         <el-option label="待确认" value="UNCONFIRMED" />
       </el-select>
-      订单类型：<el-select v-model="listQuery.type" placeholder="" size="small" clearable class="filter-item" style="width: 100px;margin-top: 0.5rem;">
+      订单类型：<el-select v-model="listQuery.type" placeholder="" size="mini" clearable class="filter-item" style="width: 100px;margin-top: 0.5rem;">
         <el-option label="普通" :value="false" />
         <el-option label="大宗" :value="true" />
       </el-select>
 
-      <el-button class="filter-item" size="small" type="primary" icon="el-icon-search" style="margin-top: 0.5rem;" @click="handleFilter">
+      <el-button class="filter-item" size="mini" type="primary" icon="el-icon-search" style="margin-top: 0.5rem;" @click="handleFilter">
         查询
       </el-button>
 
@@ -45,7 +45,7 @@
       <el-table-column label="订单状态" align="center" min-width="100px">
         <template slot-scope="{row}">
           <template v-if="row.edit">
-            <el-select v-model="row.editStatus" placeholder="" size="small" clearable class="filter-item" style="width: 4rem">
+            <el-select v-model="row.editStatus" placeholder="" size="mini" clearable class="filter-item" style="width: 4rem">
               <el-option label="取消" value="cancel" />
               <el-option label="放行" value="permit" />
             </el-select>

@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <!-- <div class="filter-container">
-      <el-button class="filter-item" size="small" type="primary" icon="el-icon-search" @click="handleFilter">
+      <el-button class="filter-item" size="mini" type="primary" icon="el-icon-search" @click="handleFilter">
         添加矿池
       </el-button>
 

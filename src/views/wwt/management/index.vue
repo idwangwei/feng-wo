@@ -2,25 +2,25 @@
   <div class="app-container">
     <el-form ref="wwtPriceForm" :model="ruleForm" :rules="rules" label-width="100px" inline label-position="top">
       <el-form-item :label="label.price1" prop="price1">
-        <el-input v-model="ruleForm.price1" style="width:100px"></el-input>
+        <el-input v-model="ruleForm.price1" style="width:100px" size="mini"></el-input>
       </el-form-item>
       <el-form-item :label="label.price2" prop="price2">
-        <el-input v-model="ruleForm.price2" style="width:100px"></el-input>
+        <el-input v-model="ruleForm.price2" style="width:100px" size="mini"></el-input>
       </el-form-item>
       <el-form-item :label="label.price3" prop="price3">
-        <el-input v-model="ruleForm.price3" style="width:100px"></el-input>
+        <el-input v-model="ruleForm.price3" style="width:100px" size="mini"></el-input>
       </el-form-item>
       <el-form-item :label="label.price4" prop="price4">
-        <el-input v-model="ruleForm.price4" style="width:100px"></el-input>
+        <el-input v-model="ruleForm.price4" style="width:100px" size="mini"></el-input>
       </el-form-item>
       <el-form-item :label="label.price5" prop="price5">
-        <el-input v-model="ruleForm.price5" style="width:100px"></el-input>
+        <el-input v-model="ruleForm.price5" style="width:100px" size="mini"></el-input>
       </el-form-item>
       <el-form-item :label="label.price6" prop="price6">
-        <el-input v-model="ruleForm.price6" style="width:100px"></el-input>
+        <el-input v-model="ruleForm.price6" style="width:100px" size="mini"></el-input>
       </el-form-item>
       <el-form-item :label="label.price7" prop="price7">
-        <el-input v-model="ruleForm.price7" style="width:100px"></el-input>
+        <el-input v-model="ruleForm.price7" style="width:100px" size="mini"></el-input>
       </el-form-item>
       <el-form-item :label="btnLabel">
         <el-button v-loading="updateLoading" class="filter-item" size="mini" type="primary" icon="el-icon-search" :disabled="updateLoading" @click="submitForm('wwtPriceForm')">
@@ -70,13 +70,13 @@ export default {
         price7: ""
       },
       label: {
-        price1: "",
-        price2: "",
-        price3: "",
-        price4: "",
-        price5: "",
-        price6: "",
-        price7: ""
+        price1: "--",
+        price2: "--",
+        price3: "--",
+        price4: "--",
+        price5: "--",
+        price6: "--",
+        price7: "--"
       },
       rules: {
         price1: [{ required: true, validator: validateFloatNum }],

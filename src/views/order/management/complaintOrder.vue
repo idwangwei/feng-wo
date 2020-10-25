@@ -2,12 +2,12 @@
   <div class="app-container">
     <div class="filter-container">
       订单号：
-      <el-input v-model="listQuery.orderId" placeholder="" size="small" style="width: 150px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input v-model="listQuery.orderId" placeholder="" size="mini" style="width: 150px;" class="filter-item" @keyup.enter.native="handleFilter" />
       买家手机号：
-      <el-input v-model="listQuery.buyPhone" placeholder="" size="small" style="width: 150px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input v-model="listQuery.buyPhone" placeholder="" size="mini" style="width: 150px;" class="filter-item" @keyup.enter.native="handleFilter" />
       卖家手机号：
-      <el-input v-model="listQuery.sellerPhone" placeholder="" size="small" style="width: 150px;" class="filter-item" @keyup.enter.native="handleFilter" />
-      <el-button class="filter-item" size="small" type="primary" icon="el-icon-search" @click="handleFilter">
+      <el-input v-model="listQuery.sellerPhone" placeholder="" size="mini" style="width: 150px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-button class="filter-item" size="mini" type="primary" icon="el-icon-search" @click="handleFilter">
         查询
       </el-button>
     </div>
