@@ -63,7 +63,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="操作" width="auto" class-name="small-padding fixed-width">
+      <el-table-column label="操作" min-width="320px" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
 
           <el-button v-if="row.enable" v-loading="showFreezeLoading(row)" type="primary" size="mini" :disabled="showFreezeLoading(row)" @click="freezeAccount(row)">
