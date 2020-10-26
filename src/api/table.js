@@ -81,7 +81,7 @@ export function cancelOrder(data) {
 }
 export function cancelBuyOrder(data) {
   return request({
-    url: '/bms/market/canceled',
+    url: '/bms/market/down',
     method: 'post',
     data: { language: "", ...data }
   });

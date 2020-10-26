@@ -48,7 +48,7 @@
             <template v-if="row.edit">
               <el-select v-model="row.editStatus" placeholder="" size="mini" clearable style="width: 4rem">
                 <el-option label="取消" value="cancel" />
-                <el-option label="放行" value="permit" />
+                <el-option v-if="row.status === 'UNCONFIRMED'" label="放行" value="permit" />
               </el-select>
             </template>
             <template v-else>
