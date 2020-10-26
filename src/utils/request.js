@@ -56,6 +56,17 @@ service.interceptors.response.use(
   response => {
     const res = response.data;
     // if the custom code is not 10000, it is judged as an error.
+
+    if (res.errorCode === 10500) {
+        Message({
+            dangerouslyUseHTMLString: true,
+            message: `系统异常`,
+            type: 'error',
+            duration: 10 * 1000
+        });
+      return Promise.reject(new Error(res.errorMsg || 'Error'));
+    }
+
     if (res.errorCode !== 10000) {
       Message({
         message: `${res.errorMsg || 'Error'}`,
@@ -102,6 +113,15 @@ service.interceptors.response.use(
           location.reload();
         });
       });
+      return Promise.reject(new Error(data.errorMsg || 'Error'));
+    }
+    if (data.errorCode === 10500) {
+        Message({
+            dangerouslyUseHTMLString: true,
+            message: `系统异常`,
+            type: 'error',
+            duration: 10 * 1000
+        });
       return Promise.reject(new Error(data.errorMsg || 'Error'));
     }
 

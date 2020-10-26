@@ -100,7 +100,7 @@ export default {
           clearInterval(this.countDownTimer);
           this.countDownNum = 60;
         }
-      }, 100);
+      }, 1000);
 
       getSmsCode({ "language": "", "phone": this.formData.phone }).then(res => {
         this.$message({

@@ -176,11 +176,11 @@ export function updateRole(data) {
     data
   });
 }
-export function deleteRole(data) {
+export function deleteRole(params) {
   return request({
     url: '/bms/adminuser/role',
     method: 'delete',
-    data
+    params
   });
 }
 export function getRoleById(data) {
@@ -240,9 +240,9 @@ export function getAdminuserByPhone(params) {
     params
   });
 }
-export function getAdminuserByRoleId(params) {
+export function getAdminuserByRoleName(params) {
   return request({
-    url: `/bms/adminuser/roleId`,
+    url: `/bms/adminuser/roleName`,
     method: 'get',
     params
   });

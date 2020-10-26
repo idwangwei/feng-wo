@@ -22,7 +22,7 @@
               编辑
             </el-button>
             <el-popconfirm v-if="row.role !== 'ALL'" :title="deleteRoleTitle(row)" @onConfirm="deleteRoleHandle(row)">
-              <el-button slot="reference" v-loading="showDeleteRoleLoading(row)" :disabled="showDeleteRoleLoading(row)" size="mini" type="warning" @click="deleteRoleHandle(row)">
+              <el-button slot="reference" v-loading="showDeleteRoleLoading(row)" :disabled="showDeleteRoleLoading(row)" size="mini" type="warning">
                 删除
               </el-button>
             </el-popconfirm>
@@ -42,7 +42,7 @@
           <el-row type="flex" justify="end">
             <el-select v-model="query.type" style="width:5.5rem" size="mini">
               <el-option label="电话" value="phone" />
-              <el-option label="角色ID" value="roleId" />
+              <el-option label="角色" value="roleName" />
               <el-option label="昵称" value="username" />
             </el-select>
             <el-input v-model="query.input" size="mini" style="width:8rem;margin-right:1rem" @keyup.enter.native="queryManegementByParam"></el-input>
@@ -97,12 +97,12 @@
     </div>
 
     <el-dialog :title="roleDialogTitle" :visible.sync="roleDialogVisible" width="50%">
-      <el-form ref="roleForm" :rules="roleRules" :model="roleTemp" label-position="left" label-width="100px" style="width: 400px; margin-left:50px;">
+      <el-form ref="roleForm" :rules="roleRules" :model="roleTemp" label-position="left" label-width="100px" style="width:100%;max-width: 400px;padding-left:50px">
         <el-form-item label="角色名称" prop="name">
-          <el-input v-model="roleTemp.name" style="width:300px" />
+          <el-input v-model="roleTemp.name" style="width:100%; max-width:300px" />
         </el-form-item>
         <el-form-item label="权限" prop="auth">
-          <el-select v-model="roleTemp.auth" multiple class="filter-item" placeholder="请选择角色权限" style="width:300px" @change="roleRuleChange($event)">
+          <el-select v-model="roleTemp.auth" multiple class="filter-item" placeholder="请选择角色权限" style="width:100%; max-width:300px" @change="roleRuleChange($event)">
             <el-option v-for="item in authOptions" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
@@ -115,18 +115,18 @@
     </el-dialog>
 
     <el-dialog :title="manegementDialogTitle" :visible.sync="manegementDialogVisible" width="50%">
-      <el-form ref="manegementForm" :rules="manegementRules" :model="manegementTemp" label-position="left" label-width="100px" style="width: 400px; margin-left:50px;">
+      <el-form ref="manegementForm" :rules="manegementRules" :model="manegementTemp" label-position="left" label-width="100px" style="width:100%;max-width: 400px;padding-left:50px">
         <el-form-item label="手机号" prop="phone">
-          <el-input v-model="manegementTemp.phone" style="width:300px" :disabled="!!manegementDialog" />
+          <el-input v-model="manegementTemp.phone" style="width:100%; max-width:300px" :disabled="!!manegementDialog" />
         </el-form-item>
         <el-form-item label="名称" prop="username">
-          <el-input v-model="manegementTemp.username" :disabled="!!manegementDialog" style="width:300px" />
+          <el-input v-model="manegementTemp.username" :disabled="!!manegementDialog" style="width:100%; max-width:300px" />
         </el-form-item>
         <el-form-item v-if="!manegementDialog" label="密码" prop="password">
-          <el-input v-model="manegementTemp.password" style="width:300px" />
+          <el-input v-model="manegementTemp.password" style="width:100%; max-width:300px" />
         </el-form-item>
         <el-form-item label="角色" prop="roleId">
-          <el-select v-model="manegementTemp.roleId" class="filter-item" placeholder="请选择" style="width:300px">
+          <el-select v-model="manegementTemp.roleId" class="filter-item" placeholder="请选择" style="width:100%; max-width:300px">
             <el-option v-for="item in roleList" :key="item.id" :label="item.name" :value="item.id" />
           </el-select>
         </el-form-item>
@@ -144,7 +144,7 @@
 import {
   getRoles,
   getAdminuser,
-  deleteAdminuserRole,
+  deleteRole,
   deleteAdminuser,
   addRole,
   addAdminuser,
@@ -153,7 +153,7 @@ import {
   updateAdminuserEnable,
   getAdminuserByName,
   getAdminuserByPhone,
-  getAdminuserByRoleId
+  getAdminuserByRoleName
 } from "@/api/table";
 import { validateTelephone } from "@/utils/validate";
 
@@ -287,7 +287,7 @@ export default {
     },
     deleteRoleHandle(row) {
       this.deleteRoleLoadingList.push(row.id);
-      deleteAdminuserRole(row.id)
+      deleteRole({ id: row.id })
       .then(res => {
         this.roleList.splice(this.roleList.findIndex(v => v.id === row.id), 1);
       })
@@ -366,6 +366,7 @@ export default {
     confirmRole() {
       this.$refs['roleForm'].validate((valid) => {
         if (!valid) { return; }
+        debugger;
         if (!this.roleDialog) {
           this.addRoleLoading = true;
           addRole({ name: this.roleTemp.name, role: this.roleTemp.auth.join(',') })
@@ -379,7 +380,7 @@ export default {
           });
         } else {
           this.addRoleLoading = true;
-          updateRole({ id: this.roleDialog.id, name: this.roleTemp, role: this.roleTemp.auth.join(',') })
+          updateRole({ id: this.roleDialog.id, name: this.roleTemp.name, role: this.roleTemp.auth.join(',') })
           .then(res => {
             this.roleDialogVisible = false;
             this.getRoleList(true);
@@ -451,8 +452,8 @@ export default {
         case 'phone':
           queryPromise = getAdminuserByPhone({ phone: this.query.input });
           break;
-        case 'roleId':
-          queryPromise = getAdminuserByRoleId({ roleId: this.query.input });
+        case 'roleName':
+          queryPromise = getAdminuserByRoleName({ roleName: this.query.input });
           break;
         case 'username':
         default:
