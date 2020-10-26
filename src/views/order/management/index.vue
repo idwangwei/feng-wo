@@ -46,7 +46,7 @@
         <template slot-scope="{row}">
           <transition name="fade" mode="out-in">
             <template v-if="row.edit">
-              <el-select v-model="row.editStatus" placeholder="" size="mini" clearable style="width: 4rem">
+              <el-select v-model="row.editStatus" placeholder="" size="mini" clearable style="width: 4.5rem">
                 <el-option label="取消" value="cancel" />
                 <el-option v-if="row.status === 'UNCONFIRMED'" label="放行" value="permit" />
               </el-select>

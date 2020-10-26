@@ -36,9 +36,9 @@
         <template slot-scope="{row}">
           <transition name="fade" mode="out-in">
             <template v-if="row.edit">
-              <el-select v-model="row.editStatus" placeholder="" size="mini" clearable class="filter-item" style="width: 4rem">
+              <el-select v-model="row.editStatus" placeholder="" size="mini" clearable class="filter-item" style="width: 4.5rem">
                 <el-option label="取消" value="cancel" />
-                <el-option v-if="row.status === 'TRANSACTION'" label="匹配中" value="matching" />
+                <!-- <el-option v-if="row.status === 'TRANSACTION'" label="匹配中" value="matching" /> -->
               </el-select>
             </template>
             <template v-else>
