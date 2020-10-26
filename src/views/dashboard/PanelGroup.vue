@@ -15,8 +15,8 @@
     </el-col>
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
       <div class="card-panel">
-        <div class="card-panel-icon-wrapper icon-money">
-          <svg-icon icon-class="fmc" class-name="card-panel-icon" />
+        <div class="card-panel-icon-wrapper icon-money" style="margin:0">
+          <svg-icon icon-class="fmc" class-name="card-panel-icon" style="font-size:70px" />
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
