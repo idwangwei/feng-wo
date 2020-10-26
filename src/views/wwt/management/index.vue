@@ -35,7 +35,9 @@
       <span>全部市场：</span><el-switch v-model="priceStatus.allMarket" :active-value="true" :inactive-value="false" style="margin-right:2rem"></el-switch>
       <span>大宗市场：</span><el-switch v-model="priceStatus.bigMarket" :active-value="true" :inactive-value="false" style="margin-right:2rem"></el-switch>
       <span>普通市场：</span><el-switch v-model="priceStatus.commonMarket" :active-value="true" :inactive-value="false" style="margin-right:2rem"></el-switch>
-      <el-button v-loading="setStatusLoading" type="primary" size="mini" :disabled="setStatusLoading" @click="updateStatus">更新</el-button>
+      <el-popconfirm title="确定修改市场状态?" @onConfirm="updateStatus">
+        <el-button slot="reference" v-loading="setStatusLoading" type="primary" size="mini" :disabled="setStatusLoading">更新</el-button>
+      </el-popconfirm>
     </el-row>
 
     <el-row :gutter="32" style="margin-top:2rem;">
@@ -192,18 +194,10 @@ export default {
       });
     },
     updateStatus() {
-      this.$confirm('此操作将修改市场状态, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        this.setStatusLoading = true;
-        setPriceStatus(this.priceStatus).then(res => {
-        }).finally(() => {
-          this.setStatusLoading = false;
-        });
-      }).catch(() => {
-
+      this.setStatusLoading = true;
+      setPriceStatus(this.priceStatus).then(res => {
+      }).finally(() => {
+        this.setStatusLoading = false;
       });
     }
   }

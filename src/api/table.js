@@ -262,3 +262,17 @@ export function setPriceStatus(data) {
   });
 }
 
+export function addUserWwt(data) {
+  return request({
+    url: `/bms/user/wwt`,
+    method: 'post',
+    data
+  });
+}
+export function getWwtSmsCode() {
+  return request({
+    url: `/bms/common/sms/superadmin`,
+    method: 'get'
+  });
+}
+

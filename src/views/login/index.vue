@@ -25,6 +25,7 @@
           <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
         </span>
       </el-form-item>
+      <el-link type="primary" @click="forgetLinkHandle">忘记密码</el-link>
       <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;margin-top:80px" @click.native.prevent="handleLogin">登 录</el-button>
 
     </el-form>
@@ -96,6 +97,9 @@ export default {
           return false;
         }
       });
+    },
+    forgetLinkHandle() {
+      this.$router.push({ path: "/forgetPass" });
     }
   }
 };

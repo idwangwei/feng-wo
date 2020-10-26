@@ -3,10 +3,15 @@
 /* fade */
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.28s;
+  transition: opacity 0.08s;
+  -webkit-transition: opacity 0.08s;
+  -moz-transition: opacity 0.08s;
+  -ms-transition: opacity 0.08s;
+  -o-transition: opacity 0.08s;
 }
 
 .fade-enter,
+.fade-leave-to
 .fade-leave-active {
   opacity: 0;
 }
@@ -15,6 +20,10 @@
 .fade-transform-leave-active,
 .fade-transform-enter-active {
   transition: all .5s;
+  -webkit-transition: all .5s;
+  -moz-transition: all .5s;
+  -ms-transition: all .5s;
+  -o-transition: all .5s;
 }
 
 .fade-transform-enter {

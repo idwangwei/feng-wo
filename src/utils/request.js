@@ -87,6 +87,24 @@ service.interceptors.response.use(
   error => {
     const { response = {}} = error;
     const { data = {}} = response;
+
+    if (data.errorCode === 10401) {
+      // to re-login
+      MessageBox.alert(
+        '登录过期, 重新登录',
+        '提示',
+        {
+          confirmButtonText: '重登',
+          type: 'warning'
+        }
+      ).then(() => {
+        store.dispatch('user/logout').then(() => {
+          location.reload();
+        });
+      });
+      return Promise.reject(new Error(data.errorMsg || 'Error'));
+    }
+
     if (data.errorCode === 21011 || data.errorCode === 21012) {
       store.dispatch('user/refreshToken').then(() => {
         // requestQueue.forEach(item => {});

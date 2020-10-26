@@ -65,6 +65,11 @@ export const constantRoutes = [
         component: () => import('@/views/login/updatePass'),
         hidden: true
     },
+    {
+        path: '/forgetPass',
+        component: () => import('@/views/login/forgetPass'),
+        hidden: true
+    },
 
     {
         path: '/404',

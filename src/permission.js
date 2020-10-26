@@ -9,7 +9,7 @@ import store from '@/store';
 
 NProgress.configure({ showSpinner: false }); // NProgress Configuration
 
-const whiteList = ['/login', '/updatePass']; // no redirect whitelist
+const whiteList = ['/login', '/updatePass', '/forgetPass']; // no redirect whitelist
 const SinglePage = ['/introduce', '/register', '/userAgre', '/download'];
 router.beforeEach((to, from, next) => {
     // start progress bar
@@ -35,7 +35,7 @@ router.beforeEach((to, from, next) => {
         }
     } else {
         /* has no token*/
-        if (to.path === '/login') {
+        if (to.path === '/login' || to.path === '/forgetPass') {
             // in the free login whitelist, go directly
             next();
         } else {

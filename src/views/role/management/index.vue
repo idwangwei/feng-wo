@@ -21,9 +21,11 @@
             <el-button v-if="row.role !== 'ALL'" type="primary" size="mini" @click="showRoleDialog(row)">
               编辑
             </el-button>
-            <el-button v-if="row.role !== 'ALL'" v-loading="showDeleteRoleLoading(row)" :disabled="showDeleteRoleLoading(row)" size="mini" type="warning" @click="deleteRoleHandle(row)">
-              删除
-            </el-button>
+            <el-popconfirm v-if="row.role !== 'ALL'" :title="deleteRoleTitle(row)" @onConfirm="deleteRoleHandle(row)">
+              <el-button slot="reference" v-loading="showDeleteRoleLoading(row)" :disabled="showDeleteRoleLoading(row)" size="mini" type="warning" @click="deleteRoleHandle(row)">
+                删除
+              </el-button>
+            </el-popconfirm>
           </template>
         </el-table-column>
       </el-table>
@@ -84,9 +86,11 @@
             <el-button v-if="row.username !== 'admin'" size="mini" type="primary" @click="showManegementDialog(row)">
               编辑
             </el-button>
-            <el-button v-if="row.username !== 'admin'" v-loading="showDeleteManegementLoading(row)" size="mini" type="warning" :disabled="showDeleteManegementLoading(row)" @click="deleteAccountHandle(row)">
-              删除
-            </el-button>
+            <el-popconfirm v-if="row.username !== 'admin'" :title="deleteManegementTitle(row)" @onConfirm="deleteAccountHandle(row)">
+              <el-button slot="reference" v-loading="showDeleteManegementLoading(row)" size="mini" type="warning" :disabled="showDeleteManegementLoading(row)">
+                删除
+              </el-button>
+            </el-popconfirm>
           </template>
         </el-table-column>
       </el-table>
@@ -236,6 +240,12 @@ export default {
     this.getRoleList();
   },
   methods: {
+    deleteRoleTitle(row) {
+      return `确认删除角色 ${row.name} ?`;
+    },
+    deleteManegementTitle(row) {
+      return `确认删除管理员 ${row.username} ?`;
+    },
     getManegementList() {
       this.manegementListLoading = true;
       getAdminuser()

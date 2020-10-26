@@ -1,8 +1,20 @@
 <template>
   <div class="app-container">
+    <el-row>
+      联系电话：<el-input v-model="searchParam.phone" placeholder="" size="mini" clearable style="width: 150px;;margin-right:1rem;margin-top: 0.5rem;" class="filter-item"></el-input>
+      状态：<el-select v-model="searchParam.readType" placeholder="" size="mini" clearable class="filter-item" style="width: 100px;margin-right:1rem;margin-top: 0.5rem;">
+        <el-option label="已读" :value="true" />
+        <el-option label="未读" :value="false" />
+      </el-select>
+      <el-button class="filter-item" size="mini" type="primary" icon="el-icon-search" style="margin-top: 0.5rem;" :disabled="listLoading" @click="handleFilter">
+        查询
+      </el-button>
+
+    </el-row>
+
     <el-table :key="tableKey" v-loading="listLoading" :data="list" border fit highlight-current-row style="width: 100%; margin-top:1rem;" @row-click="clickRow">
       <el-table-column prop="id" label="用户ID" min-width="10%"></el-table-column>
-      <el-table-column prop="phoneNumber" label="电话号码" align="center" min-width="10%"></el-table-column>
+      <el-table-column prop="phone" label="联系电话" align="center" min-width="10%"></el-table-column>
       <el-table-column prop="content" label="反馈内容" align="left" min-width="40%"></el-table-column>
       <el-table-column label="图片" align="center" width="120px">
         <template slot-scope="{row}">
@@ -93,6 +105,10 @@ export default {
       dialogVisible: false,
       replyRow: {},
       replyContent: '',
+      searchParam: {
+        phone: '',
+        readType: null
+      },
       listQuery: {
         language: '',
         page: 1,
@@ -104,9 +120,9 @@ export default {
     this.getList();
   },
   methods: {
-    getList() {
+    getList(param) {
       this.listLoading = true;
-      getFeedbackList(this.listQuery)
+      getFeedbackList(param || this.listQuery)
         .then((response) => {
           this.list = response.data.contents.map(v => {
             let imageList = [];
@@ -125,6 +141,18 @@ export default {
         .finally(() => {
           this.listLoading = false;
         });
+    },
+
+    handleFilter() {
+      this.listQuery.page = 1;
+      const param = { ...this.listQuery };
+      if (this.searchParam.phone) {
+        param.phone = this.searchParam.phone;
+      }
+      if (this.searchParam.readType === true || this.searchParam.readType === false) {
+        param.readType = this.searchParam.readType;
+      }
+      this.getList(param);
     },
 
     clickRow(row, column, event) {

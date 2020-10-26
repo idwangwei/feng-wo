@@ -44,18 +44,17 @@
       </el-table-column>
       <el-table-column label="订单状态" align="center" min-width="100px">
         <template slot-scope="{row}">
-          <template v-if="row.edit">
-            <el-select v-model="row.editStatus" placeholder="" size="mini" clearable class="filter-item" style="width: 4rem">
-              <el-option label="取消" value="cancel" />
-              <el-option label="放行" value="permit" />
-            </el-select>
-            <el-button class="cancel-btn" size="mini" type="warning" @click="cancelEdit(row)">
-              取消
-            </el-button>
-          </template>
-          <template v-else>
-            <el-tag :color="row.status | colorFilter" size="mini">{{ row.status | statusFilter }}</el-tag>
-          </template>
+          <transition name="fade" mode="out-in">
+            <template v-if="row.edit">
+              <el-select v-model="row.editStatus" placeholder="" size="mini" clearable style="width: 4rem">
+                <el-option label="取消" value="cancel" />
+                <el-option label="放行" value="permit" />
+              </el-select>
+            </template>
+            <template v-else>
+              <el-tag :color="row.status | colorFilter" size="mini">{{ row.status | statusFilter }}</el-tag>
+            </template>
+          </transition>
         </template>
 
       </el-table-column>
@@ -63,12 +62,21 @@
       <el-table-column label="操作" min-width="150px" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
           <template v-if="row.status === 'OBLIGATION' || row.status === 'UNCONFIRMED'">
-            <el-button v-if="row.edit" v-loading="updateLoading(row)" type="success" size="mini" :disabled="updateLoading(row)" @click="updateStatus(row)">
-              确认
-            </el-button>
-            <el-button v-else type="primary" size="mini" @click="row.edit=!row.edit">
-              更改状态
-            </el-button>
+            <transition name="fade" mode="out-in">
+              <div v-if="row.edit">
+                <el-button v-loading="updateLoading(row)" type="success" size="mini" :disabled="updateLoading(row)" @click="updateStatus(row)">
+                  确认
+                </el-button>
+                <el-button class="cancel-btn" size="mini" type="warning" @click="cancelEdit(row)">
+                  取消
+                </el-button>
+              </div>
+              <template v-else>
+                <el-button type="primary" size="mini" @click="row.edit=!row.edit">
+                  更改状态
+                </el-button>
+              </template>
+            </transition>
           </template>
         </template>
       </el-table-column>

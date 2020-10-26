@@ -51,19 +51,18 @@
       </el-table-column>
       <el-table-column prop="unusedWwt" label="FMC数量" align="center" width="120" sortable></el-table-column>
       <el-table-column prop="usedWwt" label="矿池投入数量" align="center" width="150" sortable></el-table-column>
-      <el-table-column label="上级" align="center" width="220">
+      <el-table-column label="上级" align="center" width="150">
         <template slot-scope="{row}">
-          <template v-if="row.edit">
-            <el-input v-model="row.editParentPhone" class="edit-input" size="mini" style="width:120px" />
-            <el-button class="cancel-btn" size="mini" type="warning" @click="cancelEdit(row)">
-              取消
-            </el-button>
-          </template>
-          <span v-else>{{ row.parentPhone }}</span>
+          <transition name="fade" mode="out-in">
+            <template v-if="row.edit">
+              <el-input v-model="row.editParentPhone" class="edit-input" size="mini" style="width:120px" />
+            </template>
+            <span v-else>{{ row.parentPhone }}</span>
+          </transition>
         </template>
       </el-table-column>
 
-      <el-table-column label="操作" min-width="320px" class-name="small-padding fixed-width">
+      <el-table-column label="操作" min-width="420px" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
 
           <el-button v-if="row.enable" v-loading="showFreezeLoading(row)" type="primary" size="mini" :disabled="showFreezeLoading(row)" @click="freezeAccount(row)">
@@ -79,16 +78,27 @@
             解冻交易权限
           </el-button>
           <template v-if="!row.parentPhone">
-            <el-button v-if="row.edit" v-loading="showBindLoading(row)" type="success" size="mini" :disabled="showBindLoading(row)" @click="bindSuperior(row)">
-              确认
-            </el-button>
-            <el-button v-else type="primary" size="mini" @click="row.edit=!row.edit">
-              分配上级
-            </el-button>
+            <template v-if="row.edit">
+              <el-button v-loading="showBindLoading(row)" type="success" size="mini" :disabled="showBindLoading(row)" @click="bindSuperior(row)">
+                确认
+              </el-button>
+              <el-button class="cancel-btn" size="mini" type="warning" @click="cancelEdit(row)">
+                取消
+              </el-button>
+            </template>
+            <template v-else>
+              <el-button type="primary" size="mini" @click="row.edit=!row.edit">
+                分配上级
+              </el-button>
+            </template>
           </template>
 
           <el-button v-if="!row.active" v-loading="showActiveLoading(row)" size="mini" type="danger" :disabled="showActiveLoading(row)" @click="activeUser(row)">
             激活
+          </el-button>
+
+          <el-button v-loading="showActiveLoading(row)" size="mini" type="danger" :disabled="showActiveLoading(row)" @click="rechargeHandle(row)">
+            发币
           </el-button>
         </template>
       </el-table-column>
@@ -96,12 +106,38 @@
 
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.pageSize" @pagination="getList" />
 
+    <el-dialog title="加币操作" :visible.sync="rechargeDiaglog" width="50%">
+      <el-form ref="rechargeTemp" :rules="rules" :model="rechargeTemp" label-position="left" label-width="100px" style="width: 400px; margin-left:50px;">
+        <el-form-item label="用户昵称" prop="name">
+          <el-input v-model="rechargeTemp.name" style="width:300px" :disabled="true" />
+        </el-form-item>
+        <el-form-item label="用户手机号码" prop="userPhone">
+          <el-input v-model="rechargeTemp.userPhone" style="width:300px" :disabled="true" />
+        </el-form-item>
+        <el-form-item label="币数量" prop="wwt">
+          <el-input v-model="rechargeTemp.wwt" type="number" style="width:300px" />
+        </el-form-item>
+        <el-form-item label="短信验证码" prop="code">
+          <el-input v-model="rechargeTemp.code" style="width:300px">
+            <template slot="append">
+              <el-button type="text" style="min-width:5rem" :disabled="disableCodeBtn" @click="getSmsCode">{{ verifyStr }}</el-button>
+            </template>
+          </el-input>
+        </el-form-item>
+
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button size="mini" @click="roleDialogVisible = false">取 消</el-button>
+        <el-button v-loading="rechargeLoading" :disabled="rechargeLoading" size="mini" type="primary" @click="confirmRecharge">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { getUserList, modifyUserInfo } from "@/api/table";
+import { getUserList, modifyUserInfo, addUserWwt, getWwtSmsCode } from "@/api/table";
 import Pagination from "@/components/Pagination"; // secondary package based on el-pagination
+import { validateSmsCode, validateIntNum } from "@/utils/validate";
 
 export default {
   name: "UserManagement",
@@ -127,6 +163,22 @@ export default {
       unfreezeTradExchangeList: [],
       bindExchangeList: [],
       activeExchangeList: [],
+      rechargeDiaglog: false,
+      rechargeLoading: false,
+      rechargeRow: null,
+      rechargeTemp: {
+        name: '',
+        code: '',
+        language: '',
+        userPhone: '',
+        wwt: 0
+      },
+      rules: {
+        code: [{ required: true, message: '请输入短信验证码', trigger: 'blur', validator: validateSmsCode }],
+        wwt: [{ required: true, message: '请输入整数', trigger: 'blur', validator: validateIntNum }]
+      },
+      countDownNum: 60,
+      countDownTimer: null,
       listQuery: {
         page: 1,
         pageSize: 10,
@@ -142,8 +194,21 @@ export default {
       }
     };
   },
+  computed: {
+    verifyStr: function() {
+      return this.countDownNum === 60 ? '获取验证码' : `${this.countDownNum}S 后再试`;
+    },
+    disableCodeBtn: function() {
+      return this.countDownNum !== 60;
+    }
+  },
   created() {
     this.getList();
+  },
+  beforeDestroy() {
+    if (this.countDownTimer) {
+      clearInterval(this.countDownTimer);
+    }
   },
   methods: {
     getList() {
@@ -296,6 +361,52 @@ export default {
     cancelEdit(row) {
       row.editParentPhone = '';
       row.edit = false;
+    },
+
+    rechargeHandle(row) {
+      this.rechargeDiaglog = true;
+      this.rechageRow = row;
+      this.rechargeTemp.userPhone = row.phone;
+      this.rechargeTemp.name = row.name;
+    },
+
+    getSmsCode() {
+      this.countDownNum--;
+      this.countDownTimer = setInterval(() => {
+        this.countDownNum--;
+        if (this.countDownNum <= 0) {
+          clearInterval(this.countDownTimer);
+          this.countDownNum = 60;
+        }
+      }, 1000);
+
+      getWwtSmsCode().then(res => {
+        this.$message({
+          message: `短信验证码已发送`,
+          type: "success"
+        });
+      });
+    },
+
+    confirmRecharge() {
+      this.$refs['rechargeTemp'].validate(valid => {
+        if (!valid) {
+          return;
+        }
+        this.rechargeLoading = true;
+        addUserWwt(this.rechargeTemp)
+        .then(res => {
+          this.$message({
+            message: `加币成功`,
+            type: "success"
+          });
+          this.rechargeDiaglog = false;
+          this.getList();
+        })
+        .finally(() => {
+          this.rechargeLoading = false;
+        });
+      });
     }
 
   }

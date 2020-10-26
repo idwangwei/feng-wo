@@ -121,7 +121,8 @@ export default {
       },
       loading: false,
       imgUrl: require('@/assets/logo@2x.png'),
-      countDownNum: 60
+      countDownNum: 60,
+      countDownTimer: null
     };
   },
   computed: {
@@ -143,6 +144,11 @@ export default {
           }
       },
       immediate: true
+    }
+  },
+  beforeDestroy() {
+    if (this.countDownTimer) {
+      clearInterval(this.countDownTimer);
     }
   },
   methods: {
