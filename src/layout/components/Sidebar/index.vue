@@ -25,20 +25,20 @@ export default {
     routes() {
       const authMap = {
         ALL: '',
-        MINING_MANAGER: '/pool',
-        MARKET_MANAGER: '/wwt',
-        ORDER_MANAGER: '/order',
-        ANN_MANAGER: '/notify',
-        FEEDBACK_MANAGER: '/feedback',
-        USER_MANAGER: '/user',
-        ROLE_MANAGER: '/role'
+        MINING_MANAGER: '/manager/pool',
+        MARKET_MANAGER: '/manager/wwt',
+        ORDER_MANAGER: '/manager/order',
+        ANN_MANAGER: '/manager/notify',
+        FEEDBACK_MANAGER: '/manager/feedback',
+        USER_MANAGER: '/manager/user',
+        ROLE_MANAGER: '/manager/role'
       };
       const routes = this.$router.options.routes;
       if (this.auth.includes('ALL')) {
         return routes.filter(v => v.sidebarShow);
       } else {
         return routes.filter(v => {
-          return v.sidebarShow && (v.path === '/' || this.auth.find(au => authMap[au] === v.path));
+          return v.sidebarShow && (v.path === '/manager' || this.auth.find(au => authMap[au] === v.path));
         });
       }
     },

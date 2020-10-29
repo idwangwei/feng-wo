@@ -32,7 +32,7 @@ import Layout from '@/layout';
  */
 export const constantRoutes = [
     {
-        path: '/login',
+        path: '/manager/login',
         component: () => import('@/views/login/index'),
         hidden: true
     },
@@ -61,26 +61,26 @@ export const constantRoutes = [
         hidden: true
     },
     {
-        path: '/updatePass',
+        path: '/manager/updatePass',
         component: () => import('@/views/login/updatePass'),
         hidden: true
     },
     {
-        path: '/forgetPass',
+        path: '/manager/forgetPass',
         component: () => import('@/views/login/forgetPass'),
         hidden: true
     },
 
     {
-        path: '/404',
+        path: '/manager/404',
         component: () => import('@/views/404'),
         hidden: true
     },
 
     {
-        path: '/',
+        path: '/manager',
         component: Layout,
-        redirect: '/dashboard',
+        redirect: '/manager/dashboard',
         sidebarShow: true,
         children: [{
             path: 'dashboard',
@@ -90,9 +90,9 @@ export const constantRoutes = [
         }]
     },
     {
-        path: '/user',
+        path: '/manager/user',
         component: Layout,
-        redirect: '/user/management',
+        redirect: '/manager/user/management',
         sidebarShow: true,
         children: [{
             path: 'management',
@@ -102,9 +102,9 @@ export const constantRoutes = [
         }]
     },
     {
-        path: '/pool',
+        path: '/manager/pool',
         component: Layout,
-        redirect: '/pool/management',
+        redirect: '/manager/pool/management',
         sidebarShow: true,
         children: [{
             path: 'management',
@@ -114,9 +114,9 @@ export const constantRoutes = [
         }]
     },
     {
-        path: '/wwt',
+        path: '/manager/wwt',
         component: Layout,
-        redirect: '/wwt/management',
+        redirect: '/manager/wwt/management',
         sidebarShow: true,
         children: [{
             path: 'management',
@@ -126,9 +126,9 @@ export const constantRoutes = [
         }]
     },
     {
-        path: '/order',
+        path: '/manager/order',
         component: Layout,
-        redirect: '/order/management',
+        redirect: '/manager/order/management',
         sidebarShow: true,
         meta: { title: '订单', icon: 'clipboard' },
         children: [
@@ -153,9 +153,9 @@ export const constantRoutes = [
         ]
     },
     {
-        path: '/notify',
+        path: '/manager/notify',
         component: Layout,
-        redirect: '/notify/management',
+        redirect: '/manager/notify/management',
         sidebarShow: true,
         children: [{
             path: 'management',
@@ -165,9 +165,9 @@ export const constantRoutes = [
         }]
     },
     {
-        path: '/feedback',
+        path: '/manager/feedback',
         component: Layout,
-        redirect: '/feedback/management',
+        redirect: '/manager/feedback/management',
         sidebarShow: true,
         children: [{
             path: 'management',
@@ -177,9 +177,9 @@ export const constantRoutes = [
         }]
     },
     {
-        path: '/role',
+        path: '/manager/role',
         component: Layout,
-        redirect: '/role/management',
+        redirect: '/manager/role/management',
         sidebarShow: true,
         children: [{
             path: 'management',
@@ -190,7 +190,7 @@ export const constantRoutes = [
     },
 
     // 404 page must be placed at the end !!!
-    { path: '*', redirect: '/404', hidden: true }
+    { path: '*', redirect: '/manager/404', hidden: true }
 ];
 
 const createRouter = () => new Router({

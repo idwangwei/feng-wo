@@ -131,7 +131,7 @@ export default {
           })
           .then(res => {
             this.$store.state.dispath('');
-            this.$router.push({ path: '/' });
+            this.$router.push({ path: '/manager' });
           })
           .catch(() => {})
           .finally(() => {});

@@ -9,8 +9,18 @@ import store from '@/store';
 
 NProgress.configure({ showSpinner: false }); // NProgress Configuration
 
-const whiteList = ['/login', '/updatePass', '/forgetPass']; // no redirect whitelist
+const whiteList = ['/manager/login', '/manager/updatePass', '/manager/forgetPass']; // no redirect whitelist
 const SinglePage = ['/introduce', '/register', '/userAgre', '/download'];
+const authMap = {
+    ALL: '',
+    MINING_MANAGER: '/manager/pool',
+    MARKET_MANAGER: '/manager/wwt',
+    ORDER_MANAGER: '/manager/order',
+    ANN_MANAGER: '/manager/notify',
+    FEEDBACK_MANAGER: '/manager/feedback',
+    USER_MANAGER: '/manager/user',
+    ROLE_MANAGER: '/manager/role'
+};
 router.beforeEach((to, from, next) => {
     // start progress bar
     NProgress.start();
@@ -26,21 +36,30 @@ router.beforeEach((to, from, next) => {
     if (hasToken) {
         if (store.state.user.initLogin === 'true') {
             NProgress.done();
-            to.path === '/updatePass' ? next() : next({ path: '/updatePass' });
+            to.path === '/manager/updatePass' ? next() : next({ path: '/manager/updatePass' });
         } else if (whiteList.includes(to.path)) {
             NProgress.done();
-            next({ path: '/' });
+            next({ path: '/manager/dashboard' });
         } else {
-            next();
+            console.log(store.state.user.authArr);
+            try {
+                if (store.state.user.authArr.find(au => to.path.indexOf(authMap[au]) !== -1) || to.path.indexOf('dashboard') !== -1) {
+                    next();
+                } else {
+                    next({ path: '/manager/dashboard' });
+                }
+            } catch (err) {
+                console.log(err);
+            }
         }
     } else {
         /* has no token*/
-        if (to.path === '/login' || to.path === '/forgetPass') {
+        if (to.path === '/manager/login' || to.path === '/manager/forgetPass') {
             // in the free login whitelist, go directly
             next();
         } else {
             // other pages that do not have permission to access are redirected to the login page.
-            next(`/login?redirect=${to.path}`);
+            next(`/manager/login?redirect=${to.path}`);
             NProgress.done();
         }
     }

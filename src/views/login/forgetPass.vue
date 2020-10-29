@@ -125,7 +125,7 @@ export default {
               message: '密码修改成功',
               type: 'success'
             });
-            this.$router.push({ path: '/login' });
+            this.$router.push({ path: '/manager/login' });
           })
           .catch(() => {})
           .finally(() => {

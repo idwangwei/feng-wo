@@ -61,6 +61,7 @@ export default {
   watch: {
     $route: {
       handler: function(route) {
+          debugger;
         this.redirect = route.query && route.query.redirect;
       },
       immediate: true
@@ -84,7 +85,7 @@ export default {
           this.$store
             .dispatch("user/login", this.loginForm)
             .then(() => {
-              this.$router.push({ path: this.redirect || "/" });
+              this.$router.push({ path: this.redirect || "/manager" });
             })
             .catch(() => {
               this.$refs.password.focus();
@@ -99,7 +100,7 @@ export default {
       });
     },
     forgetLinkHandle() {
-      this.$router.push({ path: "/forgetPass" });
+      this.$router.push({ path: "/manager/forgetPass" });
     }
   }
 };
