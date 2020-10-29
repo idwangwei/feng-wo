@@ -54,7 +54,7 @@
           <el-input v-model.number="ruleForm.rate"></el-input>
         </el-form-item>
         <el-form-item label="FMC投入数量" prop="wwt">
-          <el-input v-model.number="ruleForm.wwt"></el-input>
+          <el-input v-model.number="ruleForm.wwt" :disabled="true"></el-input>
         </el-form-item>
         <el-form-item label="执行周期" prop="period">
           <el-input v-model.number="ruleForm.period"></el-input>

@@ -67,8 +67,7 @@
 
 <script>
 import { validateTelephone, validateSmsCode } from "@/utils/validate";
-import { getSmsCode } from "@/api/user";
-import { registerAccount } from "@/api/user";
+import { registerAccount, getRegisterSmsCode } from "@/api/user";
 
 export default {
   name: "Register",
@@ -168,7 +167,7 @@ export default {
         }
       }, 1000);
 
-      getSmsCode({ "language": "", "phone": this.registerForm.phone }).then(res => {
+      getRegisterSmsCode({ "language": "", "phone": this.registerForm.phone }).then(res => {
         this.$message({
           message: res.errorMsg,
           type: 'success'

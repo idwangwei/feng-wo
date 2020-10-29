@@ -14,6 +14,13 @@ export function getSmsCode(data) {
     data
   });
 }
+export function getRegisterSmsCode(data) {
+  return request({
+    url: '/bms/common/register/sms',
+    method: 'post',
+    data
+  });
+}
 export function updatePass(data) {
   return request({
     url: '/bms/common/updatePwd',

@@ -13,7 +13,7 @@
     </el-row>
 
     <el-table :key="tableKey" v-loading="listLoading" :data="list" border fit highlight-current-row style="width: 100%; margin-top:1rem;" @row-click="clickRow">
-      <el-table-column prop="id" label="用户ID" min-width="10%"></el-table-column>
+      <!-- <el-table-column prop="id" label="用户ID" min-width="10%"></el-table-column> -->
       <el-table-column prop="phone" label="联系电话" align="center" min-width="10%"></el-table-column>
       <el-table-column prop="content" label="反馈内容" align="left" min-width="40%"></el-table-column>
       <el-table-column label="图片" align="center" width="120px">
