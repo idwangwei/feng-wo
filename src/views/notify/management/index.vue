@@ -1,16 +1,16 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-
+      <el-tag>系统公告</el-tag>
       <el-button class="filter-item" size="mini" type="primary" icon="el-icon-plus" @click="showDialog()">
         添加
       </el-button>
 
     </div>
 
-    <el-table :key="tableKey" v-loading="listLoading" :data="list" border fit highlight-current-row style="width: 100%; margin-top:1rem;">
+    <el-table :key="tableKey" v-loading="listLoading" :data="list" border fit highlight-current-row style="width: 100%; margin-top:1rem;" height="calc(50vh - 164px)">
       <el-table-column prop="title" label="标题" min-width="20%"></el-table-column>
-      <el-table-column prop="content" label="内容" align="center" min-width="60%"></el-table-column>
+      <el-table-column prop="content" label="内容" align="left" min-width="60%"></el-table-column>
       <el-table-column label="时间" align="center" min-width="12%">
         <template slot-scope="{row}">
           <span>{{ row.commitTime | DateFilter }}</span>
@@ -28,7 +28,31 @@
       </el-table-column>
     </el-table>
 
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
+    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" style="padding:6px" @pagination="getList" />
+    <el-divider></el-divider>
+    <div class="filter-container">
+      <el-tag>处罚公告</el-tag>
+      <el-input v-model="filterUserPhone" size="mini" style="width:8rem;margin-right:1rem;margin-left:2rem" placeholder="用户电话" @keyup.enter.native="queryPunishListByParam()"></el-input>
+      <el-button v-loading="queryLoading" :disabled="queryLoading" type="primary" size="mini" @click="queryPunishListByParam()">
+        查询
+      </el-button>
+      <el-button :disabled="listLoading" type="primary" size="mini" @click="queryPunishListByParam(true)">
+        全部
+      </el-button>
+
+    </div>
+    <el-table :key="punishTableKey" v-loading="punishListLoading" :data="punishList" border fit highlight-current-row style="width: 100%; margin-top:1rem;" height="calc(50vh - 164px)">
+      <el-table-column prop="userPhone" label="用户" align="center" width="120px"></el-table-column>
+      <el-table-column prop="title" label="标题" min-width="20%"></el-table-column>
+      <el-table-column prop="content" label="内容" align="left" min-width="60%"></el-table-column>
+      <el-table-column label="时间" align="center" min-width="12%">
+        <template slot-scope="{row}">
+          <span>{{ row.commitTime | DateFilter }}</span>
+        </template>
+      </el-table-column>
+    </el-table>
+
+    <pagination v-show="totalPunish>0" :total="totalPunish" :page.sync="listQueryPunish.page" :limit.sync="listQueryPunish.limit" style="padding:6px" @pagination="getListPunish" />
 
     <el-dialog title="创建公告" :visible.sync="dialogVisible" width="50%">
       <el-form ref="addNotifyForm" :model="ruleForm" :rules="rules" label-width="100px">
@@ -65,11 +89,15 @@ export default {
   data() {
     return {
       tableKey: 0,
+      punishTableKey: 1,
       list: null,
+      punishList: null,
       total: 0,
+      totalPunish: 0,
       listLoading: true,
       addLoading: false,
       dialogVisible: false,
+      punishListLoading: false,
       ruleForm: {
         title: '',
         content: ''
@@ -86,6 +114,18 @@ export default {
         page: 1,
         pageSize: 20,
         announcementId: null,
+        isAdmin: true,
+        queryAnn: true,
+        language: ""
+      },
+      filterUserPhone: '',
+      queryLoading: false,
+      listQueryPunish: {
+        page: 1,
+        pageSize: 20,
+        announcementId: null,
+        isAdmin: true,
+        userPhone: "",
         language: ""
       },
       deleteLoadingList: []
@@ -93,8 +133,24 @@ export default {
   },
   created() {
     this.getList();
+    this.getListPunish();
   },
   methods: {
+    queryPunishListByParam(isAll) {
+      debugger;
+      if (isAll) {
+        this.filterUserPhone = "";
+        this.listQueryPunish.userPhone = "";
+        this.listQueryPunish.page = 1;
+        this.getListPunish();
+        return;
+      }
+      if (!this.filterUserPhone) { return; }
+      this.listQueryPunish.userPhone = this.filterUserPhone;
+      this.listQueryPunish.page = 1;
+      this.queryLoading = true;
+      this.getListPunish(true);
+    },
     getList(hideLoading) {
       this.listLoading = !hideLoading;
       getNotifyList(this.listQuery)
@@ -109,7 +165,21 @@ export default {
           this.listLoading = false;
         });
     },
-
+    getListPunish(hideLoading) {
+      this.punishListLoading = !hideLoading;
+      getNotifyList(this.listQueryPunish)
+        .then((response) => {
+          this.punishList = response.data.contents;
+          this.totalPunish = response.data.total;
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+        .finally(() => {
+          this.punishListLoading = false;
+          this.queryLoading = false;
+        });
+    },
     showDialog() {
       this.dialogVisible = true;
       this.$refs.addNotifyForm && this.$refs.addNotifyForm.resetFields();

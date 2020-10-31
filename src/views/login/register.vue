@@ -7,10 +7,10 @@
         </div>
       </el-image>
     </div>
-    <el-form ref="registerForm" :model="registerForm" :rules="registerRules" class="register-form" auto-complete="on" label-position="left">
+    <el-form ref="registerForm" :model="registerForm" :rules="registerRules" class="register-form" label-position="left">
 
       <el-form-item prop="phone">
-        <el-input ref="phone" v-model="registerForm.phone" placeholder="请输入手机号" name="phone" type="text" tabindex="1">
+        <el-input ref="registerPhone" v-model="registerForm.phone" placeholder="请输入手机号" name="registerPhone" autocomplete="new-password" type="text" tabindex="1">
           <template slot="prepend">
             <span class="svg-container">
               <svg-icon icon-class="user" />
@@ -20,7 +20,7 @@
       </el-form-item>
 
       <el-form-item prop="code">
-        <el-input ref="code" v-model="registerForm.code" placeholder="请输入验证码" name="code" type="text" tabindex="2">
+        <el-input ref="rigsterCode" v-model="registerForm.code" placeholder="请输入验证码" name="rigsterCode" autocomplete="new-password" type="text" tabindex="1">
           <template slot="prepend">
             <span class="svg-container">
               <svg-icon icon-class="documentation" />
@@ -32,7 +32,7 @@
         </el-input>
       </el-form-item>
       <el-form-item prop="password">
-        <el-input ref="password" v-model="registerForm.password" placeholder="请输入登录密码" name="password" type="password" tabindex="2">
+        <el-input ref="password" v-model="registerForm.password" placeholder="请输入登录密码" name="password" autocomplete="new-password" type="password" tabindex="1">
           <template slot="prepend">
             <span class="svg-container">
               <svg-icon icon-class="password" />
@@ -41,7 +41,7 @@
         </el-input>
       </el-form-item>
       <el-form-item prop="checkPass">
-        <el-input ref="checkPass" v-model="registerForm.checkPass" placeholder="请输入确认密码" name="checkPass" type="password" tabindex="2">
+        <el-input ref="checkPass" v-model="registerForm.checkPass" placeholder="请输入确认密码" name="checkPass" type="password" tabindex="1">
           <template slot="prepend">
             <span class="svg-container">
               <svg-icon icon-class="password" />
@@ -50,7 +50,7 @@
         </el-input>
       </el-form-item>
       <el-form-item prop="alipayPwd">
-        <el-input ref="alipayPwd" v-model="registerForm.alipayPwd" placeholder="请输入支付密码" name="alipayPwd" type="password" tabindex="2">
+        <el-input ref="alipayPwd" v-model="registerForm.alipayPwd" placeholder="请输入支付密码" name="alipayPwd" type="password" tabindex="1">
           <template slot="prepend">
             <span class="svg-container">
               <svg-icon icon-class="money" />
@@ -68,6 +68,7 @@
 <script>
 import { validateTelephone, validateSmsCode } from "@/utils/validate";
 import { registerAccount, getRegisterSmsCode } from "@/api/user";
+import { MessageBox } from 'element-ui';
 
 export default {
   name: "Register",
@@ -193,7 +194,16 @@ export default {
           }
           registerAccount(paramData)
             .then(() => {
-              this.$router.push({ path: "/download" });
+              MessageBox.alert(
+                '注册成功',
+                '提示',
+                {
+                  confirmButtonText: '确定',
+                  type: 'ifno'
+                }
+              ).then(() => {
+                this.$router.push({ path: "/download" });
+              });
             })
             .catch(() => {
 
