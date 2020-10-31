@@ -276,3 +276,10 @@ export function getWwtSmsCode() {
   });
 }
 
+export function getUserInfo(params) {
+    return request({
+      url: `/bms/user/info`,
+      method: 'post',
+      params
+    });
+  }

@@ -28,6 +28,13 @@
           </div>
         </template>
       </el-table-column>
+      <el-table-column label="支付凭证" align="center" width="120px">
+        <template slot-scope="{row}">
+          <div @click.stop>
+            <el-image v-if="row.payOrderUrl" style="width: 100px; height: 100px" :src="row.payOrderUrl" :preview-src-list="row.payOrderImageList"></el-image>
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column label="订单类型" align="center" min-width="100px">
         <template slot-scope="{row}">
           {{ row.type | typeFilter }}
@@ -154,12 +161,14 @@ export default {
         .then((response) => {
           this.list = response.data.contents.map(v => {
             let imageList = [];
+            let payOrderImageList = [];
             try {
               imageList = v.appealImages.replace(/\[|\]/g, '').split(',').map(img => `${process.env.VUE_APP_BASE_API}/bms/common/images/APPEAL/${img.trim()}`);
+              payOrderImageList = v.payOrder.replace(/\[|\]/g, '').split(',').map(img => `${process.env.VUE_APP_BASE_API}/bms/common/images/PAYMENT/${img.trim()}`);
             } catch (err) {
-              return { ...v, url: null, imageList: null };
+              return { ...v, url: null, payOrderUrl: null, payOrderImageList: null, imageList: null };
             }
-            return { ...v, url: imageList[0], imageList: imageList, edit: false, editStatus: null };
+            return { ...v, url: imageList[0], imageList: imageList, payOrderUrl: payOrderImageList[0], payOrderImageList: payOrderImageList, edit: false, editStatus: null };
           });
 
           this.total = response.data.total;

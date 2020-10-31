@@ -62,9 +62,11 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="操作" min-width="420px" class-name="small-padding fixed-width">
+      <el-table-column label="操作" min-width="600px" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
-
+          <el-button size="mini" type="primary" @click="showUserInfo(row)">
+            查看资料
+          </el-button>
           <el-button v-if="row.enable" v-loading="showFreezeLoading(row)" type="primary" size="mini" :disabled="showFreezeLoading(row)" @click="freezeAccount(row)">
             冻结账户
           </el-button>
@@ -97,9 +99,10 @@
             激活
           </el-button>
 
-          <el-button v-loading="showActiveLoading(row)" size="mini" type="danger" :disabled="showActiveLoading(row)" @click="rechargeHandle(row)">
+          <el-button size="mini" type="danger" @click="rechargeHandle(row)">
             发币
           </el-button>
+
         </template>
       </el-table-column>
     </el-table>
@@ -127,15 +130,41 @@
 
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button size="mini" @click="roleDialogVisible = false">取 消</el-button>
+        <el-button size="mini" @click="rechargeDiaglog = false">取 消</el-button>
         <el-button v-loading="rechargeLoading" :disabled="rechargeLoading" size="mini" type="primary" @click="confirmRecharge">确 定</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog title="用户信息" :visible.sync="userInfoDialog" width="50%">
+      <el-form ref="userInfoTemp" v-loading="getUserInfoLoading" :rules="rules" :model="userInfoTemp" label-position="left" label-width="100px" style="width: 400px; margin-left:50px;">
+
+        <el-form-item label="姓名" prop="name">
+          <el-input v-model="userInfoTemp.name" placeholder="无" style="width:300px" :disabled="true" />
+        </el-form-item>
+        <el-form-item label="身份证号" prop="number">
+          <el-input v-model="userInfoTemp.number" placeholder="无" style="width:300px" :disabled="true" />
+        </el-form-item><el-form-item label="支付宝账号" prop="alipayAccount">
+          <el-input v-model="userInfoTemp.alipayAccount" placeholder="无" style="width:300px" :disabled="true" />
+        </el-form-item>
+        <el-form-item label="开户支行" prop="bankBranch">
+          <el-input v-model="userInfoTemp.bankBranch" placeholder="无" style="width:300px" :disabled="true" />
+        </el-form-item>
+        <el-form-item label="银行卡号" prop="bankCard">
+          <el-input v-model="userInfoTemp.bankCard" placeholder="无" style="width:300px" :disabled="true" />
+        </el-form-item>
+        <el-form-item label="开户行" prop="bankDeposit">
+          <el-input v-model="userInfoTemp.bankDeposit" placeholder="无" style="width:300px" :disabled="true" />
+        </el-form-item>
+
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button size="mini" type="primary" @click="userInfoDialog = false">关 闭</el-button>
       </span>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { getUserList, modifyUserInfo, addUserWwt, getWwtSmsCode } from "@/api/table";
+import { getUserList, modifyUserInfo, addUserWwt, getWwtSmsCode, getUserInfo } from "@/api/table";
 import Pagination from "@/components/Pagination"; // secondary package based on el-pagination
 import { validateSmsCode, validateIntNum } from "@/utils/validate";
 
@@ -165,6 +194,7 @@ export default {
       activeExchangeList: [],
       rechargeDiaglog: false,
       rechargeLoading: false,
+      userInfoDialog: false,
       rechargeRow: null,
       rechargeTemp: {
         name: '',
@@ -173,6 +203,15 @@ export default {
         userPhone: '',
         wwt: 0
       },
+      userInfoTemp: {
+          name: '',
+          number: '',
+          alipayAccount: '',
+          bankBranch: '',
+          bankCard: '',
+          bankDeposit: ''
+      },
+      getUserInfoLoading: false,
       rules: {
         code: [{ required: true, message: '请输入短信验证码', trigger: 'blur', validator: validateSmsCode }],
         wwt: [{ required: true, message: '请输入整数', trigger: 'blur', validator: validateIntNum }]
@@ -407,6 +446,25 @@ export default {
           this.rechargeLoading = false;
         });
       });
+    },
+    showUserInfo(row) {
+        this.userInfoDialog = true;
+        this.getUserInfoLoading = true;
+        getUserInfo({ userPhone: row.phone })
+        .then(res => {
+          debugger;
+          const data = res.data || {};
+          const { account = {}, identity = {}} = data;
+          this.userInfoTemp.name = identity.name;
+          this.userInfoTemp.number = identity.number;
+          this.userInfoTemp.alipayAccount = account.alipayAccount;
+          this.userInfoTemp.bankBranch = account.bankBranch;
+          this.userInfoTemp.bankCard = account.bankCard;
+          this.userInfoTemp.bankDeposit = account.bankDeposit;
+        })
+        .finally(() => {
+          this.getUserInfoLoading = false;
+        });
     }
 
   }
