@@ -32,6 +32,16 @@ import Layout from '@/layout';
  */
 export const constantRoutes = [
     {
+        path: '/',
+        redirect: '/manager/login',
+        hidden: true
+    },
+    {
+        path: '/manager',
+        redirect: '/manager/login',
+        hidden: true
+    },
+    {
         path: '/manager/login',
         component: () => import('@/views/login/index'),
         hidden: true
@@ -78,12 +88,12 @@ export const constantRoutes = [
     },
 
     {
-        path: '/manager',
+        path: '/manager/dashboard',
         component: Layout,
-        redirect: '/manager/dashboard',
+        redirect: '/manager/dashboard/list',
         sidebarShow: true,
         children: [{
-            path: 'dashboard',
+            path: 'list',
             name: '数据概览',
             component: () => import('@/views/dashboard/index'),
             meta: { title: '数据概览', icon: 'dashboard' }

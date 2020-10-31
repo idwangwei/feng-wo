@@ -102,7 +102,7 @@ const actions = {
       });
     });
   },
-  adminInitBind({ commit, data }) {
+  adminInitBind({ commit }, data) {
     new Promise((resolve, reject) => {
       adminBind(data)
       .then(res => {

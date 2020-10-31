@@ -182,7 +182,7 @@ export default {
           this.loading = true;
           const paramData = {
             language: "",
-            phoneMack: "web",
+            phoneMack: "",
             phone: this.registerForm.phone,
             code: this.registerForm.code,
             password: this.registerForm.password,

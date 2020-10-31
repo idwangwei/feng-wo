@@ -85,7 +85,7 @@ export default {
           this.$store
             .dispatch("user/login", this.loginForm)
             .then(() => {
-              this.$router.push({ path: this.redirect || "/manager" });
+              this.$router.push({ path: this.redirect || "/manager/dashboard" });
             })
             .catch(() => {
               this.$refs.password.focus();

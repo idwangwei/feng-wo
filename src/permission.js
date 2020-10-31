@@ -33,9 +33,21 @@ router.beforeEach((to, from, next) => {
     document.title = getPageTitle(to.meta.title);
     // determine whether the user has logged in
     const hasToken = getToken();
+
+    if ((from.path === '/' || from.path === '/manager') && to.path === '/manager/login') {
+        store.dispatch('user/logout');
+        NProgress.done();
+        next();
+        return;
+    }
+
     if (hasToken) {
         if (store.state.user.initLogin === 'true') {
             NProgress.done();
+            if (to.path === '/manager/login') {
+                next();
+                return;
+            }
             to.path === '/manager/updatePass' ? next() : next({ path: '/manager/updatePass' });
         } else if (whiteList.includes(to.path)) {
             NProgress.done();

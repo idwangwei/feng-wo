@@ -124,14 +124,14 @@ export default {
     confirmHandle() {
       this.$refs.formData.validate(valid => {
         if (valid) {
-          this.$store.dispath('user/adminInitBind', {
+          this.$store.dispatch('user/adminInitBind', {
             code: this.formData.smsCode,
             newPassword: this.formData.pass,
             phone: this.formData.phone
           })
           .then(res => {
-            this.$store.state.dispath('');
-            this.$router.push({ path: '/manager' });
+            // this.$store.state.dispatch('');
+            this.$router.push({ path: '/manager/dashboard' });
           })
           .catch(() => {})
           .finally(() => {});
