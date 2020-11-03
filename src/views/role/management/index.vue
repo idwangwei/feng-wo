@@ -103,7 +103,7 @@
         </el-form-item>
         <el-form-item label="权限" prop="auth">
           <el-select v-model="roleTemp.auth" multiple class="filter-item" placeholder="请选择角色权限" style="width:100%; max-width:300px" @change="roleRuleChange($event)">
-            <el-option v-for="item in authOptions" :key="item.value" :label="item.label" :value="item.value" />
+            <el-option v-for="item in authOptions" :key="item.value" :label="item.label" :value="item.value" :disabled="item.disabled" />
           </el-select>
         </el-form-item>
 
@@ -158,15 +158,15 @@ import {
 import { validateTelephone } from "@/utils/validate";
 
 const roleAuthLabelValue = [
-  { value: 'ALL', label: '所有权限' },
-  { value: 'MINING_MANAGER', label: '矿池管理' },
-  { value: 'MARKET_MANAGER', label: '市场管理' },
-  { value: 'ORDER_MANAGER', label: '订单管理' },
-  { value: 'ANN_MANAGER', label: '公告管理' },
-  { value: 'FEEDBACK_MANAGER', label: '用户反馈管理' },
-  { value: 'USER_MANAGER', label: '用户管理' },
-  { value: 'TALENT_MANAGER', label: '达人管理' },
-  { value: 'ROLE_MANAGER', label: '角色管理' }
+  { disabled: false, value: 'ALL', label: '所有权限' },
+  { disabled: false, value: 'MINING_MANAGER', label: '矿池管理' },
+  { disabled: false, value: 'MARKET_MANAGER', label: '市场管理' },
+  { disabled: false, value: 'ORDER_MANAGER', label: '订单管理' },
+  { disabled: false, value: 'ANN_MANAGER', label: '公告管理' },
+  { disabled: false, value: 'FEEDBACK_MANAGER', label: '用户反馈管理' },
+  { disabled: false, value: 'USER_MANAGER', label: '用户管理' },
+  { disabled: false, value: 'TALENT_MANAGER', label: '达人管理' },
+  { disabled: true, value: 'ROLE_MANAGER', label: '角色管理' }
 ];
 export default {
   filters: {

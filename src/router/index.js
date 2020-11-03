@@ -207,7 +207,7 @@ export const constantRoutes = [
             path: 'management',
             name: '达人管理',
             component: () => import('@/views/talent/management/index'),
-            meta: { title: '达人管理', icon: 'user' }
+            meta: { title: '达人管理', icon: 'people' }
         }]
     },
 

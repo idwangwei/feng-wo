@@ -13,7 +13,7 @@
         <el-input ref="registerPhone" v-model="registerForm.phone" placeholder="请输入手机号" name="registerPhone" autocomplete="new-password" type="text" tabindex="1">
           <template slot="prepend">
             <span class="svg-container">
-              <svg-icon icon-class="phone" style="font-size: 1.1rem;margin-left: -0.21rem;"/>
+              <svg-icon icon-class="phone" style="font-size: 1.1rem;margin-left: -0.21rem;" />
             </span>
           </template>
         </el-input>
@@ -23,7 +23,7 @@
         <el-input ref="rigsterCode" v-model="registerForm.code" placeholder="请输入验证码" name="rigsterCode" autocomplete="new-password" type="text" tabindex="1">
           <template slot="prepend">
             <span class="svg-container">
-              <svg-icon icon-class="yanzhengma" style="font-size: 1.1rem;margin-left: -0.21rem;"/>
+              <svg-icon icon-class="yanzhengma" style="font-size: 1.1rem;margin-left: -0.21rem;" />
             </span>
           </template>
           <template slot="append">
@@ -58,8 +58,8 @@
           </template>
         </el-input>
       </el-form-item>
-      <el-row type="flex" justify="center" align="middle">
-        <span>点击“注册”及表示你同意</span>
+      <el-row type="flex" justify="center" align="middle" style="color:#909399;font-size:0.8rem">
+        <span>点击“注册”即表示你同意</span>
         <router-link to="/userAgre"><el-link type="primary" style="margin-top:-0.25rem">《服务协议》</el-link></router-link>
       </el-row>
       <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;margin-top:30px" @click.native.prevent="handleRegister">注 册</el-button>
@@ -228,7 +228,7 @@ export default {
 
 $bg: #283443;
 $light_gray: #fff;
-$cursor: #fff;
+$cursor:#283443;
 
 @supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
   .register-container .el-input input {
@@ -249,12 +249,12 @@ $cursor: #fff;
       -webkit-appearance: none;
       border-radius: 0px;
       padding: 12px 5px 12px 15px;
-      color: $light_gray;
+      color: $bg;
       height: 47px;
       caret-color: $cursor;
 
       &:-webkit-autofill {
-        box-shadow: 0 0 0px 1000px $bg inset !important;
+        box-shadow: 0 0 0px 1000px $light_gray inset !important;
         -webkit-text-fill-color: $cursor !important;
       }
     }
@@ -281,11 +281,13 @@ $light_gray: #eee;
   width: 100%;
   background-color: $bg;
   overflow: hidden;
-
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   .register-form {
     position: relative;
     width: 520px;
-    max-width: 100%;
+    max-width: calc(100% - 2rem);
     padding: 16px 35px 0;
     margin: 0 auto;
     overflow: hidden;
