@@ -19,7 +19,12 @@
     <el-divider></el-divider>
     <div class="filter-container">
       <el-tag style="margin-right:1rem">达人今日分红详情</el-tag>
-      <el-input v-model="editQuery.lv" size="mini" style="width:8rem;margin-right:1rem" placeholder="达人等级" @keyup.enter.native="queryDetailListByParam()"></el-input>
+      <el-select v-model="editQuery.lv" size="mini" style="width:8rem;margin-right:1rem" placeholder="达人等级">
+        <el-option label="LV1" value="1"> </el-option>
+        <el-option label="LV2" value="2"> </el-option>
+        <el-option label="LV3" value="3"> </el-option>
+        <el-option label="LV4" value="4"> </el-option>
+      </el-select>
       <el-input v-model="editQuery.name" size="mini" style="width:8rem;margin-right:1rem" placeholder="达人姓名" @keyup.enter.native="queryDetailListByParam()"></el-input>
       <el-input v-model="editQuery.userPhone" size="mini" style="width:8rem;margin-right:1rem" placeholder="达人号码" @keyup.enter.native="queryDetailListByParam()"></el-input>
       <el-button v-loading="queryLoading" :disabled="queryLoading" type="primary" size="mini" @click="queryDetailListByParam()">
@@ -110,9 +115,9 @@ export default {
         return;
       }
       if (!this.editQuery.lv && this.editQuery.name && this.editQuery.userPhone) { return; }
-      this.listQueryDetail.lv = this.editQuery.lv.trim();
-      this.listQueryDetail.name = this.editQuery.name.trim();
-      this.listQueryDetail.userPhone = this.editQuery.userPhone.trim();
+      this.listQueryDetail.lv = this.editQuery.lv && this.editQuery.lv.trim();
+      this.listQueryDetail.name = this.editQuery.name && this.editQuery.name.trim();
+      this.listQueryDetail.userPhone = this.editQuery.userPhone && this.editQuery.userPhone.trim();
       this.listQueryDetail.page = 1;
       this.queryLoading = true;
       this.getListDetail(true);
