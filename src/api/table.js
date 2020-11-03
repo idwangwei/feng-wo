@@ -277,9 +277,22 @@ export function getWwtSmsCode() {
 }
 
 export function getUserInfo(params) {
-    return request({
-      url: `/bms/user/info`,
-      method: 'post',
-      params
-    });
-  }
+  return request({
+    url: `/bms/user/info`,
+    method: 'post',
+    params
+  });
+}
+export function getTalentInfoList(data) {
+  return request({
+    url: `/bms/talent/info`,
+    method: 'post',
+    data: { language: "", ...data }
+  });
+}
+export function getTalentOverview() {
+  return request({
+    url: `/bms/talent/overview`,
+    method: 'get'
+  });
+}

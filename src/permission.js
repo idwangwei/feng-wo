@@ -19,6 +19,7 @@ const authMap = {
     ANN_MANAGER: '/manager/notify',
     FEEDBACK_MANAGER: '/manager/feedback',
     USER_MANAGER: '/manager/user',
+    TALENT_MANAGER: '/manager/talent',
     ROLE_MANAGER: '/manager/role'
 };
 router.beforeEach((to, from, next) => {

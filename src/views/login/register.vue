@@ -13,7 +13,7 @@
         <el-input ref="registerPhone" v-model="registerForm.phone" placeholder="请输入手机号" name="registerPhone" autocomplete="new-password" type="text" tabindex="1">
           <template slot="prepend">
             <span class="svg-container">
-              <svg-icon icon-class="user" />
+              <svg-icon icon-class="phone" style="font-size: 1.1rem;margin-left: -0.21rem;"/>
             </span>
           </template>
         </el-input>
@@ -23,7 +23,7 @@
         <el-input ref="rigsterCode" v-model="registerForm.code" placeholder="请输入验证码" name="rigsterCode" autocomplete="new-password" type="text" tabindex="1">
           <template slot="prepend">
             <span class="svg-container">
-              <svg-icon icon-class="documentation" />
+              <svg-icon icon-class="yanzhengma" style="font-size: 1.1rem;margin-left: -0.21rem;"/>
             </span>
           </template>
           <template slot="append">
@@ -53,12 +53,15 @@
         <el-input ref="alipayPwd" v-model="registerForm.alipayPwd" placeholder="请输入支付密码" name="alipayPwd" type="password" tabindex="1">
           <template slot="prepend">
             <span class="svg-container">
-              <svg-icon icon-class="money" />
+              <svg-icon icon-class="password" />
             </span>
           </template>
         </el-input>
       </el-form-item>
-
+      <el-row type="flex" justify="center" align="middle">
+        <span>点击“注册”及表示你同意</span>
+        <router-link to="/userAgre"><el-link type="primary" style="margin-top:-0.25rem">《服务协议》</el-link></router-link>
+      </el-row>
       <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;margin-top:30px" @click.native.prevent="handleRegister">注 册</el-button>
 
     </el-form>
@@ -258,8 +261,10 @@ $cursor: #fff;
   }
 
   .el-form-item {
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(0, 0, 0, 0.1);
+    // border: 1px solid rgba(255, 255, 255, 0.1);
+    // background: rgba(0, 0, 0, 0.1);
+    border: 1px solid #807d7d40;
+    background: white;
     border-radius: 5px;
     color: #454545;
   }
@@ -284,6 +289,8 @@ $light_gray: #eee;
     padding: 16px 35px 0;
     margin: 0 auto;
     overflow: hidden;
+    background-color: white;
+    border-radius: 0.2rem;
   }
   /deep/ .role-select .el-form-item__content {
     display: flex;
@@ -295,12 +302,17 @@ $light_gray: #eee;
     }
   }
   /deep/ .el-input-group__append{
-    background-color: #283443;
-    border-color:  #283443;
+    // background-color: #283443;
+    // border-color:  #283443;
+    background-color: white;
+    border-color:  white;
+
   }
   /deep/ .el-input-group__prepend{
-    background-color: #283443;
-    border-color:  #283443;
+    // background-color: #283443;
+    // border-color:  #283443;
+    background-color: white;
+    border-color:  white;
     padding: 0;
   }
   .tips {

@@ -165,6 +165,7 @@ const roleAuthLabelValue = [
   { value: 'ANN_MANAGER', label: '公告管理' },
   { value: 'FEEDBACK_MANAGER', label: '用户反馈管理' },
   { value: 'USER_MANAGER', label: '用户管理' },
+  { value: 'TALENT_MANAGER', label: '达人管理' },
   { value: 'ROLE_MANAGER', label: '角色管理' }
 ];
 export default {

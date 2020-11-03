@@ -198,6 +198,18 @@ export const constantRoutes = [
             meta: { title: '角色管理', icon: 'user' }
         }]
     },
+    {
+        path: '/manager/talent',
+        component: Layout,
+        redirect: '/manager/talent/management',
+        sidebarShow: true,
+        children: [{
+            path: 'management',
+            name: '达人管理',
+            component: () => import('@/views/talent/management/index'),
+            meta: { title: '达人管理', icon: 'user' }
+        }]
+    },
 
     // 404 page must be placed at the end !!!
     { path: '*', redirect: '/manager/404', hidden: true }
