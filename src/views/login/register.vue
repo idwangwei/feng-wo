@@ -1,12 +1,12 @@
 <template>
   <div class="register-container">
-    <div class="title-container">
+    <!-- <div class="title-container">
       <el-image style="width: 100%; height: 60px; background: none" :src="imgUrl" fit="scale-down">
         <div slot="error" class="image-slot">
           <i class="el-icon-picture-outline"></i>
         </div>
       </el-image>
-    </div>
+    </div> -->
     <el-form ref="registerForm" :model="registerForm" :rules="registerRules" class="register-form" label-position="left">
 
       <el-form-item prop="phone">
@@ -23,11 +23,11 @@
         <el-input ref="rigsterCode" v-model="registerForm.code" placeholder="请输入验证码" name="rigsterCode" autocomplete="new-password" type="text" tabindex="1">
           <template slot="prepend">
             <span class="svg-container">
-              <svg-icon icon-class="yanzhengma" style="font-size: 1.1rem;margin-left: -0.21rem;" />
+              <svg-icon icon-class="yanzhengma2" />
             </span>
           </template>
           <template slot="append">
-            <el-button type="text" style="min-width:5rem" :disabled="disableCodeBtn" @click="getSmsCodeHandle">{{ verifyStr }}</el-button>
+            <el-button type="text" round style="min-width:5rem;border:1px solid #df893d;color:#df893d;padding:0.2rem 0.5rem" :disabled="disableCodeBtn" @click="getSmsCodeHandle">{{ verifyStr }}</el-button>
           </template>
         </el-input>
       </el-form-item>
@@ -35,7 +35,7 @@
         <el-input ref="password" v-model="registerForm.password" placeholder="请输入登录密码" name="password" autocomplete="new-password" type="password" tabindex="1">
           <template slot="prepend">
             <span class="svg-container">
-              <svg-icon icon-class="password" />
+              <svg-icon icon-class="password2" style="font-size: 1.1rem;margin-left: -0.1rem;" />
             </span>
           </template>
         </el-input>
@@ -44,7 +44,7 @@
         <el-input ref="checkPass" v-model="registerForm.checkPass" placeholder="请输入确认密码" name="checkPass" type="password" tabindex="1">
           <template slot="prepend">
             <span class="svg-container">
-              <svg-icon icon-class="password" />
+              <svg-icon icon-class="password2" style="font-size: 1.1rem;margin-left: -0.1rem;" />
             </span>
           </template>
         </el-input>
@@ -53,16 +53,25 @@
         <el-input ref="alipayPwd" v-model="registerForm.alipayPwd" placeholder="请输入支付密码" name="alipayPwd" type="password" tabindex="1">
           <template slot="prepend">
             <span class="svg-container">
-              <svg-icon icon-class="password" />
+              <svg-icon icon-class="password2" style="font-size: 1.1rem;margin-left: -0.1rem;" />
+            </span>
+          </template>
+        </el-input>
+      </el-form-item>
+      <el-form-item prop="invitationCode">
+        <el-input ref="invitationCode" v-model="registerForm.invitationCode" placeholder="请输入推荐人推荐码" name="invitationCode" type="text" tabindex="1" :disabled="invitationCode">
+          <template slot="prepend">
+            <span class="svg-container">
+              <svg-icon icon-class="invitation" />
             </span>
           </template>
         </el-input>
       </el-form-item>
       <el-row type="flex" justify="center" align="middle" style="color:#909399;font-size:0.8rem">
         <span>点击“注册”即表示你同意</span>
-        <router-link to="/userAgre"><el-link type="primary" style="margin-top:-0.25rem">《服务协议》</el-link></router-link>
+        <router-link to="/userAgre"><el-link type="" style="margin-top:-0.1rem">《服务协议》</el-link></router-link>
       </el-row>
-      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;margin-top:30px" @click.native.prevent="handleRegister">注 册</el-button>
+      <el-button :loading="loading" round plain style="width:100%;margin-bottom:30px;margin-top:10px;border-color:#df893d;color:#df893d" @click.native.prevent="handleRegister">注 册</el-button>
 
     </el-form>
   </div>
@@ -112,7 +121,8 @@ export default {
         code: "",
         password: "",
         checkPass: "",
-        alipayPwd: ""
+        alipayPwd: "",
+        invitationCode: ""
       },
       invitationCode: "",
       registerRules: {
@@ -142,6 +152,7 @@ export default {
           console.log(route);
           if (route.query && route.query.invitationCode) {
             this.invitationCode = route.query.invitationCode;
+            this.registerForm.invitationCode = this.invitationCode;
           } else {
             this.invitationCode = null;
           }
@@ -190,10 +201,11 @@ export default {
             phone: this.registerForm.phone,
             code: this.registerForm.code,
             password: this.registerForm.password,
-            alipayPwd: this.registerForm.alipayPwd
+            alipayPwd: this.registerForm.alipayPwd,
+            invitationCode: this.registerForm.invitationCode
           };
-          if (this.invitationCode) {
-            paramData.invitationCode = this.invitationCode;
+          if (!paramData.invitationCode) {
+            delete paramData.invitationCode;
           }
           registerAccount(paramData)
             .then(() => {
@@ -279,7 +291,7 @@ $light_gray: #eee;
 .register-container {
   min-height: 100%;
   width: 100%;
-  background-color: $bg;
+  background-color: #fbfbfb;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -293,6 +305,11 @@ $light_gray: #eee;
     overflow: hidden;
     background-color: white;
     border-radius: 0.2rem;
+  }
+  /deep/ .el-form-item {
+    border-top: none;
+    border-left: none;
+    border-right: none;
   }
   /deep/ .role-select .el-form-item__content {
     display: flex;
