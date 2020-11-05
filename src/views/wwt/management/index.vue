@@ -35,7 +35,7 @@
       <span>全部市场：</span><el-switch v-model="priceStatus.allMarket" :active-value="true" :inactive-value="false" style="margin-right:2rem"></el-switch>
       <span>大宗市场：</span><el-switch v-model="priceStatus.bigMarket" :active-value="true" :inactive-value="false" style="margin-right:2rem"></el-switch>
       <span>普通市场：</span><el-switch v-model="priceStatus.commonMarket" :active-value="true" :inactive-value="false" style="margin-right:2rem"></el-switch>
-      <el-popconfirm title="确定修改市场状态?" @onConfirm="updateStatus">
+      <el-popconfirm title="确定修改市场状态?" @confirm="updateStatus()">
         <el-button slot="reference" v-loading="setStatusLoading" type="primary" size="mini" :disabled="setStatusLoading">更新</el-button>
       </el-popconfirm>
     </el-row>
