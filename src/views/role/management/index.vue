@@ -21,7 +21,7 @@
             <el-button v-if="row.role !== 'ALL'" type="primary" size="mini" @click="showRoleDialog(row)">
               编辑
             </el-button>
-            <el-popconfirm v-if="row.role !== 'ALL'" :title="deleteRoleTitle(row)" @onConfirm="deleteRoleHandle(row)">
+            <el-popconfirm v-if="row.role !== 'ALL'" :title="deleteRoleTitle(row)" @confirm="deleteRoleHandle(row)">
               <el-button slot="reference" v-loading="showDeleteRoleLoading(row)" :disabled="showDeleteRoleLoading(row)" size="mini" type="warning">
                 删除
               </el-button>
@@ -86,7 +86,7 @@
             <el-button v-if="row.username !== 'admin'" size="mini" type="primary" @click="showManegementDialog(row)">
               编辑
             </el-button>
-            <el-popconfirm v-if="row.username !== 'admin'" :title="deleteManegementTitle(row)" @onConfirm="deleteAccountHandle(row)">
+            <el-popconfirm v-if="row.username !== 'admin'" :title="deleteManegementTitle(row)" @confirm="deleteAccountHandle(row)">
               <el-button slot="reference" v-loading="showDeleteManegementLoading(row)" size="mini" type="warning" :disabled="showDeleteManegementLoading(row)">
                 删除
               </el-button>
@@ -166,6 +166,7 @@ const roleAuthLabelValue = [
   { disabled: false, value: 'FEEDBACK_MANAGER', label: '用户反馈管理' },
   { disabled: false, value: 'USER_MANAGER', label: '用户管理' },
   { disabled: false, value: 'TALENT_MANAGER', label: '达人管理' },
+  { disabled: false, value: 'VOTE_MANAGER', label: '投票管理' },
   { disabled: true, value: 'ROLE_MANAGER', label: '角色管理' }
 ];
 export default {

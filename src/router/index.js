@@ -210,6 +210,18 @@ export const constantRoutes = [
             meta: { title: '达人管理', icon: 'people' }
         }]
     },
+    {
+        path: '/manager/vote',
+        component: Layout,
+        redirect: '/manager/vote/management',
+        sidebarShow: true,
+        children: [{
+            path: 'management',
+            name: '投票管理',
+            component: () => import('@/views/vote/management/index'),
+            meta: { title: '投票管理', icon: 'tab' }
+        }]
+    },
 
     // 404 page must be placed at the end !!!
     { path: '*', redirect: '/manager/404', hidden: true }

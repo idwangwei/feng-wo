@@ -32,6 +32,7 @@ export default {
         FEEDBACK_MANAGER: '/manager/feedback',
         USER_MANAGER: '/manager/user',
         TALENT_MANAGER: '/manager/talent',
+        VOTE_MANAGER: '/manager/vote',
         ROLE_MANAGER: '/manager/role'
       };
       const routes = this.$router.options.routes;

@@ -296,3 +296,24 @@ export function getTalentOverview() {
     method: 'get'
   });
 }
+export function getVoteList(data) {
+  return request({
+    url: `/bms/vote/list`,
+    method: 'post',
+    data: { ...data, language: '' }
+  });
+}
+export function deleteVote(data) {
+  return request({
+    url: `/bms/vote/delete`,
+    method: 'post',
+    data
+  });
+}
+export function addVote(data) {
+  return request({
+    url: `/bms/vote/add`,
+    method: 'post',
+    data
+  });
+}
