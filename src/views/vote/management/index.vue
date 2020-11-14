@@ -27,7 +27,7 @@
     </el-table>
     <pagination v-show="totalDataList>0" :total="totalDataList" :page.sync="listQuery.page" :limit.sync="listQuery.pageSize" style="padding:6px" @pagination="getList" />
 
-    <el-dialog title="创建自制投票" :visible.sync="voteDialogVisible" width="50%">
+    <el-dialog title="创建自制投票" :visible.sync="voteDialogVisible" width="50%" :close-on-click-modal="false">
       <el-form ref="voteForm" label-position="right" :rules="voteRules" :model="voteTemp" label-width="100px" style="width:100%;max-width: 600px;padding-left:50px;max-height:60vh;overflow: auto;">
         <el-form-item label="投票内容" prop="content">
           <el-input v-model="voteTemp.content" style="width:100%; max-width:300px" />
@@ -193,7 +193,7 @@ export default {
         addVote({
           content: this.voteTemp.content,
           expiresType: this.voteTemp.expiresType,
-          images: this.voteTemp.images.join(','),
+          images: this.voteTemp.images,
           optionNumber: this.voteTemp.optionNumber,
           options: this.voteTemp.options.map(v => v.value),
           type: this.voteTemp.type
@@ -228,6 +228,11 @@ export default {
     },
     fileError(err, file, fileList) {
       debugger;
+      try {
+        this.$message.warning(JSON.parse(err.message).error);
+      } catch (error) {
+        this.$message.warning(`文件${file.name}上传失败`);
+      }
       this.$message.warning(err);
     }
   }
