@@ -71,6 +71,12 @@ export const constantRoutes = [
         hidden: true
     },
     {
+        path: '/faq',
+        component: () => import('@/views/login/faq'),
+        meta: { title: '新人FAQ' },
+        hidden: true
+    },
+    {
         path: '/manager/updatePass',
         component: () => import('@/views/login/updatePass'),
         hidden: true

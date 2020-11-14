@@ -10,7 +10,7 @@ import store from '@/store';
 NProgress.configure({ showSpinner: false }); // NProgress Configuration
 
 const whiteList = ['/manager/login', '/manager/updatePass', '/manager/forgetPass']; // no redirect whitelist
-const SinglePage = ['/introduce', '/register', '/userAgre', '/download'];
+const SinglePage = ['/introduce', '/register', '/userAgre', '/download', '/faq'];
 const authMap = {
     ALL: '',
     MINING_MANAGER: '/manager/pool',

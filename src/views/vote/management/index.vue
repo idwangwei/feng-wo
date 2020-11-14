@@ -193,7 +193,7 @@ export default {
         addVote({
           content: this.voteTemp.content,
           expiresType: this.voteTemp.expiresType,
-          images: this.voteTemp.images,
+          images: JSON.stringify(this.voteTemp.images),
           optionNumber: this.voteTemp.optionNumber,
           options: this.voteTemp.options.map(v => v.value),
           type: this.voteTemp.type
