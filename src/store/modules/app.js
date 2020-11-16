@@ -1,10 +1,12 @@
 import Cookies from 'js-cookie';
+import { getPubkey } from '@/api/user';
 const state = {
   sidebar: {
     opened: Cookies.get('sidebarStatus') ? !!+Cookies.get('sidebarStatus') : true,
     withoutAnimation: false
   },
-  device: 'desktop'
+  device: 'desktop',
+  pubkey: null
 };
 
 const mutations = {
@@ -24,6 +26,9 @@ const mutations = {
   },
   TOGGLE_DEVICE: (state, device) => {
     state.device = device;
+  },
+  SET_PUBKEY: (state, key) => {
+    state.pubkey = key;
   }
 };
 
@@ -36,6 +41,16 @@ const actions = {
   },
   toggleDevice({ commit }, device) {
     commit('TOGGLE_DEVICE', device);
+  },
+  getKey({ commit }) {
+    return new Promise((resolve, reject) => {
+      getPubkey().then(response => {
+        commit('SET_PUBKEY', response);
+      })
+      .catch(error => {
+        reject(error);
+      });
+    });
   }
 };
 

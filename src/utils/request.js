@@ -1,6 +1,24 @@
 import axios from 'axios';
 import { MessageBox, Message } from 'element-ui';
 import store from '@/store';
+import JsEncrypt from 'jsencrypt';
+
+const encruption = (key, obj) => {
+  if (!obj) {
+    return null;
+  }
+  const encrypt = new JsEncrypt();
+  encrypt.setPublicKey(key);
+
+  let paramsData = ''; // 加密后的参数
+  let paramsString = ''; // 把传过来的data数据转成字符串
+  paramsString = JSON.stringify(obj);
+  paramsString.match(/.{1,30}/g).forEach((str) => {
+    paramsData += encrypt.encrypt(str);
+  });
+  return JSON.stringify({ body: paramsData });
+};
+
 // create an axios instance
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
@@ -31,7 +49,10 @@ service.interceptors.request.use(
     } else {
       config.baseURL = process.env.VUE_APP_BASE_API;
     }
-
+    debugger;
+    if (config.method === 'post' || config.method === 'put') {
+      config.data = encruption(store.getters.pubkey, config.data);
+    }
     return config;
   },
   error => {
@@ -58,12 +79,12 @@ service.interceptors.response.use(
     // if the custom code is not 10000, it is judged as an error.
 
     if (res.errorCode === 10500) {
-        Message({
-            dangerouslyUseHTMLString: true,
-            message: `系统异常`,
-            type: 'error',
-            duration: 10 * 1000
-        });
+      Message({
+        dangerouslyUseHTMLString: true,
+        message: `系统异常`,
+        type: 'error',
+        duration: 10 * 1000
+      });
       return Promise.reject(new Error(res.errorMsg || 'Error'));
     }
 
@@ -116,12 +137,12 @@ service.interceptors.response.use(
       return Promise.reject(new Error(data.errorMsg || 'Error'));
     }
     if (data.errorCode === 10500) {
-        Message({
-            dangerouslyUseHTMLString: true,
-            message: `系统异常`,
-            type: 'error',
-            duration: 10 * 1000
-        });
+      Message({
+        dangerouslyUseHTMLString: true,
+        message: `系统异常`,
+        type: 'error',
+        duration: 10 * 1000
+      });
       return Promise.reject(new Error(data.errorMsg || 'Error'));
     }
 

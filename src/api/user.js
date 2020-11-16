@@ -64,3 +64,9 @@ export function getApkUrl(data) {
       data
     });
   }
+export function getPubkey() {
+    return request({
+      url: `/bms/common/apkurl`,
+      method: 'get'
+    });
+  }
