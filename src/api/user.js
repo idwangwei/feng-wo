@@ -66,7 +66,7 @@ export function getApkUrl(data) {
   }
 export function getPubkey() {
     return request({
-      url: `/bms/common/apkurl`,
+      url: `/bms/common/publickey`,
       method: 'get'
     });
   }

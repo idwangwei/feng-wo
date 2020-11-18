@@ -322,7 +322,6 @@ export default {
       });
     },
     freezeAccount(row) {
-      debugger;
       this.freezeExchangeList.push(row.phone);
       modifyUserInfo({ userPhone: row.phone, enable: false })
       .then(res => {
@@ -352,7 +351,6 @@ export default {
       });
     },
     freezeAccountTrad(row) {
-      debugger;
       this.freezeTradExchangeList.push(row.phone);
       modifyUserInfo({ userPhone: row.phone, alipayEnable: false })
       .then(res => {
@@ -453,7 +451,6 @@ export default {
         this.getUserInfoLoading = true;
         getUserInfo({ userPhone: row.phone })
         .then(res => {
-          debugger;
           const data = res.data || {};
           const { account = {}, identity = {}} = data;
           this.userInfoTemp.name = identity.name;

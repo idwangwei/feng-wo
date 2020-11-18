@@ -104,7 +104,6 @@ export default {
         return;
       }
       const reg = /^\d+$/;
-      debugger;
       if (this.editQuery.lv && !reg.test(this.editQuery.lv.trim())) {
         Message({
           dangerouslyUseHTMLString: true,

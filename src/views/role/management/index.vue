@@ -368,7 +368,6 @@ export default {
     confirmRole() {
       this.$refs['roleForm'].validate((valid) => {
         if (!valid) { return; }
-        debugger;
         if (!this.roleDialog) {
           this.addRoleLoading = true;
           addRole({ name: this.roleTemp.name, role: this.roleTemp.auth.join(',') })

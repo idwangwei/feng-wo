@@ -218,7 +218,6 @@ export default {
       this.$message.warning(`当前限制选择 5 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
     },
     fileSuccess(response, file, fileList) {
-      debugger;
       if (response.errorCode === 10000) {
         this.$message.success(`文件${file.name}上传成功`);
         this.voteTemp.images.push(response.data);
@@ -227,7 +226,6 @@ export default {
       }
     },
     fileError(err, file, fileList) {
-      debugger;
       try {
         this.$message.warning(JSON.parse(err.message).error);
       } catch (error) {

@@ -2,6 +2,7 @@ import axios from 'axios';
 import { MessageBox, Message } from 'element-ui';
 import store from '@/store';
 import JsEncrypt from 'jsencrypt';
+window.JsEncrypt = JsEncrypt;
 
 const encruption = (key, obj) => {
   if (!obj) {
@@ -9,13 +10,59 @@ const encruption = (key, obj) => {
   }
   const encrypt = new JsEncrypt();
   encrypt.setPublicKey(key);
+  encrypt.encryptLong = function(string) {
+    const k = this;
+    const maxLength = (((k.key.n.bitLength() + 7) >> 3) - 11);
+    try {
+        let subStr = ""; let encryptedString = "";
+        let subStart = 0;
+        let bitLen = 0;
+        const len = string.length;
+        for (var i = 0; i < len; i++) {
+            // js 是使用 Unicode 编码的，每个字符所占用的字节数不同
+            const charCode = string.charCodeAt(i);
+            // if(i >= 218 && i<= 275)
+            //     console.log(i, charCode.toString(16), string[i])
+            let increment = 0;
+            if (charCode <= 0x007f) {
+                increment = 1;
+            } else if (charCode <= 0x07ff) {
+                increment = 2;
+            } else if (charCode <= 0xffff) {
+                increment = 3;
+            } else {
+                increment = 4;
+            }
+            bitLen += increment;
 
+            // 字节数到达上限，获取子字符串加密并追加到总字符串后。更新下一个字符串起始位置及字节计算。
+            if (bitLen > maxLength) {
+              debugger;
+                // 本位字符加上会过长，回到上一位
+                subStr = string.substring(subStart, i);
+                console.log(subStart, i, subStr);
+                const t = k.encrypt(subStr);
+                // console.log(t)
+                encryptedString += t;
+                // substring第i位不会被取到。-1是因为进入下次循环时，i+1导致上一位被忽略，得回去把它带上
+                subStart = i--;
+                bitLen = 0;
+            }
+        }
+        subStr = string.substring(subStart, len);
+        console.log(subStr);
+        encryptedString += k.encrypt(subStr);
+        return encryptedString;
+        // return hex2b64(encryptedString);
+    } catch (ex) {
+      return false;
+    }
+  };
   let paramsData = ''; // 加密后的参数
   let paramsString = ''; // 把传过来的data数据转成字符串
   paramsString = JSON.stringify(obj);
-  paramsString.match(/.{1,30}/g).forEach((str) => {
-    paramsData += encrypt.encrypt(str);
-  });
+  console.log(paramsString.length, paramsString);
+  paramsData = encrypt.encryptLong(paramsString);
   return JSON.stringify({ body: paramsData });
 };
 
@@ -49,7 +96,6 @@ service.interceptors.request.use(
     } else {
       config.baseURL = process.env.VUE_APP_BASE_API;
     }
-    debugger;
     if (config.method === 'post' || config.method === 'put') {
       config.data = encruption(store.getters.pubkey, config.data);
     }

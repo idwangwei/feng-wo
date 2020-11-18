@@ -81,6 +81,7 @@
 import { validateTelephone, validateSmsCode } from "@/utils/validate";
 import { registerAccount, getRegisterSmsCode } from "@/api/user";
 import { MessageBox } from 'element-ui';
+import { mapGetters } from 'vuex';
 
 export default {
   name: "Register",
@@ -139,6 +140,9 @@ export default {
     };
   },
   computed: {
+    ...mapGetters([
+      'pubkey'
+    ]),
     verifyStr: function() {
       return this.countDownNum === 60 ? '获取验证码' : `${this.countDownNum}S 后再试`;
     },
@@ -158,6 +162,11 @@ export default {
           }
       },
       immediate: true
+    }
+  },
+  created() {
+    if (!this.pubkey) {
+      this.$store.dispatch('app/getKey');
     }
   },
   beforeDestroy() {

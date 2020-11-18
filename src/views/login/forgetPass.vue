@@ -29,6 +29,8 @@
 <script>
 import { validateTelephone, validateSmsCode } from "@/utils/validate";
 import { getSmsCode, updatePass } from "@/api/user";
+import { mapGetters } from 'vuex';
+
 export default {
   name: "ForgetPass",
   data() {
@@ -73,11 +75,19 @@ export default {
     };
   },
   computed: {
+    ...mapGetters([
+      'pubkey'
+    ]),
     verifyStr: function() {
       return this.countDownNum === 60 ? '获取验证码' : `${this.countDownNum}S 后再试`;
     },
     disableCodeBtn: function() {
       return this.countDownNum !== 60;
+    }
+  },
+  created() {
+    if (!this.pubkey) {
+      this.$store.dispatch('app/getKey');
     }
   },
   beforeDestroy() {

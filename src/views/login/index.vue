@@ -34,6 +34,8 @@
 
 <script>
 import { validName, validatePassword } from "@/utils/validate";
+import { mapGetters } from 'vuex';
+
 export default {
   name: "Login",
   data() {
@@ -56,16 +58,24 @@ export default {
     };
   },
   computed: {
-
+    ...mapGetters([
+      'pubkey'
+    ])
   },
   watch: {
     $route: {
       handler: function(route) {
-          debugger;
         this.redirect = route.query && route.query.redirect;
       },
       immediate: true
     }
+  },
+  created() {
+      debugger;
+    if (!this.pubkey) {
+      this.$store.dispatch('app/getKey');
+    }
+    window.loginC = this;
   },
   methods: {
     showPwd() {

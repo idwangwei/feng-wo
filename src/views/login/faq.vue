@@ -37,7 +37,6 @@ export default {
   },
   created() {
     axios.get('/json/faq.json',).then(res => {
-        debugger;
         this.items = res.data;
     });
   },

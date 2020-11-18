@@ -137,7 +137,6 @@ export default {
   },
   methods: {
     queryPunishListByParam(isAll) {
-      debugger;
       if (isAll) {
         this.filterUserPhone = "";
         this.listQueryPunish.userPhone = "";
