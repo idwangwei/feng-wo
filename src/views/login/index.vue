@@ -73,7 +73,7 @@ export default {
   created() {
       debugger;
     if (!this.pubkey) {
-      this.$store.dispatch('app/getKey');
+    //   this.$store.dispatch('app/getKey');
     }
     window.loginC = this;
   },

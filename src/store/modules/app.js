@@ -45,13 +45,13 @@ const actions = {
   },
   getKey({ commit }) {
     return new Promise((resolve, reject) => {
-      getPubkey().then(response => {
-        commit('SET_PUBKEY', response);
-        setPubKey(response);
+      getPubkey().then(res => {
+        console.log('pubkey:', res.data.key);
+        commit('SET_PUBKEY', res.data.key);
+        setPubKey(res.data.key);
+        resolve();
       })
       .catch(error => {
-        commit('SET_PUBKEY', 'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCQbjqqLnTyLsIs8ieC9rT6iqpwEO31fZtVlhc7QAE68K/nrne5ZTgWCyU9CyCDIX7EvUzzDtEm0TDZn7ZoznVKUliQ15yMJbO9umv+MCY+Xux3IWS96HGk95DYZ9x7hXkKaqD8D9xRjXtpXzoyb7cE9MiiJaCQ5xtVMJk38xWZxQIDAQAB');
-        setPubKey('MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCQbjqqLnTyLsIs8ieC9rT6iqpwEO31fZtVlhc7QAE68K/nrne5ZTgWCyU9CyCDIX7EvUzzDtEm0TDZn7ZoznVKUliQ15yMJbO9umv+MCY+Xux3IWS96HGk95DYZ9x7hXkKaqD8D9xRjXtpXzoyb7cE9MiiJaCQ5xtVMJk38xWZxQIDAQAB');
         reject(error);
       });
     });

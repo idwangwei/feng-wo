@@ -2,6 +2,8 @@ import axios from 'axios';
 import { MessageBox, Message } from 'element-ui';
 import store from '@/store';
 import JsEncrypt from 'jsencrypt';
+// window.JsEncrypt = JsEncrypt;
+
 function hexToBase64(str) {
   return btoa(String.fromCharCode.apply(null,
       str.replace(/\r|\n/g, "").replace(/([\da-fA-F]{2}) ?/g, "0x$1 ").replace(/ +$/, "").split(" "))

@@ -38,7 +38,7 @@ router.beforeEach((to, from, next) => {
 
     if ((from.path === '/' || from.path === '/manager') && to.path === '/manager/login') {
         store.dispatch('user/logout');
-        store.dispatch('app/getKey');
+        // store.dispatch('app/getKey');
         NProgress.done();
         next();
         return;

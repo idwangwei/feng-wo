@@ -59,7 +59,7 @@ export function removeInfo() {
     Cookies.remove(TokenKey);
     Cookies.remove(RefreshTokenKey);
     Cookies.remove(InitLogin);
-    Cookies.remove(pubKey);
+    // Cookies.remove(pubKey);
 }
 
 export function checkPermission(value) {

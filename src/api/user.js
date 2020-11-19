@@ -1,4 +1,5 @@
 import request from '@/utils/request';
+import axios from 'axios';
 
 export function login(data) {
   return request({
@@ -65,8 +66,5 @@ export function getApkUrl(data) {
     });
   }
 export function getPubkey() {
-    return request({
-      url: `/bms/common/publickey`,
-      method: 'get'
-    });
-  }
+    return axios.get('/json/pubkey.json');
+}
