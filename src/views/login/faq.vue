@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h1 style="text-align:center">新人FAQ</h1>
+    <!-- <h1 style="text-align:center">新人FAQ</h1> -->
 
     <el-collapse v-model="activeNames">
       <template v-for="(item, index) in items">
