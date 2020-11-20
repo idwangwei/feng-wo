@@ -69,7 +69,7 @@ router.beforeEach((to, from, next) => {
         }
     } else {
         /* has no token*/
-        if (to.path === '/manager/login' || to.path === '/manager/forgetPass') {
+        if (to.path === '/manager/login' || to.path === '/manager/forgetPass' || to.path === '/manager/404') {
             // in the free login whitelist, go directly
             next();
         } else {

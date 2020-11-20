@@ -33,12 +33,12 @@ import Layout from '@/layout';
 export const constantRoutes = [
     {
         path: '/',
-        redirect: '/manager/login',
+        redirect: '/manager/404',
         hidden: true
     },
     {
         path: '/manager',
-        redirect: '/manager/login',
+        redirect: '/manager/404',
         hidden: true
     },
     {
