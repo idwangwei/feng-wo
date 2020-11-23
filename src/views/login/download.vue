@@ -9,15 +9,20 @@
       </el-image>
     </el-row>
     <el-row>
-      <el-button round>
-        <el-link :href="androidURL" target="_self" :underline="false" download="">ANDROID 下载</el-link>
-      </el-button>
+
+      <el-link :href="androidURL" target="_self" :underline="false" download="">
+        <el-button round>
+          Android 下载
+        </el-button>
+      </el-link>
 
     </el-row>
     <el-row>
-      <el-button round @click="donwLoadIOS()">
-        <el-link :href="iosURL" target="_self" :underline="false" download="">IOS 下载</el-link>
-      </el-button>
+      <el-link :href="iosURL" target="_self" :underline="false" download="">
+        <el-button round>
+          IOS 下载
+        </el-button>
+      </el-link>
     </el-row>
   </div>
 </template>
@@ -29,37 +34,34 @@ export default {
   data() {
     return {
       loading: false,
-      imgUrl: require('@/assets/logo@2x.png'),
+      imgUrl: require("@/assets/logo@2x.png"),
       androidURL: "",
       iosURL: ""
     };
   },
-  computed: {
-
-  },
-  watch: {
-
-  },
+  computed: {},
+  watch: {},
   created() {
-    getApkUrl().then(res => {
+    getApkUrl().then((res) => {
       this.androidURL = res.data.androidUrl;
       this.iosURL = res.data.iosUrl;
     });
   },
   methods: {
-
+    donwLoadIOS() {
+      console.log("");
+    }
   }
 };
 </script>
 
 <style lang="scss">
-
 $bg: #283443;
 $light_gray: #fff;
 $cursor: #fff;
 
 @supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
-  .download-container{
+  .download-container {
     color: $cursor;
   }
 }
@@ -80,11 +82,18 @@ $light_gray: #eee;
   align-items: center;
   flex-direction: column;
   padding-bottom: 5rem;
-  .el-row{
+  .el-row {
     margin-bottom: 1.5rem;
     width: 60%;
     max-width: 22rem;
-    button{
+    .el-link {
+      width: 100%;
+      /deep/ .el-link--inner {
+        width: 100%;
+        display: block;
+      }
+    }
+    button {
       width: 100%;
     }
   }

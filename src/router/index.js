@@ -4,7 +4,7 @@ import Router from 'vue-router';
 Vue.use(Router);
 
 /* Layout */
-import Layout from '@/layout';
+// import Layout from '@/layout';
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -41,11 +41,11 @@ export const constantRoutes = [
         redirect: '/manager/404',
         hidden: true
     },
-    {
-        path: '/manager/login',
-        component: () => import('@/views/login/index'),
-        hidden: true
-    },
+    // {
+    //     path: '/manager/login',
+    //     component: () => import('@/views/login/index'),
+    //     hidden: true
+    // },
     {
         path: '/register',
         component: () => import('@/views/login/register'),
@@ -76,7 +76,7 @@ export const constantRoutes = [
         meta: { title: '新人FAQ' },
         hidden: true
     },
-    {
+/*     {
         path: '/manager/updatePass',
         component: () => import('@/views/login/updatePass'),
         hidden: true
@@ -85,14 +85,14 @@ export const constantRoutes = [
         path: '/manager/forgetPass',
         component: () => import('@/views/login/forgetPass'),
         hidden: true
-    },
+    }, */
 
     {
         path: '/manager/404',
         component: () => import('@/views/404'),
         hidden: true
     },
-
+/*
     {
         path: '/manager/dashboard',
         component: Layout,
@@ -227,7 +227,7 @@ export const constantRoutes = [
             component: () => import('@/views/vote/management/index'),
             meta: { title: '投票管理', icon: 'tab' }
         }]
-    },
+    }, */
 
     // 404 page must be placed at the end !!!
     { path: '*', redirect: '/manager/404', hidden: true }
