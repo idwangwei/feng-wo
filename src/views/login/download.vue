@@ -2,7 +2,7 @@
   <div class="download-container">
 
     <el-row class="ma">
-      <el-image style="width: 100%; height: 60px;" :src="imgUrl" fit="scale-down">
+      <el-image style="width: 100%; height: 120px;" :src="imgUrl" fit="scale-down">
         <div slot="error" class="image-slot">
           <i class="el-icon-picture-outline"></i>
         </div>
@@ -34,7 +34,7 @@ export default {
   data() {
     return {
       loading: false,
-      imgUrl: require("@/assets/logo@2x.png"),
+      imgUrl: require("@/assets/download.png"),
       androidURL: "",
       iosURL: ""
     };
@@ -75,7 +75,7 @@ $light_gray: #eee;
 .download-container {
   min-height: 100%;
   width: 100%;
-  background-color: $bg;
+  background-color: #fff;
   overflow: hidden;
   display: flex;
   justify-content: center;
@@ -92,9 +92,12 @@ $light_gray: #eee;
         width: 100%;
         display: block;
       }
+      color: #fff;
     }
     button {
       width: 100%;
+      border-color: #FE9440;
+      color: #FE9440;
     }
   }
 }
