@@ -2,67 +2,50 @@ import axios from 'axios';
 import { MessageBox, Message } from 'element-ui';
 import store from '@/store';
 import JsEncrypt from 'jsencrypt';
-// window.JsEncrypt = JsEncrypt;
 
 function hexToBase64(str) {
   return btoa(String.fromCharCode.apply(null,
       str.replace(/\r|\n/g, "").replace(/([\da-fA-F]{2}) ?/g, "0x$1 ").replace(/ +$/, "").split(" "))
   );
 }
-JsEncrypt.prototype.encryptLong = function(string) {
-	var k = this.getKey();
-	try {
-		var ct = "";
-		// RSA每次加密117bytes，需要辅助方法判断字符串截取位置
-		// 1.获取字符串截取点
-		var bytes = [];
-		bytes.push(0);
-		var byteNo = 0;
-    var len, c;
-    len = string.length;
-    var temp = 0;
-    for (let i = 0; i < len; i++) {
-      c = string.charCodeAt(i);
-      if (c >= 0x010000 && c <= 0x10FFFF) {
-        byteNo += 4;
-      } else if (c >= 0x000800 && c <= 0x00FFFF) {
-        byteNo += 3;
-      } else if (c >= 0x000080 && c <= 0x0007FF) {
-        byteNo += 2;
-      } else {
-        byteNo += 1;
-      }
-      if ((byteNo % 117) >= 114 || (byteNo % 117) === 0) {
-        if (byteNo - temp >= 114) {
-          bytes.push(i);
-          temp = byteNo;
+
+JsEncrypt.prototype.encryptUnicodeLong = function(string) {
+    var k = this.getKey();
+    // 根据key所能编码的最大长度来定分段长度。key size - 11：11字节随机padding使每次加密结果都不同。
+    var maxLength = ((k.n.bitLength() + 7) >> 3) - 11;
+    try {
+        var subStr = ""; var encryptedString = "";
+        var subStart = 0; var subEnd = 0;
+        var bitLen = 0; var tmpPoint = 0;
+        for (var i = 0, len = string.length; i < len; i++) {
+            // js 是使用 Unicode 编码的，每个字符所占用的字节数不同
+            var charCode = string.charCodeAt(i);
+            if (charCode <= 0x007f) {
+                bitLen += 1;
+            } else if (charCode <= 0x07ff) {
+                bitLen += 2;
+            } else if (charCode <= 0xffff) {
+                bitLen += 3;
+            } else {
+                bitLen += 4;
+            }
+            // 字节数到达上限，获取子字符串加密并追加到总字符串后。更新下一个字符串起始位置及字节计算。
+            if (bitLen > maxLength) {
+                subStr = string.substring(subStart, subEnd);
+                encryptedString += k.encrypt(subStr);
+                subStart = subEnd;
+                bitLen = bitLen - tmpPoint;
+            } else {
+                subEnd = i;
+                tmpPoint = bitLen;
+            }
         }
-      }
+        subStr = string.substring(subStart, len);
+        encryptedString += k.encrypt(subStr);
+        return hexToBase64(encryptedString);
+    } catch (ex) {
+        return false;
     }
-		// 2.截取字符串并分段加密
-    if (bytes.length > 1) {
-      for (let i = 0; i < bytes.length - 1; i++) {
-        var str;
-        if (i === 0) {
-          str = string.substring(0, bytes[i + 1] + 1);
-        } else {
-          str = string.substring(bytes[i] + 1, bytes[i + 1] + 1);
-        }
-        var t1 = k.encrypt(str);
-        ct += t1;
-      }
-      if (bytes[bytes.length - 1] !== string.length - 1) {
-        var lastStr = string.substring(bytes[bytes.length - 1] + 1);
-        ct += k.encrypt(lastStr);
-      }
-      return hexToBase64(ct);
-    }
-		var t = k.encrypt(string);
-		var y = hexToBase64(t);
-		return y;
-	} catch (ex) {
-		return false;
-	}
 };
 
 const encruption = (key, obj) => {
@@ -75,7 +58,7 @@ const encruption = (key, obj) => {
   let paramsString = ''; // 把传过来的data数据转成字符串
   paramsString = JSON.stringify(obj);
   console.log(paramsString.length, paramsString);
-  paramsData = encrypt.encryptLong(paramsString);
+  paramsData = encrypt.encryptUnicodeLong(paramsString);
   return JSON.stringify({ body: paramsData });
 };
 
@@ -105,7 +88,7 @@ service.interceptors.request.use(
     // 注册接口在8001端口，其他接口在8080
     const url = config.url.replace(config.baseURL, '');
     if (url === '/auth/register') {
-      config.baseURL = process.env.VUE_APP_BASE_API.replace('8080', '8001');
+      config.baseURL = process.env.VUE_APP_BASE_API.replace('fbomeoc.com:8080', 'honeycomb-fmc.com:8001');
     } else {
       config.baseURL = process.env.VUE_APP_BASE_API;
     }
