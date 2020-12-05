@@ -136,7 +136,7 @@ export default {
           this.total = response.data.total;
         })
         .catch((error) => {
-          console.log(error);
+          console.error(error);
         })
         .finally(() => {
           this.listLoading = false;
@@ -167,7 +167,7 @@ export default {
         this.replyRow.haveRead = true;
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
       })
       .finally(() => {
         this.replyListLoading = false;

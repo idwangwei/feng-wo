@@ -57,7 +57,7 @@ const encruption = (key, obj) => {
   let paramsData = ''; // 加密后的参数
   let paramsString = ''; // 把传过来的data数据转成字符串
   paramsString = JSON.stringify(obj);
-  console.log(paramsString.length, paramsString);
+  // console.log(paramsString.length, paramsString);
   paramsData = encrypt.encryptUnicodeLong(paramsString);
   return JSON.stringify({ body: paramsData });
 };
@@ -99,7 +99,6 @@ service.interceptors.request.use(
   },
   error => {
     // do something with request error
-    console.log(error); // for debug
     return Promise.reject(error);
   }
 );

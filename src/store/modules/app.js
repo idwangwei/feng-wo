@@ -46,7 +46,7 @@ const actions = {
   getKey({ commit }) {
     return new Promise((resolve, reject) => {
       getPubkey().then(res => {
-        // console.log('pubkey:', res.data.key);
+        // //console.log('pubkey:', res.data.key);
         commit('SET_PUBKEY', res.data.key);
         setPubKey(res.data.key);
         resolve();

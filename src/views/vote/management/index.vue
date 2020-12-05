@@ -165,7 +165,7 @@ export default {
           this.totalDataList = response.data.total;
         })
         .catch((error) => {
-          console.log(error);
+          console.error(error);
         })
         .finally(() => {
           this.VoteListLoading = false;

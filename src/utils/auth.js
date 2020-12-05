@@ -18,12 +18,12 @@ export function getRefreshToken() {
 }
 
 export function setToken(token) {
-    console.log('setToke====');
+    // console.log('setToke====');
     return Cookies.set(TokenKey, token);
 }
 
 export function removeToken() {
-    console.log('removeToken====');
+    // console.log('removeToken====');
     Cookies.remove(TokenKey);
 }
 export function setRefreshToken(token) {
@@ -43,7 +43,7 @@ export function getAuth() {
     return str ? str.split(',') : [];
 }
 export function setPubKey(data) {
-    console.log('setPubKey====');
+    // console.log('setPubKey====');
 
     return Cookies.set(pubKey, data);
 }
@@ -52,8 +52,8 @@ export function getPubKey() {
 }
 
 export function removeInfo() {
-    console.log('removeToken====');
-    console.log('remove pubKey====');
+    // console.log('removeToken====');
+    // console.log('remove pubKey====');
 
     Cookies.remove(authRoles);
     Cookies.remove(TokenKey);
