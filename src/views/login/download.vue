@@ -23,6 +23,7 @@
           IOS 下载
         </el-button>
       </el-link>
+      <p style="font-size: 0.6rem;color: #565656;line-height: 1rem;padding: 0 1rem;">iOS用户需要先下载TestFlight APP，然后点击 开始测试按钮 获取 安装蜂窝APP，等待安装完毕，就可以开始使用</p>
     </el-row>
   </div>
 </template>
@@ -84,7 +85,7 @@ $light_gray: #eee;
   padding-bottom: 5rem;
   .el-row {
     margin-bottom: 1.5rem;
-    width: 60%;
+    width: 80%;
     max-width: 22rem;
     .el-link {
       width: 100%;
