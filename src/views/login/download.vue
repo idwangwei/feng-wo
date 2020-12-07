@@ -50,7 +50,7 @@ export default {
   },
   methods: {
     donwLoadIOS() {
-      console.log("");
+      // console.log("");
     }
   }
 };

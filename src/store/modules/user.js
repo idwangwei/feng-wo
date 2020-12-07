@@ -76,7 +76,7 @@ const actions = {
   logout({ commit, state }) {
     return new Promise((resolve, reject) => {
         commit('CLEAR');
-        console.log('logout====');
+        // console.log('logout====');
         removeInfo();
         resetRouter();
         resolve();

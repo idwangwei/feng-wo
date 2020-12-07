@@ -162,8 +162,8 @@ export default {
             };
           });
 
-          console.log(xaxis);
-          console.log(options.series);
+          // console.log(xaxis);
+          // console.log(options.series);
         }
       }
 

@@ -153,7 +153,7 @@ export default {
   watch: {
     $route: {
       handler: function(route) {
-          console.log(route);
+          // console.log(route);
           if (route.query && route.query.invitationCode) {
             this.invitationCode = route.query.invitationCode;
             this.registerForm.invitationCode = this.invitationCode;
@@ -236,7 +236,7 @@ export default {
               this.loading = false;
             });
         } else {
-          console.log("error submit!!");
+          // console.log("error submit!!");
           return false;
         }
       });

@@ -124,7 +124,7 @@ export default {
           [this.label.price7, this.ruleForm.price7] = response.data.price7.split(':');
         })
         .catch((error) => {
-          console.log(error);
+          console.error(error);
         })
         .finally(() => {
           this.listLoading = false;

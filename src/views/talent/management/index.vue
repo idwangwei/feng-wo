@@ -128,7 +128,7 @@ export default {
           this.list = response.data;
         })
         .catch((error) => {
-          console.log(error);
+          console.error(error);
         })
         .finally(() => {
           this.listLoading = false;
@@ -142,7 +142,7 @@ export default {
           this.totalDetailList = response.data.total;
         })
         .catch((error) => {
-          console.log(error);
+          console.error(error);
         })
         .finally(() => {
           this.DetailListLoading = false;

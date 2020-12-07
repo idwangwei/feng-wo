@@ -137,7 +137,7 @@ export default {
       },
       // setter
       set: function(newValue) {
-        console.log('set editEarnings');
+        // console.log('set editEarnings');
       }
     }
   },
@@ -156,7 +156,7 @@ export default {
           this.list = response.data;
         })
         .catch((error) => {
-          console.log(error);
+          console.error(error);
         })
         .finally(() => {
           this.listLoading = false;

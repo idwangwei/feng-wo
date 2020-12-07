@@ -56,7 +56,7 @@ router.beforeEach((to, from, next) => {
             NProgress.done();
             next({ path: '/manager/dashboard' });
         } else {
-            console.log(store.state.user.authArr);
+            // console.log(store.state.user.authArr);
             try {
                 if (store.state.user.authArr.find(au => to.path.indexOf(authMap[au]) !== -1) || to.path.indexOf('dashboard') !== -1) {
                     next();
@@ -64,7 +64,7 @@ router.beforeEach((to, from, next) => {
                     next({ path: '/manager/dashboard' });
                 }
             } catch (err) {
-                console.log(err);
+                // console.log(err);
             }
         }
     } else {

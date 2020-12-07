@@ -255,7 +255,7 @@ export default {
           this.manegementList = response.data.map(v => ({ ...v, roles: v.roleName.split(',') }));
         })
         .catch((error) => {
-          console.log(error);
+          console.error(error);
         })
         .finally(() => {
           this.manegementListLoading = false;
@@ -268,7 +268,7 @@ export default {
           this.roleList = response.data.map(v => ({ ...v, auth: v.role.split(',') }));
         })
         .catch((error) => {
-          console.log(error);
+          console.error(error);
         })
         .finally(() => {
           this.roleListLoading = false;

@@ -151,7 +151,7 @@ export default {
           this.total = response.data.total;
         })
         .catch((error) => {
-          console.log(error);
+          console.error(error);
         })
         .finally(() => {
           this.listLoading = false;
