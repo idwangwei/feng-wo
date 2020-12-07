@@ -32,7 +32,7 @@
         </el-input>
       </el-form-item>
       <el-form-item prop="password">
-        <el-input ref="password" v-model="registerForm.password" placeholder="请输入登录密码" name="password" autocomplete="new-password" type="password" tabindex="1">
+        <el-input ref="password" v-model="registerForm.password" placeholder="请输入6-18位字母+数字组合密码" name="password" autocomplete="new-password" type="password" tabindex="1">
           <template slot="prepend">
             <span class="svg-container">
               <svg-icon icon-class="password2" style="font-size: 1.1rem;margin-left: -0.1rem;" />
@@ -50,7 +50,7 @@
         </el-input>
       </el-form-item>
       <el-form-item prop="alipayPwd">
-        <el-input ref="alipayPwd" v-model="registerForm.alipayPwd" placeholder="请输入支付密码" name="alipayPwd" type="password" tabindex="1">
+        <el-input ref="alipayPwd" v-model="registerForm.alipayPwd" placeholder="请输入6位纯数字支付密码" name="alipayPwd" type="password" tabindex="1">
           <template slot="prepend">
             <span class="svg-container">
               <svg-icon icon-class="password2" style="font-size: 1.1rem;margin-left: -0.1rem;" />
