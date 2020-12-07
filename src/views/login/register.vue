@@ -88,9 +88,9 @@ export default {
   data() {
     const validatePass = (rule, value, callback) => {
       if (value === '') {
-        callback(new Error('请输入密码'));
-      } else if (!(/^.{8,18}$/.test(value))) {
-        callback(new Error('密码为8-18位有效字符'));
+        callback(new Error('请输入6-18位字母+数字组合密码'));
+      } else if (!(/^\w{6,18}$/.test(value))) {
+        callback(new Error('请输入6-18位字母+数字组合密码'));
       } else {
         if (this.registerForm.checkPass !== '') {
           this.$refs.registerForm.validateField('checkPass');
@@ -100,9 +100,9 @@ export default {
     };
     const validatePay = (rule, value, callback) => {
       if (value === '') {
-        callback(new Error('请输入支付密码'));
-      } else if (!(/^.{6,8}$/.test(value))) {
-        callback(new Error('密码为6-8位有效字符'));
+        callback(new Error('请输入6位纯数字支付密码'));
+      } else if (!(/^\d{6}$/.test(value))) {
+        callback(new Error('请输入6位纯数字支付密码'));
       } else {
         callback();
       }
