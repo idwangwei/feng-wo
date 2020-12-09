@@ -128,6 +128,13 @@ export function getFeedbackList(data) {
     data
   });
 }
+export function deleteFeedback(data) {
+  return request({
+    url: '/bms/feedback/delete',
+    method: 'post',
+    data
+  });
+}
 export function getFeedbackReplyList(data) {
   return request({
     url: '/bms/feedback/replyfeedbacks',

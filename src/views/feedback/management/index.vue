@@ -9,11 +9,11 @@
       <el-button class="filter-item" size="mini" type="primary" icon="el-icon-search" style="margin-top: 0.5rem;" :disabled="listLoading" @click="handleFilter">
         查询
       </el-button>
-
     </el-row>
 
     <el-table :key="tableKey" v-loading="listLoading" :data="list" border fit highlight-current-row style="width: 100%; margin-top:1rem;" @row-click="clickRow">
       <!-- <el-table-column prop="id" label="用户ID" min-width="10%"></el-table-column> -->
+      <el-table-column prop="user" label="用户账号" align="center" min-width="10%"></el-table-column>
       <el-table-column prop="phone" label="联系电话" align="center" min-width="10%"></el-table-column>
       <el-table-column prop="content" label="反馈内容" align="left" min-width="40%"></el-table-column>
       <el-table-column label="图片" align="center" width="120px">
@@ -23,9 +23,18 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="时间" align="center" min-width="15%" class-name="badge-overflow-display">
+      <el-table-column label="时间" align="center" min-width="10%" class-name="badge-overflow-display">
         <template slot-scope="{row}">
           <el-badge is-dot class="item" :hidden="row.haveRead">{{ row.commitTime | DateFilter }}</el-badge>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" width="80px" class-name="small-padding fixed-width">
+        <template slot-scope="{row}">
+          <el-popconfirm title="确认删除？" @confirm="deleteItem(row)">
+            <el-button slot="reference" v-loading="showDeleteLoading(row)" :disabled="showDeleteLoading(row)" type="primary" size="mini" @click.stop="">
+              删除
+            </el-button>
+          </el-popconfirm>
         </template>
       </el-table-column>
     </el-table>
@@ -81,7 +90,7 @@
 </template>
 
 <script>
-import { getFeedbackList, getFeedbackReplyList, replyFeedback } from "@/api/table";
+import { getFeedbackList, getFeedbackReplyList, replyFeedback, deleteFeedback } from "@/api/table";
 import Pagination from "@/components/Pagination"; // secondary package based on el-pagination
 import { parseTime } from "@/utils/index";
 
@@ -113,7 +122,9 @@ export default {
         language: '',
         page: 1,
         pageSize: 10
-      }
+      },
+      deleteLoadingList: []
+
     };
   },
   created() {
@@ -186,6 +197,24 @@ export default {
       })
       .finally(() => {
         this.replyLoading = false;
+      });
+    },
+    showDeleteLoading(row) {
+      return this.deleteLoadingList.includes(row.id);
+    },
+    deleteItem(row) {
+      this.deleteLoadingList.push(row.id);
+      deleteFeedback({ delId: row.id })
+      .then(res => {
+        this.$message({
+          message: `反馈删除成功`,
+          type: 'success'
+        });
+        this.handleFilter();
+      })
+      .catch(() => {})
+      .finally(() => {
+        this.deleteLoadingList.splice(this.deleteLoadingList.indexOf(row.id), 1);
       });
     }
 
