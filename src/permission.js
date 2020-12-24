@@ -10,7 +10,7 @@ import store from '@/store';
 NProgress.configure({ showSpinner: false }); // NProgress Configuration
 
 const whiteList = ['/manager/login', '/manager/updatePass', '/manager/forgetPass']; // no redirect whitelist
-const SinglePage = ['/introduce', '/register', '/userAgre', '/download', '/faq'];
+const SinglePage = ['/introduce', '/register', '/userAgre', '/download', '/faq', '/404'];
 const authMap = {
     ALL: '',
     MINING_MANAGER: '/manager/pool',
@@ -69,7 +69,7 @@ router.beforeEach((to, from, next) => {
         }
     } else {
         /* has no token*/
-        if (to.path === '/manager/login' || to.path === '/manager/forgetPass' || to.path === '/manager/404') {
+        if (to.path === '/manager/login' || to.path === '/manager/forgetPass' || to.path === '/404') {
             // in the free login whitelist, go directly
             next();
         } else {

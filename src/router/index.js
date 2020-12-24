@@ -33,17 +33,12 @@ import Layout from '@/layout';
 export const constantRoutes = [
     {
         path: '/',
-        redirect: '/manager/404',
+        redirect: '/404',
         hidden: true
     },
     {
         path: '/manager',
-        redirect: '/manager/404',
-        hidden: true
-    },
-    {
-        path: '/manager/login',
-        component: () => import('@/views/login/index'),
+        redirect: '/404',
         hidden: true
     },
     {
@@ -77,6 +72,18 @@ export const constantRoutes = [
         hidden: true
     },
     {
+        path: '/404',
+        component: () => import('@/views/404'),
+        meta: { title: '404' },
+        hidden: true
+    },
+
+    {
+        path: '/manager/login',
+        component: () => import('@/views/login/index'),
+        hidden: true
+    },
+    {
         path: '/manager/updatePass',
         component: () => import('@/views/login/updatePass'),
         hidden: true
@@ -86,13 +93,6 @@ export const constantRoutes = [
         component: () => import('@/views/login/forgetPass'),
         hidden: true
     },
-
-    {
-        path: '/manager/404',
-        component: () => import('@/views/404'),
-        hidden: true
-    },
-
     {
         path: '/manager/dashboard',
         component: Layout,
@@ -230,7 +230,7 @@ export const constantRoutes = [
     },
 
     // 404 page must be placed at the end !!!
-    { path: '*', redirect: '/manager/404', hidden: true }
+    { path: '*', redirect: '/404', hidden: true }
 ];
 
 const createRouter = () => new Router({

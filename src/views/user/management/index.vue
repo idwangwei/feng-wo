@@ -23,6 +23,27 @@
         查询
       </el-button>
 
+      <el-popover
+        v-model="popularizeVisible"
+        placement="bottom"
+        style="margin-left:2rem;margin-top: 0.5rem;"
+      >
+        手机号：<el-input
+          v-model="popularizePhone"
+          placeholder=""
+          size="mini"
+          clearable
+          style="width: 150px;;margin-right:1rem;margin-top: 0.5rem;"
+          class="filter-item"
+          @keyup.enter.native="handlePopularizeFilter"
+        />
+        <div style="text-align: right; margin: 0.5rem 0 0 0">
+          <el-button size="mini" type="text" @click="popularizeVisible = false">取消</el-button>
+          <el-button type="primary" size="mini" @click="popularizeVisible = false;handlePopularizeFilter()">确定</el-button>
+        </div>
+        <el-button slot="reference" type="primary" icon="el-icon-search" size="mini">直推查询</el-button>
+      </el-popover>
+
     </div>
 
     <el-table :key="tableKey" v-loading="listLoading" :data="list" border fit highlight-current-row style="width: 100%; margin-top:1rem;" @sort-change="sortChange">
@@ -231,7 +252,9 @@ export default {
         enable: null,
         alipayEnable: null
 
-      }
+      },
+      popularizePhone: '',
+      popularizeVisible: false
     };
   },
   computed: {
@@ -462,6 +485,37 @@ export default {
         })
         .finally(() => {
           this.getUserInfoLoading = false;
+        });
+    },
+    handlePopularizeFilter() {
+      if (!this.popularizePhone) {
+        return;
+      }
+      this.listQuery.page = 1;
+      this.listLoading = true;
+      const params = {
+        page: 1,
+        pageSize: 10,
+        language: "",
+        asc: false,
+        orderValue: "",
+        name: "",
+        phone: this.popularizePhone,
+        active: null,
+        enable: null,
+        alipayEnable: null,
+        queryTeam: true
+      };
+      getUserList(params)
+        .then((response) => {
+          this.list = response.data.contents.map(v => ({ ...v, edit: false, editParentPhone: null }));
+          this.total = response.data.total;
+        })
+        .catch((error) => {
+          console.error(error);
+        })
+        .finally(() => {
+          this.listLoading = false;
         });
     }
 
