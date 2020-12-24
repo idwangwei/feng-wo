@@ -19,31 +19,13 @@
         <el-option label="冻结" :value="false" />
       </el-select>
 
-      <el-button class="filter-item" size="mini" type="primary" icon="el-icon-search" style="margin-top: 0.5rem;" :disabled="listLoading" @click="handleFilter">
+      <el-button class="filter-item" size="mini" type="primary" icon="el-icon-search" style="margin-top: 0.5rem;margin-right:1rem" :disabled="listLoading" @click="handleFilter">
         查询
       </el-button>
 
-      <el-popover
-        v-model="popularizeVisible"
-        placement="bottom"
-        style="margin-left:2rem;margin-top: 0.5rem;"
-      >
-        手机号：<el-input
-          v-model="popularizePhone"
-          placeholder=""
-          size="mini"
-          clearable
-          style="width: 150px;;margin-right:1rem;margin-top: 0.5rem;"
-          class="filter-item"
-          @keyup.enter.native="handlePopularizeFilter"
-        />
-        <div style="text-align: right; margin: 0.5rem 0 0 0">
-          <el-button size="mini" type="text" @click="popularizeVisible = false">取消</el-button>
-          <el-button type="primary" size="mini" @click="popularizeVisible = false;handlePopularizeFilter()">确定</el-button>
-        </div>
-        <el-button slot="reference" type="primary" icon="el-icon-search" size="mini">直推查询</el-button>
-      </el-popover>
-
+      <el-button class="filter-item" size="mini" type="primary" icon="el-icon-search" style="margin-top: 0.5rem;" :disabled="listLoading" @click="handlePopularizeFilter">
+        直推查询
+      </el-button>
     </div>
 
     <el-table :key="tableKey" v-loading="listLoading" :data="list" border fit highlight-current-row style="width: 100%; margin-top:1rem;" @sort-change="sortChange">
@@ -251,10 +233,7 @@ export default {
         active: null,
         enable: null,
         alipayEnable: null
-
-      },
-      popularizePhone: '',
-      popularizeVisible: false
+      }
     };
   },
   computed: {
@@ -488,22 +467,10 @@ export default {
         });
     },
     handlePopularizeFilter() {
-      if (!this.popularizePhone) {
-        return;
-      }
       this.listQuery.page = 1;
       this.listLoading = true;
       const params = {
-        page: 1,
-        pageSize: 10,
-        language: "",
-        asc: false,
-        orderValue: "",
-        name: "",
-        phone: this.popularizePhone,
-        active: null,
-        enable: null,
-        alipayEnable: null,
+        ...this.listQuery,
         queryTeam: true
       };
       getUserList(params)
