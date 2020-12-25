@@ -232,7 +232,8 @@ export default {
         phone: "",
         active: null,
         enable: null,
-        alipayEnable: null
+        alipayEnable: null,
+        queryTeam: false
       }
     };
   },
@@ -270,6 +271,7 @@ export default {
     },
     handleFilter() {
       this.listQuery.page = 1;
+      this.listQuery.queryTeam = false;
       this.getList();
     },
 
@@ -287,7 +289,8 @@ export default {
       } else {
         this.listQuery.asc = true;
       }
-      this.handleFilter();
+      this.listQuery.page = 1;
+      this.getList();
     },
 
     showFreezeLoading(row) {
@@ -468,24 +471,9 @@ export default {
     },
     handlePopularizeFilter() {
       this.listQuery.page = 1;
-      this.listLoading = true;
-      const params = {
-        ...this.listQuery,
-        queryTeam: true
-      };
-      getUserList(params)
-        .then((response) => {
-          this.list = response.data.contents.map(v => ({ ...v, edit: false, editParentPhone: null }));
-          this.total = response.data.total;
-        })
-        .catch((error) => {
-          console.error(error);
-        })
-        .finally(() => {
-          this.listLoading = false;
-        });
+      this.listQuery.queryTeam = true;
+      this.getList();
     }
-
   }
 };
 </script>
